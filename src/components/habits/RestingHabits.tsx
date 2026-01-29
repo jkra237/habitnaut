@@ -4,12 +4,14 @@ import { Button } from '@/components/ui/button';
 import { useFlowNautStore } from '@/store/flownaut-store';
 import type { Habit } from '@/types/flownaut';
 import { Moon, RefreshCw, ChevronDown } from 'lucide-react';
+import { useTranslations } from '@/hooks/use-translations';
 
 interface RestingHabitsProps {
   habits: Habit[];
 }
 
 export function RestingHabits({ habits }: RestingHabitsProps) {
+  const t = useTranslations();
   const [isExpanded, setIsExpanded] = useState(false);
   const wakeHabit = useFlowNautStore((s) => s.wakeHabit);
 
@@ -27,7 +29,7 @@ export function RestingHabits({ habits }: RestingHabitsProps) {
           </div>
           <div>
             <span className="text-sm font-medium text-foreground">
-              Resting habits
+              {t.habits.restingHabits}
             </span>
             <span className="text-xs text-muted-foreground ml-2">
               {habits.length}
@@ -52,7 +54,7 @@ export function RestingHabits({ habits }: RestingHabitsProps) {
           >
             <div className="px-4 pb-4 space-y-2">
               <p className="text-xs text-muted-foreground mb-3">
-                Some habits only accompany us for a while. You can wake them when you're ready.
+                {t.habits.restingNote}
               </p>
               {habits.map((habit) => (
                 <motion.div
@@ -72,7 +74,7 @@ export function RestingHabits({ habits }: RestingHabitsProps) {
                     className="text-xs"
                   >
                     <RefreshCw className="w-3 h-3 mr-1" />
-                    Wake
+                    {t.habits.wake}
                   </Button>
                 </motion.div>
               ))}
