@@ -206,6 +206,8 @@ export interface Translations {
     title: string;
     prompt: string;
     placeholder: string;
+    save: string;
+    todayEntries: string;
     pastEntries: string;
     noEntries: string;
     delete: string;
@@ -435,6 +437,8 @@ export const translations: Record<SupportedLanguage, Translations> = {
       title: 'Gratitude',
       prompt: 'What am I grateful for today?',
       placeholder: 'Write here...',
+      save: 'Save',
+      todayEntries: 'Added today',
       pastEntries: 'Past entries',
       noEntries: 'No past entries yet',
       delete: 'Delete',
@@ -460,7 +464,7 @@ export const translations: Record<SupportedLanguage, Translations> = {
       progressNote: { name: 'Progress note', reason: 'Celebrates visible growth' },
       shareLearning: { name: 'Share a learning', reason: 'Connects with others' },
       intentionSetting: { name: 'Set an intention', reason: 'Bridges inner and outer goals' },
-      planTomorrow: { name: 'Plan tomorrow', reason: 'Supports your love of structure' },
+      planTomorrow: { name: 'Plan the day', reason: 'Supports your love of structure' },
       weeklyReview: { name: 'Weekly review', reason: 'Creates clarity and order' },
       followCuriosity: { name: 'Follow curiosity', reason: 'Celebrates your spontaneity' },
       surpriseSelf: { name: 'Surprise yourself', reason: 'Keeps things fresh' },
@@ -661,6 +665,8 @@ export const translations: Record<SupportedLanguage, Translations> = {
       title: 'Gratitud',
       prompt: '¿Por qué estoy agradecido hoy?',
       placeholder: 'Escribe aquí...',
+      save: 'Guardar',
+      todayEntries: 'Añadido hoy',
       pastEntries: 'Entradas anteriores',
       noEntries: 'Aún no hay entradas anteriores',
       delete: 'Eliminar',
@@ -887,6 +893,8 @@ export const translations: Record<SupportedLanguage, Translations> = {
       title: 'Dankbarkeit',
       prompt: 'Wofür bin ich heute dankbar?',
       placeholder: 'Schreibe hier...',
+      save: 'Speichern',
+      todayEntries: 'Heute eingetragen',
       pastEntries: 'Vergangene Einträge',
       noEntries: 'Noch keine vergangenen Einträge',
       delete: 'Löschen',

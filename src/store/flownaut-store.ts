@@ -52,8 +52,8 @@ interface FlowNautStore extends UserState {
   addInsight: (insight: Omit<Insight, 'id' | 'generatedAt'>) => void;
   
   // Gratitude
-  setGratitude: (date: string, text: string) => void;
-  deleteGratitude: (date: string) => void;
+  addGratitude: (date: string, text: string) => void;
+  deleteGratitude: (id: string) => void;
   
   // Week reflection
   setWeekWord: (weekStart: string, word: string) => void;
@@ -222,22 +222,20 @@ export const useFlowNautStore = create<FlowNautStore>()(
       })),
 
       // Gratitude
-      setGratitude: (date, text) => set((state) => {
-        const existing = state.gratitudeEntries.find((e) => e.date === date);
-        if (existing) {
-          return {
-            gratitudeEntries: state.gratitudeEntries.map((e) =>
-              e.date === date ? { ...e, text } : e
-            ),
-          };
-        }
-        return {
-          gratitudeEntries: [...state.gratitudeEntries, { date, text }],
-        };
-      }),
+      addGratitude: (date, text) => set((state) => ({
+        gratitudeEntries: [
+          ...state.gratitudeEntries,
+          {
+            id: crypto.randomUUID(),
+            date,
+            text,
+            createdAt: new Date().toISOString(),
+          },
+        ],
+      })),
 
-      deleteGratitude: (date) => set((state) => ({
-        gratitudeEntries: state.gratitudeEntries.filter((e) => e.date !== date),
+      deleteGratitude: (id) => set((state) => ({
+        gratitudeEntries: state.gratitudeEntries.filter((e) => e.id !== id),
       })),
 
       setWeekWord: (weekStart, word) => set((state) => {
