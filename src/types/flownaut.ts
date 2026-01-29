@@ -1,0 +1,56 @@
+// FlowNaut Types - Self-observation, not optimization
+
+export interface PersonalityProfile {
+  // Four axes - each is a spectrum, not a binary
+  rhythm: 'morning' | 'evening' | 'flexible';
+  energy: 'steady' | 'bursts' | 'waves';
+  motivation: 'internal' | 'external' | 'mixed';
+  approach: 'structured' | 'spontaneous' | 'adaptive';
+}
+
+export interface OnboardingAnswer {
+  questionId: string;
+  choice: 'a' | 'b';
+}
+
+export interface Habit {
+  id: string;
+  name: string;
+  emoji?: string;
+  createdAt: Date;
+  isResting: boolean; // "let rest" instead of deleted
+  restingNote?: string;
+}
+
+export type HabitState = 'done' | 'not-done' | 'conscious-skip';
+
+export interface DayEntry {
+  date: string; // YYYY-MM-DD
+  habits: Record<string, HabitState>;
+  mood?: number; // 1-5, optional
+  energy?: number; // 1-5, optional
+  note?: string;
+}
+
+export interface Insight {
+  id: string;
+  type: 'correlation' | 'pattern' | 'reflection';
+  message: string;
+  generatedAt: Date;
+}
+
+export interface WeekReflection {
+  weekStart: string;
+  word?: string;
+  takeaway?: string;
+}
+
+export interface UserState {
+  hasCompletedOnboarding: boolean;
+  personality?: PersonalityProfile;
+  habits: Habit[];
+  entries: DayEntry[];
+  insights: Insight[];
+  reflections: WeekReflection[];
+  preferredTone: 'gentle' | 'clear';
+}
