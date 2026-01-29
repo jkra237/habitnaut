@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Bell, BellOff, Sun, Cloud, Moon, X } from 'lucide-react';
+import { Bell, BellOff, Sun, Cloud, Moon, X, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import type { HabitReminder, TimeAnchor, ReminderFrequency } from '@/types/flownaut';
 import { REMINDER_INVITATION, getRandomReminderCopy } from '@/lib/reminder-copy';
+import { useNotifications } from '@/hooks/use-notifications';
 
 interface ReminderSettingsProps {
   reminder: HabitReminder;
@@ -24,9 +26,20 @@ const FREQUENCIES: { value: ReminderFrequency; label: string }[] = [
 ];
 
 export function ReminderSettings({ reminder, habitName, onUpdate, onClose }: ReminderSettingsProps) {
+  const { permission, isSupported, testNotification } = useNotifications();
+  const [testSent, setTestSent] = useState(false);
+
   const previewCopy = reminder.frequency !== 'none' 
     ? getRandomReminderCopy({ habitName, frequency: reminder.frequency })
     : null;
+
+  const handleTestNotification = async () => {
+    const success = await testNotification();
+    if (success) {
+      setTestSent(true);
+      setTimeout(() => setTestSent(false), 3000);
+    }
+  };
 
   return (
     <motion.div
@@ -104,6 +117,38 @@ export function ReminderSettings({ reminder, habitName, onUpdate, onClose }: Rem
               </button>
             ))}
           </div>
+        </motion.div>
+      )}
+
+      {/* Notification permission status */}
+      {reminder.frequency !== 'none' && isSupported && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="space-y-3"
+        >
+          {permission === 'denied' && (
+            <div className="p-3 rounded-xl bg-accent/20 border border-accent/30 text-sm text-foreground">
+              <p>Browser notifications are blocked. Please enable them in your browser settings to receive gentle reminders.</p>
+            </div>
+          )}
+          
+          {permission === 'pending' && (
+            <div className="p-3 rounded-xl bg-secondary border border-border text-sm text-muted-foreground">
+              <p>When you save, we'll ask for notification permission.</p>
+            </div>
+          )}
+
+          {permission === 'granted' && (
+            <button
+              onClick={handleTestNotification}
+              disabled={testSent}
+              className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors disabled:opacity-50"
+            >
+              <Sparkles className="w-4 h-4" />
+              {testSent ? 'Test sent!' : 'Send a test notification'}
+            </button>
+          )}
         </motion.div>
       )}
 
