@@ -75,8 +75,10 @@ export interface AppPreferences {
 }
 
 export interface GratitudeEntry {
+  id: string;
   date: string; // YYYY-MM-DD
   text: string;
+  createdAt: string; // ISO timestamp
 }
 
 export interface UserState {

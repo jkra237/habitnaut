@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, X, Trash2, Heart } from 'lucide-react';
+import { Calendar, X, Trash2, Heart, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { useFlowNautStore } from '@/store/flownaut-store';
@@ -11,16 +11,14 @@ import { useLanguage } from '@/hooks/use-translations';
 
 export function GratitudeJournal() {
   const [showHistory, setShowHistory] = useState(false);
+  const [text, setText] = useState('');
   const t = useTranslations();
   const language = useLanguage();
   
   const todayStr = format(new Date(), 'yyyy-MM-dd');
   const gratitudeEntries = useFlowNautStore((s) => s.gratitudeEntries);
-  const setGratitude = useFlowNautStore((s) => s.setGratitude);
+  const addGratitude = useFlowNautStore((s) => s.addGratitude);
   const deleteGratitude = useFlowNautStore((s) => s.deleteGratitude);
-  
-  const todayEntry = gratitudeEntries.find((e) => e.date === todayStr);
-  const [text, setText] = useState(todayEntry?.text || '');
   
   const getLocale = () => {
     switch (language) {
@@ -32,17 +30,24 @@ export function GratitudeJournal() {
 
   const handleSave = () => {
     if (text.trim()) {
-      setGratitude(todayStr, text.trim());
+      addGratitude(todayStr, text.trim());
+      setText('');
     }
   };
 
-  const handleDelete = (date: string) => {
-    deleteGratitude(date);
+  const handleDelete = (id: string) => {
+    deleteGratitude(id);
   };
 
+  // Today's entries
+  const todayEntries = gratitudeEntries
+    .filter((e) => e.date === todayStr)
+    .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+
+  // Past entries (not from today)
   const pastEntries = gratitudeEntries
     .filter((e) => e.date !== todayStr)
-    .sort((a, b) => b.date.localeCompare(a.date));
+    .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 
   return (
     <div className="bg-card rounded-2xl border border-border/50 shadow-card p-5">
@@ -61,7 +66,7 @@ export function GratitudeJournal() {
         </Button>
       </div>
 
-      {/* Today's entry */}
+      {/* Today's input */}
       <div className="space-y-3">
         <p className="text-sm text-muted-foreground">
           {t.gratitude?.prompt || 'Wofür bin ich heute dankbar?'}
@@ -69,11 +74,50 @@ export function GratitudeJournal() {
         <Textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
-          onBlur={handleSave}
           placeholder={t.gratitude?.placeholder || 'Schreibe hier...'}
           className="min-h-[80px] resize-none bg-background/50 border-border/50 focus:border-primary/30"
         />
+        <Button
+          onClick={handleSave}
+          disabled={!text.trim()}
+          variant="gentle"
+          size="sm"
+          className="w-full flex items-center gap-2"
+        >
+          <Plus className="w-4 h-4" />
+          {t.gratitude?.save || 'Speichern'}
+        </Button>
       </div>
+
+      {/* Today's entries */}
+      {todayEntries.length > 0 && (
+        <div className="mt-4 pt-4 border-t border-border/50 space-y-2">
+          <p className="text-xs text-muted-foreground mb-2">
+            {t.gratitude?.todayEntries || "Heute eingetragen"}
+          </p>
+          {todayEntries.map((entry) => (
+            <motion.div
+              key={entry.id}
+              initial={{ opacity: 0, y: -5 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="p-3 rounded-xl bg-primary/5 border border-primary/10 group"
+            >
+              <div className="flex items-start justify-between gap-2">
+                <p className="text-sm text-foreground whitespace-pre-wrap flex-1">
+                  {entry.text}
+                </p>
+                <button
+                  onClick={() => handleDelete(entry.id)}
+                  className="p-1.5 rounded-lg text-muted-foreground/50 hover:text-destructive hover:bg-destructive/10 transition-colors opacity-0 group-hover:opacity-100"
+                  title={t.gratitude?.delete || 'Löschen'}
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      )}
 
       {/* History panel */}
       <AnimatePresence>
@@ -104,7 +148,7 @@ export function GratitudeJournal() {
               <div className="space-y-3 max-h-64 overflow-y-auto">
                 {pastEntries.map((entry) => (
                   <motion.div
-                    key={entry.date}
+                    key={entry.id}
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="p-3 rounded-xl bg-secondary/50 group"
@@ -119,7 +163,7 @@ export function GratitudeJournal() {
                         </p>
                       </div>
                       <button
-                        onClick={() => handleDelete(entry.date)}
+                        onClick={() => handleDelete(entry.id)}
                         className="p-1.5 rounded-lg text-muted-foreground/50 hover:text-destructive hover:bg-destructive/10 transition-colors opacity-0 group-hover:opacity-100"
                         title={t.gratitude?.delete || 'Löschen'}
                       >
