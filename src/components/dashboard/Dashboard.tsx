@@ -1,17 +1,21 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { format } from 'date-fns';
-import { Plus, Settings, Leaf, Moon } from 'lucide-react';
+import { Plus, Settings as SettingsIcon, Leaf, Moon, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { HabitMatrix } from '@/components/habits/HabitMatrix';
 import { AddHabitDialog } from '@/components/habits/AddHabitDialog';
 import { DailyCheckin } from '@/components/checkin/DailyCheckin';
 import { InsightCard, DEMO_INSIGHTS } from '@/components/insights/InsightCard';
 import { RestingHabits } from '@/components/habits/RestingHabits';
+import { HabitTimeline } from '@/components/insights/HabitTimeline';
+import { Settings } from '@/components/settings/Settings';
 import { useFlowNautStore } from '@/store/flownaut-store';
 
 export function Dashboard() {
   const [isAddHabitOpen, setIsAddHabitOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [showTimeline, setShowTimeline] = useState(false);
   const habits = useFlowNautStore((s) => s.getActiveHabits());
   const restingHabits = useFlowNautStore((s) => s.getRestingHabits());
   const insights = useFlowNautStore((s) => s.insights);
@@ -52,8 +56,13 @@ export function Dashboard() {
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" className="rounded-xl">
-              <Settings className="w-5 h-5" />
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="rounded-xl"
+              onClick={() => setIsSettingsOpen(true)}
+            >
+              <SettingsIcon className="w-5 h-5" />
             </Button>
           </div>
         </div>
@@ -131,6 +140,47 @@ export function Dashboard() {
           </motion.section>
         )}
 
+        {/* Timeline visualization */}
+        {habits.length > 0 && (
+          <motion.section
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.35 }}
+            className="bg-card rounded-2xl border border-border/50 shadow-card p-5"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-serif font-medium text-foreground flex items-center gap-2">
+                <TrendingUp className="w-4 h-4 text-primary" />
+                Your Rhythm
+              </h2>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowTimeline(!showTimeline)}
+                className="text-xs"
+              >
+                {showTimeline ? 'Hide' : 'Show'} timeline
+              </Button>
+            </div>
+            <AnimatePresence>
+              {showTimeline && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                >
+                  <HabitTimeline daysToShow={30} />
+                </motion.div>
+              )}
+            </AnimatePresence>
+            {!showTimeline && (
+              <p className="text-sm text-muted-foreground">
+                See how your habits flow over time.
+              </p>
+            )}
+          </motion.section>
+        )}
+
         {/* Insights */}
         {insights.length > 0 && (
           <motion.section
@@ -173,6 +223,13 @@ export function Dashboard() {
         isOpen={isAddHabitOpen}
         onClose={() => setIsAddHabitOpen(false)}
       />
+
+      {/* Settings */}
+      <AnimatePresence>
+        {isSettingsOpen && (
+          <Settings onClose={() => setIsSettingsOpen(false)} />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
