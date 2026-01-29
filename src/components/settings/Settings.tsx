@@ -342,13 +342,6 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
       />
 
       <SettingsRow 
-        icon={isAuthenticated ? Cloud : CloudOff} 
-        label="Save to Cloud" 
-        sublabel={isAuthenticated ? 'Your profile is synced' : 'Keeps your profile safe if you change devices'}
-        onClick={() => setSection(isAuthenticated ? 'cloud' : 'auth')}
-      />
-
-      <SettingsRow 
         icon={RefreshCw} 
         label="Reset Profile" 
         sublabel="Start fresh. Nothing carries over."
