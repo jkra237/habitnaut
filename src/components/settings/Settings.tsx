@@ -24,13 +24,16 @@ import {
   MessageCircle,
   ExternalLink,
   Edit3,
-  Sparkles
+  Sparkles,
+  Globe
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { useCloudSync } from '@/hooks/use-cloud-sync';
 import { useFlowNautStore } from '@/store/flownaut-store';
+import { useTranslations, useSetLanguage, useLanguage } from '@/hooks/use-translations';
+import { LANGUAGE_OPTIONS, type SupportedLanguage } from '@/lib/i18n/translations';
 import type { InsightFrequency, WeekStart } from '@/types/flownaut';
 
 interface SettingsProps {
@@ -38,53 +41,135 @@ interface SettingsProps {
   onEditProfile?: () => void;
 }
 
-type SettingsSection = 'main' | 'profile' | 'cloud' | 'auth' | 'reset' | 'delete' | 'habits' | 'experience' | 'privacy' | 'about' | 'google-cloud';
+type SettingsSection = 'main' | 'profile' | 'cloud' | 'auth' | 'reset' | 'delete' | 'habits' | 'experience' | 'privacy' | 'about' | 'google-cloud' | 'language';
 
-const PERSONALITY_DESCRIPTIONS: Record<string, Record<string, string>> = {
+const PERSONALITY_DESCRIPTIONS: Record<string, Record<string, Record<SupportedLanguage, string>>> = {
   rhythm: {
-    morning: 'You tend to feel most alive in the morning hours',
-    evening: 'You come alive as the day winds down',
-    flexible: 'Your rhythm flows naturally with the day',
+    morning: {
+      en: 'You tend to feel most alive in the morning hours',
+      es: 'Tiendes a sentirte más vivo en las horas de la mañana',
+      de: 'Du fühlst dich in den Morgenstunden am lebendigsten',
+    },
+    evening: {
+      en: 'You come alive as the day winds down',
+      es: 'Cobras vida cuando el día termina',
+      de: 'Du wirst lebendig, wenn der Tag ausklingt',
+    },
+    flexible: {
+      en: 'Your rhythm flows naturally with the day',
+      es: 'Tu ritmo fluye naturalmente con el día',
+      de: 'Dein Rhythmus fließt natürlich mit dem Tag',
+    },
   },
   energy: {
-    steady: 'Your energy flows steadily throughout the day',
-    bursts: 'You work in bursts of intense energy',
-    waves: 'Your energy moves in natural waves',
+    steady: {
+      en: 'Your energy flows steadily throughout the day',
+      es: 'Tu energía fluye constantemente durante el día',
+      de: 'Deine Energie fließt stetig durch den Tag',
+    },
+    bursts: {
+      en: 'You work in bursts of intense energy',
+      es: 'Trabajas en ráfagas de energía intensa',
+      de: 'Du arbeitest in intensiven Energieschüben',
+    },
+    waves: {
+      en: 'Your energy moves in natural waves',
+      es: 'Tu energía se mueve en oleadas naturales',
+      de: 'Deine Energie bewegt sich in natürlichen Wellen',
+    },
   },
   motivation: {
-    internal: 'You\'re guided by an inner sense of what matters',
-    external: 'Goals and visible outcomes energize you',
-    mixed: 'You balance inner values with external goals',
+    internal: {
+      en: "You're guided by an inner sense of what matters",
+      es: 'Te guías por un sentido interno de lo que importa',
+      de: 'Du wirst von einem inneren Sinn für das Wichtige geleitet',
+    },
+    external: {
+      en: 'Goals and visible outcomes energize you',
+      es: 'Las metas y resultados visibles te energizan',
+      de: 'Ziele und sichtbare Ergebnisse energetisieren dich',
+    },
+    mixed: {
+      en: 'You balance inner values with external goals',
+      es: 'Equilibras valores internos con metas externas',
+      de: 'Du balancierst innere Werte mit äußeren Zielen',
+    },
   },
   approach: {
-    structured: 'You find comfort in gentle structure',
-    spontaneous: 'You prefer following what feels right',
-    adaptive: 'You adapt your approach to each situation',
+    structured: {
+      en: 'You find comfort in gentle structure',
+      es: 'Encuentras comodidad en una estructura suave',
+      de: 'Du findest Komfort in sanfter Struktur',
+    },
+    spontaneous: {
+      en: 'You prefer following what feels right',
+      es: 'Prefieres seguir lo que se siente correcto',
+      de: 'Du bevorzugst dem zu folgen, was sich richtig anfühlt',
+    },
+    adaptive: {
+      en: 'You adapt your approach to each situation',
+      es: 'Adaptas tu enfoque a cada situación',
+      de: 'Du passt deinen Ansatz an jede Situation an',
+    },
   },
   focus: {
-    deep: 'You prefer deep focus on one thing at a time',
-    varied: 'You thrive with variety and switching tasks',
-    contextual: 'Your focus adapts to what\'s needed',
+    deep: {
+      en: 'You prefer deep focus on one thing at a time',
+      es: 'Prefieres un enfoque profundo en una cosa a la vez',
+      de: 'Du bevorzugst tiefen Fokus auf eine Sache',
+    },
+    varied: {
+      en: 'You thrive with variety and switching tasks',
+      es: 'Prosperas con variedad y cambio de tareas',
+      de: 'Du blühst auf mit Abwechslung und Aufgabenwechsel',
+    },
+    contextual: {
+      en: "Your focus adapts to what's needed",
+      es: 'Tu enfoque se adapta a lo que se necesita',
+      de: 'Dein Fokus passt sich dem Bedarf an',
+    },
   },
   recovery: {
-    solitude: 'Quiet time restores your energy',
-    social: 'Being with others recharges you',
-    mixed: 'You balance solitude and connection',
+    solitude: {
+      en: 'Quiet time restores your energy',
+      es: 'El tiempo tranquilo restaura tu energía',
+      de: 'Ruhige Zeit stellt deine Energie wieder her',
+    },
+    social: {
+      en: 'Being with others recharges you',
+      es: 'Estar con otros te recarga',
+      de: 'Mit anderen zusammen zu sein lädt dich auf',
+    },
+    mixed: {
+      en: 'You balance solitude and connection',
+      es: 'Equilibras soledad y conexión',
+      de: 'Du balancierst Einsamkeit und Verbundenheit',
+    },
   },
   pace: {
-    slow: 'A deliberate, unhurried pace suits you',
-    moderate: 'You find a balanced rhythm',
-    fast: 'You thrive with quick, dynamic movement',
+    slow: {
+      en: 'A deliberate, unhurried pace suits you',
+      es: 'Un ritmo deliberado y sin prisa te sienta bien',
+      de: 'Ein bedachtes, ungehetztes Tempo passt zu dir',
+    },
+    moderate: {
+      en: 'You find a balanced rhythm',
+      es: 'Encuentras un ritmo equilibrado',
+      de: 'Du findest einen ausgewogenen Rhythmus',
+    },
+    fast: {
+      en: 'You thrive with quick, dynamic movement',
+      es: 'Prosperas con movimientos rápidos y dinámicos',
+      de: 'Du blühst mit schneller, dynamischer Bewegung auf',
+    },
   },
-};
-
-const INSIGHT_DESCRIPTIONS: Record<InsightFrequency, string> = {
-  rare: 'About once a month — quiet observation',
-  occasional: 'Every 1-2 weeks — gentle reflections',
-  weekly: 'Weekly — regular self-observation prompts',
 };
 
 export function Settings({ onClose, onEditProfile }: SettingsProps) {
+  const t = useTranslations();
+  const currentLanguage = useLanguage();
+  const setLanguage = useSetLanguage();
+  
   const [section, setSection] = useState<SettingsSection>('main');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -214,8 +299,8 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
   const getPersonalitySummary = () => {
     if (!personality) return null;
     const summaryParts = [
-      PERSONALITY_DESCRIPTIONS.rhythm[personality.rhythm],
-      PERSONALITY_DESCRIPTIONS.energy[personality.energy],
+      PERSONALITY_DESCRIPTIONS.rhythm[personality.rhythm]?.[currentLanguage],
+      PERSONALITY_DESCRIPTIONS.energy[personality.energy]?.[currentLanguage],
     ].filter(Boolean);
     return summaryParts.slice(0, 2).join('. ') + '.';
   };
@@ -258,66 +343,114 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
       onClick={() => { setSection(to); setConfirmReset(false); setConfirmDelete(false); }}
       className="w-full text-center text-sm text-muted-foreground hover:text-foreground transition-colors py-2"
     >
-      ← Back
+      ← {t.common.back}
     </button>
   );
+
+  const currentLanguageOption = LANGUAGE_OPTIONS.find(l => l.value === currentLanguage);
 
   const renderMain = () => (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
       {/* Profile Section */}
       <div className="space-y-2">
-        <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide px-1">Profile</h3>
+        <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide px-1">{t.settings.sections.profile}</h3>
         <SettingsRow 
           icon={User} 
-          label="Your Profile" 
-          sublabel={isAuthenticated ? `Synced as ${userEmail}` : 'View & edit your snapshot'}
+          label={t.settings.profile.title} 
+          sublabel={isAuthenticated ? `${t.settings.profile.syncedAs} ${userEmail}` : t.settings.profile.subtitle}
           onClick={() => setSection('profile')}
+        />
+      </div>
+
+      {/* Language */}
+      <div className="space-y-2">
+        <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide px-1">{t.settings.language.title}</h3>
+        <SettingsRow 
+          icon={Globe} 
+          label={currentLanguageOption?.label || 'English'}
+          sublabel={t.settings.language.subtitle}
+          onClick={() => setSection('language')}
+          rightContent={<span className="text-xl mr-2">{currentLanguageOption?.flag}</span>}
         />
       </div>
 
       {/* Habits & Reminders */}
       <div className="space-y-2">
-        <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide px-1">Habits & Reminders</h3>
+        <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide px-1">{t.settings.sections.habitsReminders}</h3>
         <SettingsRow 
           icon={preferences.globalRemindersEnabled ? Bell : BellOff} 
-          label="Reminders" 
-          sublabel="Gentle reminders, if you want them"
+          label={t.settings.habits.title} 
+          sublabel={t.settings.habits.subtitle}
           onClick={() => setSection('habits')}
         />
       </div>
 
       {/* App Experience */}
       <div className="space-y-2">
-        <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide px-1">App Experience</h3>
+        <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide px-1">{t.settings.sections.appExperience}</h3>
         <SettingsRow 
           icon={Sparkles} 
-          label="Insights & Reflections" 
-          sublabel="How often reflections appear"
+          label={t.settings.experience.title} 
+          sublabel={t.settings.experience.subtitle}
           onClick={() => setSection('experience')}
         />
       </div>
 
       {/* Data & Privacy */}
       <div className="space-y-2">
-        <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide px-1">Data & Privacy</h3>
+        <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide px-1">{t.settings.sections.dataPrivacy}</h3>
         <SettingsRow 
           icon={Shield} 
-          label="Your Data" 
-          sublabel="Export, import, or manage your data"
+          label={t.settings.privacy.title} 
+          sublabel={t.settings.privacy.subtitle}
           onClick={() => setSection('privacy')}
         />
       </div>
 
       {/* Support & About */}
       <div className="space-y-2">
-        <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide px-1">Support</h3>
+        <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide px-1">{t.settings.sections.support}</h3>
         <SettingsRow 
           icon={HelpCircle} 
-          label="Help & About" 
-          sublabel="Learn how this app works"
+          label={t.settings.about.title} 
+          sublabel={t.settings.about.subtitle}
           onClick={() => setSection('about')}
         />
       </div>
+    </motion.div>
+  );
+
+  const renderLanguage = () => (
+    <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-5">
+      <div className="text-center mb-4">
+        <h3 className="font-medium text-foreground">{t.settings.language.title}</h3>
+        <p className="text-sm text-muted-foreground">{t.settings.language.subtitle}</p>
+      </div>
+
+      <div className="space-y-3">
+        {LANGUAGE_OPTIONS.map((option) => (
+          <button
+            key={option.value}
+            onClick={() => {
+              setLanguage(option.value);
+              setSection('main');
+            }}
+            className={`w-full p-4 rounded-xl text-left transition-all flex items-center gap-4 ${
+              currentLanguage === option.value
+                ? 'bg-primary/10 border-2 border-primary/30'
+                : 'bg-secondary/50 border-2 border-transparent hover:bg-secondary/80'
+            }`}
+          >
+            <span className="text-2xl">{option.flag}</span>
+            <span className="font-medium text-foreground">{option.label}</span>
+            {currentLanguage === option.value && (
+              <Check className="w-5 h-5 text-primary ml-auto" />
+            )}
+          </button>
+        ))}
+      </div>
+
+      <BackButton />
     </motion.div>
   );
 
@@ -326,33 +459,33 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
       {/* Profile Summary */}
       {personality && (
         <div className="p-4 rounded-xl bg-primary/5 border border-primary/10">
-          <p className="text-xs text-muted-foreground mb-2">Your current snapshot</p>
+          <p className="text-xs text-muted-foreground mb-2">{t.settings.profile.currentSnapshot}</p>
           <p className="text-sm text-foreground">{getPersonalitySummary()}</p>
           <p className="text-xs text-muted-foreground mt-3 italic">
-            This reflects how you currently tend to approach habits.
+            {t.settings.profile.snapshotNote}
           </p>
         </div>
       )}
 
       <SettingsRow 
         icon={Edit3} 
-        label="Revisit Questions" 
-        sublabel="You can revisit this anytime"
+        label={t.settings.profile.revisitQuestions} 
+        sublabel={t.settings.profile.revisitSubtitle}
         onClick={handleEditProfile}
       />
 
       <SettingsRow 
         icon={RefreshCw} 
-        label="Reset Profile" 
-        sublabel="Start fresh. Nothing carries over."
+        label={t.settings.profile.resetProfile} 
+        sublabel={t.settings.profile.resetSubtitle}
         onClick={() => setSection('reset')}
       />
 
       {isAuthenticated && (
         <SettingsRow 
           icon={Trash2} 
-          label="Delete Everywhere" 
-          sublabel="Removes your data from this device and the cloud"
+          label={t.settings.profile.deleteEverywhere} 
+          sublabel={t.settings.profile.deleteSubtitle}
           onClick={() => setSection('delete')}
           destructive
         />
@@ -365,8 +498,8 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
   const renderHabits = () => (
     <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-5">
       <div className="text-center mb-4">
-        <h3 className="font-medium text-foreground">Reminders</h3>
-        <p className="text-sm text-muted-foreground">Gentle reminders, if you want them.</p>
+        <h3 className="font-medium text-foreground">{t.settings.habits.title}</h3>
+        <p className="text-sm text-muted-foreground">{t.settings.habits.subtitle}</p>
       </div>
 
       {/* Global toggle */}
@@ -374,8 +507,8 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
         <div className="flex items-center gap-3">
           <Bell className="w-5 h-5 text-muted-foreground" />
           <div>
-            <p className="font-medium text-sm text-foreground">Enable reminders</p>
-            <p className="text-xs text-muted-foreground">Uses your device's notification settings</p>
+            <p className="font-medium text-sm text-foreground">{t.settings.habits.enableReminders}</p>
+            <p className="text-xs text-muted-foreground">{t.settings.habits.deviceSettings}</p>
           </div>
         </div>
         <Switch
@@ -387,9 +520,9 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
       {/* Habit count */}
       <div className="p-4 rounded-xl bg-secondary/30 text-center">
         <p className="text-2xl font-serif text-foreground">{habits.length}</p>
-        <p className="text-xs text-muted-foreground">habits you're observing</p>
+        <p className="text-xs text-muted-foreground">{t.settings.habits.habitsObserving}</p>
         <p className="text-xs text-muted-foreground mt-1">
-          ({habits.filter(h => !h.isResting).length} active, {habits.filter(h => h.isResting).length} resting)
+          ({habits.filter(h => !h.isResting).length} {t.settings.habits.active}, {habits.filter(h => h.isResting).length} {t.settings.habits.resting})
         </p>
       </div>
 
@@ -400,8 +533,8 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
   const renderExperience = () => (
     <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-5">
       <div className="text-center mb-4">
-        <h3 className="font-medium text-foreground">Insights & Reflections</h3>
-        <p className="text-sm text-muted-foreground">How often you'd like reflections to appear.</p>
+        <h3 className="font-medium text-foreground">{t.settings.experience.title}</h3>
+        <p className="text-sm text-muted-foreground">{t.settings.experience.subtitle}</p>
       </div>
 
       {/* Insight Frequency */}
@@ -416,28 +549,28 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
                 : 'bg-secondary/50 border-2 border-transparent hover:bg-secondary/80'
             }`}
           >
-            <p className="font-medium text-sm text-foreground capitalize">{freq}</p>
-            <p className="text-xs text-muted-foreground mt-1">{INSIGHT_DESCRIPTIONS[freq]}</p>
+            <p className="font-medium text-sm text-foreground">{t.settings.experience.insightFrequency[freq]}</p>
+            <p className="text-xs text-muted-foreground mt-1">{t.settings.experience.insightFrequency[`${freq}Desc` as keyof typeof t.settings.experience.insightFrequency]}</p>
           </button>
         ))}
       </div>
 
       {/* Info about insight types */}
       <div className="p-4 rounded-xl bg-secondary/30 space-y-2">
-        <p className="text-xs font-medium text-foreground">Types of reflections:</p>
+        <p className="text-xs font-medium text-foreground">{t.settings.experience.reflectionTypes}</p>
         <ul className="text-xs text-muted-foreground space-y-1">
-          <li>• <span className="font-medium">Patterns</span> — observing trends over time</li>
-          <li>• <span className="font-medium">Connections</span> — highlighting possible links</li>
-          <li>• <span className="font-medium">Prompts</span> — gentle questions for introspection</li>
+          <li>• <span className="font-medium">{t.settings.experience.patterns}</span> — {t.settings.experience.patternsDesc}</li>
+          <li>• <span className="font-medium">{t.settings.experience.connections}</span> — {t.settings.experience.connectionsDesc}</li>
+          <li>• <span className="font-medium">{t.settings.experience.prompts}</span> — {t.settings.experience.promptsDesc}</li>
         </ul>
         <p className="text-xs text-muted-foreground mt-2 italic">
-          Never prescriptive. Never "you should". Just observations.
+          {t.settings.experience.neverPrescriptive}
         </p>
       </div>
 
       {/* Week Start */}
       <div className="space-y-2">
-        <label className="text-sm font-medium text-foreground">Week starts on</label>
+        <label className="text-sm font-medium text-foreground">{t.settings.experience.weekStartsOn}</label>
         <div className="flex gap-2">
           {(['monday', 'sunday'] as WeekStart[]).map((day) => (
             <button
@@ -450,7 +583,7 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
               }`}
             >
               <Calendar className="w-4 h-4" />
-              {day.charAt(0).toUpperCase() + day.slice(1)}
+              {day === 'monday' ? t.settings.experience.monday : t.settings.experience.sunday}
             </button>
           ))}
         </div>
@@ -463,25 +596,25 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
   const renderPrivacy = () => (
     <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-5">
       <div className="text-center mb-4">
-        <h3 className="font-medium text-foreground">Your Data</h3>
-        <p className="text-sm text-muted-foreground">Your data belongs to you.</p>
+        <h3 className="font-medium text-foreground">{t.settings.privacy.title}</h3>
+        <p className="text-sm text-muted-foreground">{t.settings.privacy.subtitle}</p>
       </div>
 
       {/* Data Overview */}
       <div className="p-4 rounded-xl bg-secondary/30 space-y-2">
-        <p className="text-sm font-medium text-foreground">Stored locally</p>
+        <p className="text-sm font-medium text-foreground">{t.settings.privacy.storedLocally}</p>
         <ul className="text-xs text-muted-foreground space-y-1">
-          <li>• {habits.length} habits</li>
-          <li>• {entries.length} daily entries</li>
-          <li>• Personality profile</li>
-          <li>• App preferences</li>
+          <li>• {habits.length} {t.settings.privacy.habits}</li>
+          <li>• {entries.length} {t.settings.privacy.dailyEntries}</li>
+          <li>• {t.settings.privacy.personalityProfile}</li>
+          <li>• {t.settings.privacy.appPreferences}</li>
         </ul>
         {isAuthenticated && (
           <>
-            <p className="text-sm font-medium text-foreground mt-3">Stored in cloud</p>
+            <p className="text-sm font-medium text-foreground mt-3">{t.settings.privacy.storedInCloud}</p>
             <ul className="text-xs text-muted-foreground space-y-1">
-              <li>• Profile & habits</li>
-              {syncLogsEnabled && <li>• Daily entries (opt-in)</li>}
+              <li>• {t.settings.privacy.profileAndHabits}</li>
+              {syncLogsEnabled && <li>• {t.settings.privacy.dailyEntriesOptIn}</li>}
             </ul>
           </>
         )}
@@ -490,15 +623,15 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
       {/* Google Cloud sync (placeholder) */}
       <SettingsRow 
         icon={Cloud} 
-        label="Connect to Google Drive" 
-        sublabel="Save your data to Google Cloud"
+        label={t.settings.privacy.googleDrive} 
+        sublabel={t.settings.privacy.googleDriveSubtitle}
         onClick={() => setSection('google-cloud')}
       />
 
       <SettingsRow 
         icon={Download} 
-        label="Export Data" 
-        sublabel="Download as JSON"
+        label={t.settings.privacy.exportData} 
+        sublabel={t.settings.privacy.exportSubtitle}
         onClick={handleExport}
       />
 
@@ -513,8 +646,8 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
       <div className="space-y-2">
         <SettingsRow 
           icon={Upload} 
-          label="Import Data" 
-          sublabel="Restore from a previous export"
+          label={t.settings.privacy.importData} 
+          sublabel={t.settings.privacy.importSubtitle}
           onClick={handleImportClick}
         />
         {importError && (
@@ -532,7 +665,7 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
             <p className="text-sm text-foreground">Clear all daily entries? Cloud data remains untouched.</p>
             <div className="flex gap-2">
               <Button variant="outline" onClick={() => setConfirmClearLogs(false)} className="flex-1">
-                Cancel
+                {t.common.cancel}
               </Button>
               <Button variant="destructive" onClick={handleClearLogs} className="flex-1">
                 Clear
@@ -542,8 +675,8 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
         ) : (
           <SettingsRow 
             icon={Trash2} 
-            label="Clear Local Logs" 
-            sublabel="Deletes local entries only"
+            label={t.settings.privacy.clearLogs} 
+            sublabel={t.settings.privacy.clearLogsSubtitle}
             onClick={handleClearLogs}
           />
         )}
@@ -594,7 +727,7 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
           <Leaf className="w-8 h-8 text-primary" />
         </div>
         <h3 className="font-serif text-lg font-medium text-foreground">FlowNaut</h3>
-        <p className="text-xs text-muted-foreground">Version 1.0.0</p>
+        <p className="text-xs text-muted-foreground">{t.settings.about.version} 1.0.0</p>
       </div>
 
       <div className="p-4 rounded-xl bg-secondary/30">
@@ -602,7 +735,7 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
           "I observe myself – I don't judge myself."
         </p>
         <p className="text-xs text-muted-foreground text-center mt-2">
-          A self-observation tool focused on awareness and personal fit, not discipline or optimization.
+          {t.settings.about.philosophyText}
         </p>
       </div>
 
@@ -724,9 +857,9 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
         <div className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-secondary flex items-center justify-center">
           <Leaf className="w-7 h-7 text-primary" />
         </div>
-        <h3 className="text-lg font-serif font-medium text-foreground">Reset Profile</h3>
+        <h3 className="text-lg font-serif font-medium text-foreground">{t.settings.profile.resetProfile}</h3>
         <p className="text-sm text-muted-foreground mt-2 max-w-xs mx-auto">
-          Start fresh. Nothing carries over.
+          {t.settings.profile.resetSubtitle}
         </p>
         {isAuthenticated && (
           <p className="text-xs text-muted-foreground mt-3 px-4 py-2 bg-secondary rounded-lg inline-block">
@@ -739,12 +872,12 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
         <div className="space-y-3">
           <p className="text-center text-sm text-foreground font-medium">Are you sure?</p>
           <div className="flex gap-2">
-            <Button onClick={() => setConfirmReset(false)} variant="outline" className="flex-1">Cancel</Button>
+            <Button onClick={() => setConfirmReset(false)} variant="outline" className="flex-1">{t.common.cancel}</Button>
             <Button onClick={handleSoftReset} variant="destructive" className="flex-1">Reset</Button>
           </div>
         </div>
       ) : (
-        <Button onClick={handleSoftReset} variant="outline" className="w-full">Reset profile</Button>
+        <Button onClick={handleSoftReset} variant="outline" className="w-full">{t.settings.profile.resetProfile}</Button>
       )}
 
       <BackButton to="profile" />
@@ -757,9 +890,9 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
         <div className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-destructive/10 flex items-center justify-center">
           <AlertTriangle className="w-7 h-7 text-destructive" />
         </div>
-        <h3 className="text-lg font-serif font-medium text-foreground">Delete Everywhere</h3>
+        <h3 className="text-lg font-serif font-medium text-foreground">{t.settings.profile.deleteEverywhere}</h3>
         <p className="text-sm text-muted-foreground mt-2 max-w-xs mx-auto">
-          Removes your data from this device and the cloud.
+          {t.settings.profile.deleteSubtitle}
         </p>
       </div>
 
@@ -767,17 +900,35 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
         <div className="space-y-3">
           <p className="text-center text-sm text-destructive font-medium">This is permanent.</p>
           <div className="flex gap-2">
-            <Button onClick={() => setConfirmDelete(false)} variant="outline" className="flex-1">Cancel</Button>
+            <Button onClick={() => setConfirmDelete(false)} variant="outline" className="flex-1">{t.common.cancel}</Button>
             <Button onClick={handleHardDelete} variant="destructive" className="flex-1">Delete everything</Button>
           </div>
         </div>
       ) : (
-        <Button onClick={handleHardDelete} variant="destructive" className="w-full">Delete everywhere</Button>
+        <Button onClick={handleHardDelete} variant="destructive" className="w-full">{t.settings.profile.deleteEverywhere}</Button>
       )}
 
       <BackButton to="profile" />
     </motion.div>
   );
+
+  const getSectionTitle = () => {
+    switch (section) {
+      case 'main': return t.settings.title;
+      case 'profile': return t.settings.profile.title;
+      case 'habits': return t.settings.habits.title;
+      case 'experience': return t.settings.experience.title;
+      case 'privacy': return t.settings.privacy.title;
+      case 'about': return t.settings.about.title;
+      case 'language': return t.settings.language.title;
+      case 'auth': return 'Cloud Sync';
+      case 'cloud': return 'Cloud Sync';
+      case 'google-cloud': return 'Google Drive';
+      case 'reset': return t.settings.profile.resetProfile;
+      case 'delete': return t.settings.profile.deleteEverywhere;
+      default: return t.settings.title;
+    }
+  };
 
   return (
     <motion.div
@@ -793,17 +944,7 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
       >
         <div className="sticky top-0 bg-card border-b border-border/50 p-4 flex items-center justify-between rounded-t-3xl">
           <h2 className="text-lg font-serif font-medium text-foreground">
-            {section === 'main' && 'Settings'}
-            {section === 'profile' && 'Your Profile'}
-            {section === 'habits' && 'Reminders'}
-            {section === 'experience' && 'Insights'}
-            {section === 'privacy' && 'Data & Privacy'}
-            {section === 'about' && 'About'}
-            {section === 'auth' && 'Cloud Sync'}
-            {section === 'cloud' && 'Cloud Sync'}
-            {section === 'google-cloud' && 'Google Drive'}
-            {section === 'reset' && 'Reset'}
-            {section === 'delete' && 'Delete'}
+            {getSectionTitle()}
           </h2>
           <button onClick={onClose} className="p-2 rounded-xl hover:bg-secondary transition-colors">
             <X className="w-5 h-5 text-muted-foreground" />
@@ -813,6 +954,7 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
         <div className="p-5">
           <AnimatePresence mode="wait">
             {section === 'main' && renderMain()}
+            {section === 'language' && renderLanguage()}
             {section === 'profile' && renderProfile()}
             {section === 'habits' && renderHabits()}
             {section === 'experience' && renderExperience()}
