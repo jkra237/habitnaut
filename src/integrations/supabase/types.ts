@@ -14,13 +14,162 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      cloud_habit_logs: {
+        Row: {
+          created_at: string
+          date: string
+          energy: number | null
+          habits: Json
+          id: string
+          mood: number | null
+          note: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          date: string
+          energy?: number | null
+          habits?: Json
+          id?: string
+          mood?: number | null
+          note?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          energy?: number | null
+          habits?: Json
+          id?: string
+          mood?: number | null
+          note?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      cloud_habits: {
+        Row: {
+          created_at: string
+          description: string | null
+          emoji: string | null
+          id: string
+          is_resting: boolean | null
+          local_id: string
+          name: string
+          reminder_enabled: boolean | null
+          reminder_frequency: string | null
+          reminder_time_anchor: string | null
+          resting_note: string | null
+          soft_frequency: string | null
+          time_anchor: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          emoji?: string | null
+          id?: string
+          is_resting?: boolean | null
+          local_id: string
+          name: string
+          reminder_enabled?: boolean | null
+          reminder_frequency?: string | null
+          reminder_time_anchor?: string | null
+          resting_note?: string | null
+          soft_frequency?: string | null
+          time_anchor?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          emoji?: string | null
+          id?: string
+          is_resting?: boolean | null
+          local_id?: string
+          name?: string
+          reminder_enabled?: boolean | null
+          reminder_frequency?: string | null
+          reminder_time_anchor?: string | null
+          resting_note?: string | null
+          soft_frequency?: string | null
+          time_anchor?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      cloud_profiles: {
+        Row: {
+          cloud_sync_enabled: boolean | null
+          created_at: string
+          id: string
+          personality_axes: Json | null
+          preferred_tone: string | null
+          sync_logs_enabled: boolean | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cloud_sync_enabled?: boolean | null
+          created_at?: string
+          id?: string
+          personality_axes?: Json | null
+          preferred_tone?: string | null
+          sync_logs_enabled?: boolean | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          cloud_sync_enabled?: boolean | null
+          created_at?: string
+          id?: string
+          personality_axes?: Json | null
+          preferred_tone?: string | null
+          sync_logs_enabled?: boolean | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      cloud_reflections: {
+        Row: {
+          created_at: string
+          id: string
+          takeaway: string | null
+          user_id: string
+          week_start: string
+          word: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          takeaway?: string | null
+          user_id: string
+          week_start: string
+          word?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          takeaway?: string | null
+          user_id?: string
+          week_start?: string
+          word?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_own_profile: { Args: { check_user_id: string }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
