@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { useFlowNautStore } from '@/store/flownaut-store';
 import type { Habit } from '@/types/flownaut';
-import { Moon, X } from 'lucide-react';
+import { Moon, Trash2, X } from 'lucide-react';
 
 interface HabitOptionsProps {
   habit: Habit;
@@ -11,9 +11,15 @@ interface HabitOptionsProps {
 
 export function HabitOptions({ habit, onClose }: HabitOptionsProps) {
   const letHabitRest = useFlowNautStore((s) => s.letHabitRest);
+  const deleteHabit = useFlowNautStore((s) => s.deleteHabit);
 
   const handleLetRest = () => {
     letHabitRest(habit.id, 'Taking a break for now');
+    onClose();
+  };
+
+  const handleLetGo = () => {
+    deleteHabit(habit.id);
     onClose();
   };
 
@@ -64,7 +70,19 @@ export function HabitOptions({ habit, onClose }: HabitOptionsProps) {
           <Moon className="w-4 h-4 mr-2" />
           Let rest
           <span className="text-xs text-muted-foreground ml-auto">
-            Not delete – just pause
+            Pause gently
+          </span>
+        </Button>
+        
+        <Button
+          variant="ghost"
+          className="w-full justify-start text-muted-foreground hover:text-foreground"
+          onClick={handleLetGo}
+        >
+          <Trash2 className="w-4 h-4 mr-2" />
+          Let go
+          <span className="text-xs text-muted-foreground ml-auto">
+            Release completely
           </span>
         </Button>
       </div>

@@ -41,6 +41,7 @@ interface FlowNautStore extends UserState {
   updateHabitReminder: (habitId: string, reminder: HabitReminder) => void;
   letHabitRest: (habitId: string, note?: string) => void;
   wakeHabit: (habitId: string) => void;
+  deleteHabit: (habitId: string) => void;
   
   // Daily tracking
   setHabitState: (date: string, habitId: string, state: HabitState) => void;
@@ -138,6 +139,10 @@ export const useFlowNautStore = create<FlowNautStore>()(
         habits: state.habits.map((h) =>
           h.id === habitId ? { ...h, isResting: false, restingNote: undefined } : h
         ),
+      })),
+
+      deleteHabit: (habitId) => set((state) => ({
+        habits: state.habits.filter((h) => h.id !== habitId),
       })),
 
       setHabitState: (date, habitId, state) => set((store) => {
