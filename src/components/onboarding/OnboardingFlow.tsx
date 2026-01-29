@@ -1,9 +1,63 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { useFlowNautStore } from '@/store/flownaut-store';
 import type { PersonalityProfile, OnboardingAnswer } from '@/types/flownaut';
-import { Leaf, Moon, Sun, Zap, Heart, Compass } from 'lucide-react';
+import { Leaf, Moon, Sun, Zap, Heart, Compass, Check } from 'lucide-react';
+
+interface RecommendedHabit {
+  id: string;
+  name: string;
+  emoji: string;
+  reason: string;
+}
+
+const getRecommendedHabits = (personality: PersonalityProfile): RecommendedHabit[] => {
+  const habits: RecommendedHabit[] = [];
+
+  // Based on rhythm
+  if (personality.rhythm === 'morning') {
+    habits.push({ id: 'morning-pages', name: 'Morning pages', emoji: '📝', reason: 'Aligns with your morning clarity' });
+    habits.push({ id: 'sunrise-walk', name: 'Sunrise walk', emoji: '🌅', reason: 'Captures your peak energy time' });
+  } else if (personality.rhythm === 'evening') {
+    habits.push({ id: 'evening-reflection', name: 'Evening reflection', emoji: '🌙', reason: 'Honors your contemplative nights' });
+    habits.push({ id: 'wind-down', name: 'Wind-down ritual', emoji: '🕯️', reason: 'Supports your evening rhythm' });
+  } else {
+    habits.push({ id: 'mindful-pause', name: 'Mindful pause', emoji: '🧘', reason: 'Fits your flexible rhythm' });
+  }
+
+  // Based on energy
+  if (personality.energy === 'steady') {
+    habits.push({ id: 'daily-movement', name: 'Daily movement', emoji: '🚶', reason: 'Maintains your steady flow' });
+  } else if (personality.energy === 'bursts') {
+    habits.push({ id: 'creative-sprint', name: 'Creative sprint', emoji: '⚡', reason: 'Channels your burst energy' });
+    habits.push({ id: 'rest-ritual', name: 'Rest ritual', emoji: '☁️', reason: 'Balances your intensity' });
+  } else {
+    habits.push({ id: 'energy-check', name: 'Energy check-in', emoji: '🌊', reason: 'Honors your natural waves' });
+  }
+
+  // Based on motivation
+  if (personality.motivation === 'internal') {
+    habits.push({ id: 'gratitude', name: 'Gratitude moment', emoji: '💚', reason: 'Nurtures your inner compass' });
+  } else if (personality.motivation === 'external') {
+    habits.push({ id: 'progress-note', name: 'Progress note', emoji: '📊', reason: 'Celebrates visible growth' });
+  } else {
+    habits.push({ id: 'intention-setting', name: 'Set an intention', emoji: '🎯', reason: 'Bridges inner and outer goals' });
+  }
+
+  // Based on approach
+  if (personality.approach === 'structured') {
+    habits.push({ id: 'plan-tomorrow', name: 'Plan tomorrow', emoji: '📋', reason: 'Supports your love of structure' });
+  } else if (personality.approach === 'spontaneous') {
+    habits.push({ id: 'follow-curiosity', name: 'Follow curiosity', emoji: '✨', reason: 'Celebrates your spontaneity' });
+  } else {
+    habits.push({ id: 'flexible-focus', name: 'One focus thing', emoji: '🌿', reason: 'Adapts to your day' });
+  }
+
+  // Return top 5 unique habits
+  return habits.slice(0, 5);
+};
 
 interface Question {
   id: string;
@@ -66,42 +120,73 @@ const questions: Question[] = [
 export function OnboardingFlow() {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<OnboardingAnswer[]>([]);
+  const [selectedHabits, setSelectedHabits] = useState<Set<string>>(new Set());
+  const [personality, setPersonality] = useState<PersonalityProfile | null>(null);
+  const [tone, setTone] = useState<'gentle' | 'clear'>('gentle');
   const completeOnboarding = useFlowNautStore((s) => s.completeOnboarding);
+  const addHabit = useFlowNautStore((s) => s.addHabit);
 
   const isWelcome = step === 0;
-  const currentQuestion = !isWelcome ? questions[step - 1] : null;
-  const isComplete = step > questions.length;
+  const currentQuestion = !isWelcome && step <= questions.length ? questions[step - 1] : null;
+  const isHabitSelection = step === questions.length + 1;
+  const isComplete = step === questions.length + 2;
+
+  const recommendedHabits = personality ? getRecommendedHabits(personality) : [];
 
   const handleChoice = (choice: 'a' | 'b') => {
     if (!currentQuestion) return;
     
-    setAnswers([...answers, { questionId: currentQuestion.id, choice }]);
+    const newAnswers = [...answers, { questionId: currentQuestion.id, choice }];
+    setAnswers(newAnswers);
+    
+    // If this was the last question, build personality for habit recommendations
+    if (step === questions.length) {
+      const builtPersonality: PersonalityProfile = {
+        rhythm: 'flexible',
+        energy: 'waves',
+        motivation: 'mixed',
+        approach: 'adaptive',
+      };
+      
+      let builtTone: 'gentle' | 'clear' = 'gentle';
+
+      newAnswers.forEach((answer) => {
+        const question = questions.find((q) => q.id === answer.questionId);
+        if (!question) return;
+        
+        if (question.id === 'tone') {
+          builtTone = answer.choice === 'a' ? 'gentle' : 'clear';
+        } else {
+          const value = answer.choice === 'a' ? question.aValue : question.bValue;
+          (builtPersonality as any)[question.axis] = value;
+        }
+      });
+
+      setPersonality(builtPersonality);
+      setTone(builtTone);
+    }
+    
     setStep(step + 1);
   };
 
+  const toggleHabit = (habitId: string) => {
+    const newSelected = new Set(selectedHabits);
+    if (newSelected.has(habitId)) {
+      newSelected.delete(habitId);
+    } else {
+      newSelected.add(habitId);
+    }
+    setSelectedHabits(newSelected);
+  };
+
   const handleComplete = () => {
-    // Build personality from answers
-    const personality: PersonalityProfile = {
-      rhythm: 'flexible',
-      energy: 'waves',
-      motivation: 'mixed',
-      approach: 'adaptive',
-    };
+    if (!personality) return;
     
-    let tone: 'gentle' | 'clear' = 'gentle';
-
-    answers.forEach((answer) => {
-      const question = questions.find((q) => q.id === answer.questionId);
-      if (!question) return;
-      
-      if (question.id === 'tone') {
-        tone = answer.choice === 'a' ? 'gentle' : 'clear';
-      } else {
-        const value = answer.choice === 'a' ? question.aValue : question.bValue;
-        (personality as any)[question.axis] = value;
-      }
-    });
-
+    // Add selected habits
+    recommendedHabits
+      .filter((h) => selectedHabits.has(h.id))
+      .forEach((h) => addHabit(h.name, h.emoji));
+    
     completeOnboarding(personality, tone);
   };
 
@@ -217,6 +302,77 @@ export function OnboardingFlow() {
               <p className="text-center text-sm text-muted-foreground">
                 There's no right answer – just what feels true for you
               </p>
+            </motion.div>
+          )}
+
+          {isHabitSelection && (
+            <motion.div
+              key="habits"
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -50 }}
+              transition={{ duration: 0.4 }}
+              className="space-y-8"
+            >
+              <div className="text-center space-y-2">
+                <h2 className="text-2xl font-serif font-medium text-foreground">
+                  Starting points
+                </h2>
+                <p className="text-muted-foreground">
+                  Based on your rhythm, here are some habits that might feel natural.
+                  <br />
+                  <span className="text-sm">Select any that resonate—or skip for now.</span>
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                {recommendedHabits.map((habit) => (
+                  <motion.button
+                    key={habit.id}
+                    whileHover={{ scale: 1.01 }}
+                    whileTap={{ scale: 0.99 }}
+                    onClick={() => toggleHabit(habit.id)}
+                    className={`w-full p-4 rounded-xl border-2 transition-all duration-300 text-left flex items-center gap-4 ${
+                      selectedHabits.has(habit.id)
+                        ? 'border-primary bg-primary/10'
+                        : 'border-border bg-card hover:border-primary/50'
+                    }`}
+                  >
+                    <div className="w-12 h-12 rounded-xl bg-background flex items-center justify-center text-2xl">
+                      {habit.emoji}
+                    </div>
+                    <div className="flex-1">
+                      <div className="font-medium text-foreground">{habit.name}</div>
+                      <div className="text-sm text-muted-foreground">{habit.reason}</div>
+                    </div>
+                    <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
+                      selectedHabits.has(habit.id)
+                        ? 'border-primary bg-primary text-primary-foreground'
+                        : 'border-muted-foreground/30'
+                    }`}>
+                      {selectedHabits.has(habit.id) && <Check className="w-4 h-4" />}
+                    </div>
+                  </motion.button>
+                ))}
+              </div>
+
+              <div className="flex gap-3 justify-center">
+                <Button 
+                  onClick={() => setStep(step + 1)} 
+                  variant="ghost"
+                  className="px-6"
+                >
+                  Skip for now
+                </Button>
+                <Button 
+                  onClick={() => setStep(step + 1)} 
+                  size="lg"
+                  className="px-8"
+                  disabled={selectedHabits.size === 0}
+                >
+                  Continue with {selectedHabits.size} habit{selectedHabits.size !== 1 ? 's' : ''}
+                </Button>
+              </div>
             </motion.div>
           )}
 
