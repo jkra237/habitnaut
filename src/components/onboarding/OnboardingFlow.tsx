@@ -3,10 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { useFlowNautStore } from '@/store/flownaut-store';
 import type { PersonalityProfile, OnboardingAnswer } from '@/types/flownaut';
-import { Leaf, Moon, Sun, Zap, Heart, Compass, Check, Globe } from 'lucide-react';
+import { Moon, Sun, Zap, Heart, Compass, Check, Globe, Leaf } from 'lucide-react';
 import { suggestTimeAnchor } from '@/lib/reminder-copy';
 import { useTranslations, useSetLanguage } from '@/hooks/use-translations';
 import { LANGUAGE_OPTIONS, type SupportedLanguage } from '@/lib/i18n/translations';
+import habitnautMascot from '@/assets/habitnaut-mascot.png';
 
 interface RecommendedHabit {
   id: string;
@@ -351,14 +352,18 @@ export function OnboardingFlow() {
             >
               <div className="space-y-4">
                 <motion.div
-                  className="w-20 h-20 mx-auto rounded-3xl bg-primary/10 flex items-center justify-center"
-                  animate={{ scale: [1, 1.05, 1] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  className="w-28 h-28 mx-auto rounded-3xl overflow-hidden"
+                  animate={{ y: [0, -8, 0] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                 >
-                  <Leaf className="w-10 h-10 text-primary" />
+                  <img 
+                    src={habitnautMascot} 
+                    alt="HabitNaut mascot - a cute astronaut" 
+                    className="w-full h-full object-contain"
+                  />
                 </motion.div>
                 <h1 className="text-4xl font-serif font-medium text-foreground">
-                  {t.onboarding.welcome}
+                  HabitNaut
                 </h1>
                 <p className="text-lg text-muted-foreground leading-relaxed max-w-md mx-auto">
                   {t.onboarding.welcomeSubtitle}

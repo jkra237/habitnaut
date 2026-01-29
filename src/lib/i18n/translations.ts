@@ -1,4 +1,4 @@
-// FlowNaut Translations - English, Spanish, German
+// HabitNaut Translations - English, Spanish, German
 
 export type SupportedLanguage = 'en' | 'es' | 'de';
 
@@ -364,7 +364,7 @@ export const translations: Record<SupportedLanguage, Translations> = {
         title: 'Help & About',
         subtitle: 'Learn how this app works',
         philosophy: 'Philosophy',
-        philosophyText: 'FlowNaut is about observation, not optimization. No streaks, no guilt, no pressure.',
+        philosophyText: 'HabitNaut is about observation, not optimization. No streaks, no guilt, no pressure.',
         version: 'Version',
       },
       language: {
@@ -582,7 +582,7 @@ export const translations: Record<SupportedLanguage, Translations> = {
         title: 'Ayuda y Acerca de',
         subtitle: 'Aprende cómo funciona esta app',
         philosophy: 'Filosofía',
-        philosophyText: 'FlowNaut trata de observación, no de optimización. Sin rachas, sin culpa, sin presión.',
+        philosophyText: 'HabitNaut trata de observación, no de optimización. Sin rachas, sin culpa, sin presión.',
         version: 'Versión',
       },
       language: {
@@ -800,7 +800,7 @@ export const translations: Record<SupportedLanguage, Translations> = {
         title: 'Hilfe & Über',
         subtitle: 'Erfahre, wie diese App funktioniert',
         philosophy: 'Philosophie',
-        philosophyText: 'FlowNaut geht um Beobachtung, nicht Optimierung. Keine Streaks, keine Schuld, kein Druck.',
+        philosophyText: 'HabitNaut geht um Beobachtung, nicht Optimierung. Keine Streaks, keine Schuld, kein Druck.',
         version: 'Version',
       },
       language: {
