@@ -9,7 +9,12 @@ import type {
   Insight,
   TimeAnchor,
   SoftFrequency,
-  HabitReminder
+  HabitReminder,
+  AppPreferences,
+  ReminderTone,
+  VisualCalmLevel,
+  InsightFrequency,
+  WeekStart
 } from '@/types/flownaut';
 
 interface AddHabitOptions {
@@ -20,9 +25,20 @@ interface AddHabitOptions {
   softFrequency?: SoftFrequency;
 }
 
+const defaultPreferences: AppPreferences = {
+  language: 'en',
+  visualCalmLevel: 'default',
+  insightFrequency: 'occasional',
+  weekStart: 'monday',
+  reminderTone: 'gentle',
+  globalRemindersEnabled: true,
+};
+
 interface FlowNautStore extends UserState {
   // Onboarding
   completeOnboarding: (personality: PersonalityProfile, tone: 'gentle' | 'clear') => void;
+  updatePersonality: (personality: PersonalityProfile) => void;
+  reopenOnboarding: () => void;
   
   // Habits
   addHabit: (nameOrOptions: string | AddHabitOptions, emoji?: string) => void;
@@ -43,6 +59,14 @@ interface FlowNautStore extends UserState {
   setWeekWord: (weekStart: string, word: string) => void;
   setWeekTakeaway: (weekStart: string, takeaway: string) => void;
   
+  // Preferences
+  updatePreferences: (updates: Partial<AppPreferences>) => void;
+  setGlobalReminders: (enabled: boolean) => void;
+  
+  // Data management
+  clearLocalLogs: () => void;
+  exportData: () => string;
+  
   // Helpers
   getEntry: (date: string) => DayEntry | undefined;
   getActiveHabits: () => Habit[];
@@ -60,6 +84,7 @@ const initialState: UserState = {
   insights: [],
   reflections: [],
   preferredTone: 'gentle',
+  preferences: defaultPreferences,
 };
 
 export const useFlowNautStore = create<FlowNautStore>()(
@@ -216,6 +241,39 @@ export const useFlowNautStore = create<FlowNautStore>()(
         return {
           reflections: [...state.reflections, { weekStart, takeaway }],
         };
+      }),
+
+      // Preferences
+      updatePreferences: (updates) => set((state) => ({
+        preferences: { ...state.preferences, ...updates },
+      })),
+
+      setGlobalReminders: (enabled) => set((state) => ({
+        preferences: { ...state.preferences, globalRemindersEnabled: enabled },
+      })),
+
+      // Data management
+      clearLocalLogs: () => set((state) => ({
+        entries: [],
+      })),
+
+      exportData: () => {
+        const state = get();
+        return JSON.stringify({
+          personality: state.personality,
+          habits: state.habits,
+          entries: state.entries,
+          reflections: state.reflections,
+          preferences: state.preferences,
+          exportedAt: new Date().toISOString(),
+        }, null, 2);
+      },
+
+      // Profile management
+      updatePersonality: (personality) => set({ personality }),
+
+      reopenOnboarding: () => set({
+        hasCompletedOnboarding: false,
       }),
 
       getEntry: (date) => get().entries.find((e) => e.date === date),

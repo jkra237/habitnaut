@@ -6,6 +6,10 @@ export interface PersonalityProfile {
   energy: 'steady' | 'bursts' | 'waves';
   motivation: 'internal' | 'external' | 'mixed';
   approach: 'structured' | 'spontaneous' | 'adaptive';
+  // Extended axes for deeper personality understanding
+  focus: 'deep' | 'varied' | 'contextual';
+  recovery: 'solitude' | 'social' | 'mixed';
+  pace: 'slow' | 'moderate' | 'fast';
 }
 
 export interface OnboardingAnswer {
@@ -16,6 +20,10 @@ export interface OnboardingAnswer {
 export type TimeAnchor = 'morning' | 'midday' | 'evening' | 'none';
 export type SoftFrequency = 'daily' | 'few-times-week' | 'free';
 export type ReminderFrequency = 'none' | 'daily' | 'weekly';
+export type ReminderTone = 'gentle' | 'clear';
+export type VisualCalmLevel = 'default' | 'extra-calm';
+export type InsightFrequency = 'rare' | 'occasional' | 'weekly';
+export type WeekStart = 'monday' | 'sunday';
 
 export interface HabitReminder {
   frequency: ReminderFrequency;
@@ -59,6 +67,15 @@ export interface WeekReflection {
   takeaway?: string;
 }
 
+export interface AppPreferences {
+  language: string;
+  visualCalmLevel: VisualCalmLevel;
+  insightFrequency: InsightFrequency;
+  weekStart: WeekStart;
+  reminderTone: ReminderTone;
+  globalRemindersEnabled: boolean;
+}
+
 export interface UserState {
   hasCompletedOnboarding: boolean;
   personality?: PersonalityProfile;
@@ -67,4 +84,5 @@ export interface UserState {
   insights: Insight[];
   reflections: WeekReflection[];
   preferredTone: 'gentle' | 'clear';
+  preferences: AppPreferences;
 }
