@@ -43,7 +43,7 @@ export function HabitMatrix() {
   };
 
   const getCellStyle = (state: HabitState | undefined, isCurrentDay: boolean) => {
-    const baseClasses = 'w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl transition-all duration-300 flex items-center justify-center text-xs sm:text-sm';
+    const baseClasses = 'w-6 h-6 sm:w-10 sm:h-10 rounded-md sm:rounded-xl transition-all duration-300 flex items-center justify-center text-[10px] sm:text-sm';
     
     if (state === 'done') {
       return `${baseClasses} bg-primary/30 border-2 border-primary/50`;
@@ -92,18 +92,18 @@ export function HabitMatrix() {
   return (
     <div className="space-y-4">
       {/* Day headers */}
-      <div className="flex gap-1.5 sm:gap-2 justify-end pr-1">
+      <div className="flex gap-1 sm:gap-2 justify-end pr-1">
         {weekDates.map((date, idx) => {
           const isCurrent = isToday(date);
           return (
             <div
               key={idx}
-              className={`w-8 sm:w-10 text-center text-[10px] sm:text-xs font-medium ${
+              className={`w-6 sm:w-10 text-center text-[9px] sm:text-xs font-medium ${
                 isCurrent ? 'text-primary' : 'text-muted-foreground'
               }`}
             >
               <div>{DAYS[idx]}</div>
-              <div className={`text-[9px] sm:text-[10px] ${isCurrent ? 'text-primary' : 'text-muted-foreground/60'}`}>
+              <div className={`text-[8px] sm:text-[10px] ${isCurrent ? 'text-primary' : 'text-muted-foreground/60'}`}>
                 {format(date, 'd')}
               </div>
             </div>
@@ -155,7 +155,7 @@ export function HabitMatrix() {
             </div>
 
             {/* Day cells */}
-            <div className="flex gap-1.5 sm:gap-2 flex-shrink-0">
+            <div className="flex gap-1 sm:gap-2 flex-shrink-0">
               {weekDates.map((date, dateIdx) => {
                 const state = getStateForCell(habit.id, date);
                 const isCurrent = isToday(date);
