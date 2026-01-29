@@ -737,7 +737,7 @@ export const translations: Record<SupportedLanguage, Translations> = {
         syncedAs: 'Synchronisiert als',
         currentSnapshot: 'Dein aktueller Snapshot',
         snapshotNote: 'Dies spiegelt wider, wie du derzeit dazu neigst, Gewohnheiten anzugehen.',
-        revisitQuestions: 'Fragen erneut besuchen',
+        revisitQuestions: 'Fragen erneut beantworten',
         revisitSubtitle: 'Du kannst das jederzeit tun',
         resetProfile: 'Profil zurücksetzen',
         resetSubtitle: 'Neu anfangen. Nichts wird übernommen.',

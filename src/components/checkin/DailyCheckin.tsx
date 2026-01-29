@@ -3,24 +3,27 @@ import { motion } from 'framer-motion';
 import { useFlowNautStore } from '@/store/flownaut-store';
 import { format } from 'date-fns';
 import { Sun, Moon, Zap, Battery, Heart, Cloud } from 'lucide-react';
-
-const MOOD_OPTIONS = [
-  { value: 1, emoji: '😔', label: 'Heavy' },
-  { value: 2, emoji: '😐', label: 'Low' },
-  { value: 3, emoji: '🙂', label: 'Neutral' },
-  { value: 4, emoji: '😊', label: 'Good' },
-  { value: 5, emoji: '✨', label: 'Bright' },
-];
-
-const ENERGY_OPTIONS = [
-  { value: 1, icon: <Battery className="w-4 h-4" />, label: 'Depleted' },
-  { value: 2, icon: <Cloud className="w-4 h-4" />, label: 'Low' },
-  { value: 3, icon: <Heart className="w-4 h-4" />, label: 'Steady' },
-  { value: 4, icon: <Sun className="w-4 h-4" />, label: 'Good' },
-  { value: 5, icon: <Zap className="w-4 h-4" />, label: 'High' },
-];
+import { useTranslations } from '@/hooks/use-translations';
 
 export function DailyCheckin() {
+  const t = useTranslations();
+  
+  const MOOD_OPTIONS = [
+    { value: 1, emoji: '😔', label: t.mood.heavy },
+    { value: 2, emoji: '😐', label: t.mood.low },
+    { value: 3, emoji: '🙂', label: t.mood.neutral },
+    { value: 4, emoji: '😊', label: t.mood.good },
+    { value: 5, emoji: '✨', label: t.mood.bright },
+  ];
+
+  const ENERGY_OPTIONS = [
+    { value: 1, icon: <Battery className="w-4 h-4" />, label: t.energyLevels.depleted },
+    { value: 2, icon: <Cloud className="w-4 h-4" />, label: t.energyLevels.low },
+    { value: 3, icon: <Heart className="w-4 h-4" />, label: t.energyLevels.steady },
+    { value: 4, icon: <Sun className="w-4 h-4" />, label: t.energyLevels.good },
+    { value: 5, icon: <Zap className="w-4 h-4" />, label: t.energyLevels.high },
+  ];
+
   const today = format(new Date(), 'yyyy-MM-dd');
   const entry = useFlowNautStore((s) => s.getEntry(today));
   const setMood = useFlowNautStore((s) => s.setMood);
@@ -51,9 +54,9 @@ export function DailyCheckin() {
             <Sun className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <h3 className="font-medium text-foreground">How are you today?</h3>
+            <h3 className="font-medium text-foreground">{t.dashboard.howAreYou}</h3>
             <p className="text-xs text-muted-foreground">
-              {entry?.mood || entry?.energy ? 'Checked in' : 'Optional, just if you feel like it'}
+              {entry?.mood || entry?.energy ? t.dashboard.checkedIn : t.dashboard.optionalCheckin}
             </p>
           </div>
         </div>
@@ -91,7 +94,7 @@ export function DailyCheckin() {
         <div className="px-4 pb-4 space-y-5">
           {/* Mood selector */}
           <div className="space-y-2">
-            <label className="text-sm text-muted-foreground">Mood</label>
+            <label className="text-sm text-muted-foreground">{t.dashboard.mood}</label>
             <div className="flex justify-between gap-2">
               {MOOD_OPTIONS.map((option) => (
                 <motion.button
@@ -114,7 +117,7 @@ export function DailyCheckin() {
 
           {/* Energy selector */}
           <div className="space-y-2">
-            <label className="text-sm text-muted-foreground">Energy</label>
+            <label className="text-sm text-muted-foreground">{t.dashboard.energy}</label>
             <div className="flex justify-between gap-2">
               {ENERGY_OPTIONS.map((option) => (
                 <motion.button
@@ -135,9 +138,9 @@ export function DailyCheckin() {
             </div>
           </div>
 
-          <p className="text-center text-xs text-muted-foreground pt-2">
-            No judgment – just noticing
-          </p>
+        <p className="text-center text-xs text-muted-foreground pt-2">
+          {t.dashboard.noJudgment}
+        </p>
         </div>
       </motion.div>
     </motion.div>
