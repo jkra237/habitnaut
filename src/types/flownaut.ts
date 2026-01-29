@@ -13,13 +13,27 @@ export interface OnboardingAnswer {
   choice: 'a' | 'b';
 }
 
+export type TimeAnchor = 'morning' | 'midday' | 'evening' | 'none';
+export type SoftFrequency = 'daily' | 'few-times-week' | 'free';
+export type ReminderFrequency = 'none' | 'daily' | 'weekly';
+
+export interface HabitReminder {
+  frequency: ReminderFrequency;
+  timeAnchor: TimeAnchor;
+  enabled: boolean;
+}
+
 export interface Habit {
   id: string;
   name: string;
+  description?: string;
   emoji?: string;
+  timeAnchor: TimeAnchor;
+  softFrequency: SoftFrequency;
   createdAt: Date;
   isResting: boolean; // "let rest" instead of deleted
   restingNote?: string;
+  reminder: HabitReminder;
 }
 
 export type HabitState = 'done' | 'not-done' | 'conscious-skip';

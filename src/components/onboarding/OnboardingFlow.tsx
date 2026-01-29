@@ -5,6 +5,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useFlowNautStore } from '@/store/flownaut-store';
 import type { PersonalityProfile, OnboardingAnswer } from '@/types/flownaut';
 import { Leaf, Moon, Sun, Zap, Heart, Compass, Check } from 'lucide-react';
+import { suggestTimeAnchor } from '@/lib/reminder-copy';
 
 interface RecommendedHabit {
   id: string;
@@ -182,10 +183,15 @@ export function OnboardingFlow() {
   const handleComplete = () => {
     if (!personality) return;
     
-    // Add selected habits
+    // Add selected habits with proper options
     recommendedHabits
       .filter((h) => selectedHabits.has(h.id))
-      .forEach((h) => addHabit(h.name, h.emoji));
+      .forEach((h) => addHabit({
+        name: h.name,
+        emoji: h.emoji,
+        timeAnchor: suggestTimeAnchor(h.name),
+        softFrequency: 'free',
+      }));
     
     completeOnboarding(personality, tone);
   };

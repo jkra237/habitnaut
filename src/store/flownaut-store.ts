@@ -1,13 +1,32 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { UserState, Habit, DayEntry, HabitState, PersonalityProfile, Insight } from '@/types/flownaut';
+import type { 
+  UserState, 
+  Habit, 
+  DayEntry, 
+  HabitState, 
+  PersonalityProfile, 
+  Insight,
+  TimeAnchor,
+  SoftFrequency,
+  HabitReminder
+} from '@/types/flownaut';
+
+interface AddHabitOptions {
+  name: string;
+  emoji?: string;
+  description?: string;
+  timeAnchor?: TimeAnchor;
+  softFrequency?: SoftFrequency;
+}
 
 interface FlowNautStore extends UserState {
   // Onboarding
   completeOnboarding: (personality: PersonalityProfile, tone: 'gentle' | 'clear') => void;
   
   // Habits
-  addHabit: (name: string, emoji?: string) => void;
+  addHabit: (nameOrOptions: string | AddHabitOptions, emoji?: string) => void;
+  updateHabitReminder: (habitId: string, reminder: HabitReminder) => void;
   letHabitRest: (habitId: string, note?: string) => void;
   wakeHabit: (habitId: string) => void;
   
@@ -54,17 +73,37 @@ export const useFlowNautStore = create<FlowNautStore>()(
         preferredTone: tone,
       }),
 
-      addHabit: (name, emoji) => set((state) => ({
-        habits: [
-          ...state.habits,
-          {
-            id: crypto.randomUUID(),
-            name,
-            emoji,
-            createdAt: new Date(),
-            isResting: false,
+      addHabit: (nameOrOptions, emoji) => set((state) => {
+        const isOptions = typeof nameOrOptions === 'object';
+        const options: AddHabitOptions = isOptions 
+          ? nameOrOptions 
+          : { name: nameOrOptions, emoji };
+        
+        const newHabit: Habit = {
+          id: crypto.randomUUID(),
+          name: options.name,
+          description: options.description,
+          emoji: options.emoji,
+          timeAnchor: options.timeAnchor || 'none',
+          softFrequency: options.softFrequency || 'free',
+          createdAt: new Date(),
+          isResting: false,
+          reminder: {
+            frequency: 'none',
+            timeAnchor: options.timeAnchor || 'none',
+            enabled: false,
           },
-        ],
+        };
+        
+        return {
+          habits: [...state.habits, newHabit],
+        };
+      }),
+
+      updateHabitReminder: (habitId, reminder) => set((state) => ({
+        habits: state.habits.map((h) =>
+          h.id === habitId ? { ...h, reminder } : h
+        ),
       })),
 
       letHabitRest: (habitId, note) => set((state) => ({
