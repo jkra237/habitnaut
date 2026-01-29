@@ -74,6 +74,11 @@ export interface AppPreferences {
   globalRemindersEnabled: boolean;
 }
 
+export interface GratitudeEntry {
+  date: string; // YYYY-MM-DD
+  text: string;
+}
+
 export interface UserState {
   hasCompletedOnboarding: boolean;
   personality?: PersonalityProfile;
@@ -81,6 +86,7 @@ export interface UserState {
   entries: DayEntry[];
   insights: Insight[];
   reflections: WeekReflection[];
+  gratitudeEntries: GratitudeEntry[];
   preferredTone: 'gentle' | 'clear';
   preferences: AppPreferences;
 }

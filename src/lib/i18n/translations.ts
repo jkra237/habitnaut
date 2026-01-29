@@ -201,6 +201,16 @@ export interface Translations {
     somethingToConsider: string;
   };
   
+  // Gratitude
+  gratitude: {
+    title: string;
+    prompt: string;
+    placeholder: string;
+    pastEntries: string;
+    noEntries: string;
+    delete: string;
+  };
+  
   // Recommended habits
   recommendedHabits: {
     morningPages: { name: string; reason: string };
@@ -421,6 +431,14 @@ export const translations: Record<SupportedLanguage, Translations> = {
       patternEmerged: 'A pattern emerged',
       somethingToConsider: 'Something to consider',
     },
+    gratitude: {
+      title: 'Gratitude',
+      prompt: 'What am I grateful for today?',
+      placeholder: 'Write here...',
+      pastEntries: 'Past entries',
+      noEntries: 'No past entries yet',
+      delete: 'Delete',
+    },
     recommendedHabits: {
       morningPages: { name: 'Morning pages', reason: 'Aligns with your morning clarity' },
       sunriseWalk: { name: 'Sunrise walk', reason: 'Captures your peak energy time' },
@@ -639,6 +657,14 @@ export const translations: Record<SupportedLanguage, Translations> = {
       patternEmerged: 'Ha surgido un patrón',
       somethingToConsider: 'Algo para reflexionar',
     },
+    gratitude: {
+      title: 'Gratitud',
+      prompt: '¿Por qué estoy agradecido hoy?',
+      placeholder: 'Escribe aquí...',
+      pastEntries: 'Entradas anteriores',
+      noEntries: 'Aún no hay entradas anteriores',
+      delete: 'Eliminar',
+    },
     recommendedHabits: {
       morningPages: { name: 'Páginas matutinas', reason: 'Aprovecha tu claridad por las mañanas' },
       sunriseWalk: { name: 'Paseo al amanecer', reason: 'Captura tu momento de máxima energía' },
@@ -856,6 +882,14 @@ export const translations: Record<SupportedLanguage, Translations> = {
       noticedConnection: 'Mir ist ein Zusammenhang aufgefallen',
       patternEmerged: 'Ein Muster zeichnet sich ab',
       somethingToConsider: 'Etwas zum Nachdenken',
+    },
+    gratitude: {
+      title: 'Dankbarkeit',
+      prompt: 'Wofür bin ich heute dankbar?',
+      placeholder: 'Schreibe hier...',
+      pastEntries: 'Vergangene Einträge',
+      noEntries: 'Noch keine vergangenen Einträge',
+      delete: 'Löschen',
     },
     recommendedHabits: {
       morningPages: { name: 'Morgenseiten', reason: 'Passt zu deiner morgendlichen Klarheit' },

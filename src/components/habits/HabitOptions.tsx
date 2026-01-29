@@ -1,8 +1,12 @@
-import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { useFlowNautStore } from '@/store/flownaut-store';
-import type { Habit } from '@/types/flownaut';
-import { Moon, Trash2, X } from 'lucide-react';
+import type { Habit, HabitReminder } from '@/types/flownaut';
+import { Moon, Trash2, X, Bell, BellOff } from 'lucide-react';
+import { ReminderSettings } from './ReminderSettings';
+import { useNotifications } from '@/hooks/use-notifications';
+import { useTranslations } from '@/hooks/use-translations';
 
 interface HabitOptionsProps {
   habit: Habit;
@@ -10,8 +14,11 @@ interface HabitOptionsProps {
 }
 
 export function HabitOptions({ habit, onClose }: HabitOptionsProps) {
+  const [showReminders, setShowReminders] = useState(false);
   const letHabitRest = useFlowNautStore((s) => s.letHabitRest);
   const deleteHabit = useFlowNautStore((s) => s.deleteHabit);
+  const { enableReminder } = useNotifications();
+  const t = useTranslations();
 
   const handleLetRest = () => {
     letHabitRest(habit.id, 'Taking a break for now');
@@ -21,6 +28,11 @@ export function HabitOptions({ habit, onClose }: HabitOptionsProps) {
   const handleLetGo = () => {
     deleteHabit(habit.id);
     onClose();
+  };
+
+  const handleReminderUpdate = async (reminder: HabitReminder) => {
+    await enableReminder(habit.id, reminder);
+    setShowReminders(false);
   };
 
   return (
@@ -62,15 +74,51 @@ export function HabitOptions({ habit, onClose }: HabitOptionsProps) {
       </div>
       
       <div className="border-t border-border/50 pt-3 space-y-2">
+        {/* Reminder option */}
+        <Button
+          variant="ghost"
+          className="w-full justify-start"
+          onClick={() => setShowReminders(!showReminders)}
+        >
+          {habit.reminder?.enabled ? (
+            <Bell className="w-4 h-4 mr-2 text-primary" />
+          ) : (
+            <BellOff className="w-4 h-4 mr-2" />
+          )}
+          {t.settings?.habits?.title || 'Reminders'}
+          <span className="text-xs text-muted-foreground ml-auto">
+            {habit.reminder?.enabled ? 'On' : 'Off'}
+          </span>
+        </Button>
+
+        {/* Reminder settings panel */}
+        <AnimatePresence>
+          {showReminders && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="pl-2"
+            >
+              <ReminderSettings
+                reminder={habit.reminder || { frequency: 'none', timeAnchor: 'none', enabled: false }}
+                habitName={habit.name}
+                onUpdate={handleReminderUpdate}
+                onClose={() => setShowReminders(false)}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         <Button
           variant="ghost"
           className="w-full justify-start"
           onClick={handleLetRest}
         >
           <Moon className="w-4 h-4 mr-2" />
-          Let rest
+          {t.habits?.letRest || 'Let rest'}
           <span className="text-xs text-muted-foreground ml-auto">
-            Pause gently
+            {t.habits?.letRestSubtitle || 'Pause gently'}
           </span>
         </Button>
         
@@ -80,9 +128,9 @@ export function HabitOptions({ habit, onClose }: HabitOptionsProps) {
           onClick={handleLetGo}
         >
           <Trash2 className="w-4 h-4 mr-2" />
-          Let go
+          {t.habits?.letGo || 'Let go'}
           <span className="text-xs text-muted-foreground ml-auto">
-            Release completely
+            {t.habits?.letGoSubtitle || 'Release completely'}
           </span>
         </Button>
       </div>

@@ -3,20 +3,24 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useFlowNautStore } from '@/store/flownaut-store';
 import type { HabitState, HabitReminder } from '@/types/flownaut';
 import { format, startOfWeek, addDays, isToday } from 'date-fns';
-import { Bell, BellOff, MoreHorizontal } from 'lucide-react';
+import { MoreHorizontal } from 'lucide-react';
 import { ReminderSettings } from './ReminderSettings';
 import { HabitOptions } from './HabitOptions';
 import { useNotifications } from '@/hooks/use-notifications';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 const DAYS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
 export function HabitMatrix() {
   const [activeReminderId, setActiveReminderId] = useState<string | null>(null);
   const [activeOptionsId, setActiveOptionsId] = useState<string | null>(null);
+  const [touchedHabitId, setTouchedHabitId] = useState<string | null>(null);
   const habits = useFlowNautStore((s) => s.getActiveHabits());
   const entries = useFlowNautStore((s) => s.entries);
   const setHabitState = useFlowNautStore((s) => s.setHabitState);
-  const { enableReminder, permission, isSupported } = useNotifications();
+  const { enableReminder } = useNotifications();
+  const isMobile = useIsMobile();
 
   const weekDates = useMemo(() => {
     const start = startOfWeek(new Date(), { weekStartsOn: 1 });
@@ -124,28 +128,32 @@ export function HabitMatrix() {
             {/* Habit name and controls */}
             <div className="flex-1 min-w-0 flex items-center gap-1.5 sm:gap-2">
               <span className="text-base sm:text-xl flex-shrink-0">{habit.emoji || '🌱'}</span>
-              <span className="text-xs sm:text-sm font-medium text-foreground truncate max-w-[60px] sm:max-w-none">
-                {habit.name}
-              </span>
               
-              {/* Bell icon for reminder toggle */}
-              <button
-                onClick={() => setActiveReminderId(activeReminderId === habit.id ? null : habit.id)}
-                className={`p-1 sm:p-1.5 rounded-lg transition-all flex-shrink-0 ${
-                  habit.reminder?.enabled
-                    ? 'text-primary hover:bg-primary/10'
-                    : 'text-muted-foreground/50 hover:text-muted-foreground hover:bg-secondary'
-                }`}
-                title={habit.reminder?.enabled ? 'Reminder on' : 'Set reminder'}
-              >
-                {habit.reminder?.enabled ? (
-                  <Bell className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-                ) : (
-                  <BellOff className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-                )}
-              </button>
+              {/* Mobile: Tooltip on touch, Desktop: normal display */}
+              {isMobile ? (
+                <TooltipProvider delayDuration={0}>
+                  <Tooltip open={touchedHabitId === habit.id}>
+                    <TooltipTrigger asChild>
+                      <span 
+                        className="text-xs sm:text-sm font-medium text-foreground truncate max-w-[60px] sm:max-w-none cursor-default"
+                        onTouchStart={() => setTouchedHabitId(habit.id)}
+                        onTouchEnd={() => setTimeout(() => setTouchedHabitId(null), 1500)}
+                      >
+                        {habit.name}
+                      </span>
+                    </TooltipTrigger>
+                    <TooltipContent side="top" className="max-w-[200px]">
+                      <p>{habit.name}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              ) : (
+                <span className="text-xs sm:text-sm font-medium text-foreground truncate max-w-[60px] sm:max-w-none">
+                  {habit.name}
+                </span>
+              )}
 
-              {/* Options menu */}
+              {/* Options menu (now includes reminder option) */}
               <button
                 onClick={() => setActiveOptionsId(activeOptionsId === habit.id ? null : habit.id)}
                 className="p-1 sm:p-1.5 rounded-lg text-muted-foreground/50 hover:text-muted-foreground hover:bg-secondary transition-all flex-shrink-0"

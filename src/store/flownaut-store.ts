@@ -11,8 +11,7 @@ import type {
   SoftFrequency,
   HabitReminder,
   AppPreferences,
-  InsightFrequency,
-  WeekStart
+  GratitudeEntry,
 } from '@/types/flownaut';
 
 interface AddHabitOptions {
@@ -52,6 +51,10 @@ interface FlowNautStore extends UserState {
   // Insights
   addInsight: (insight: Omit<Insight, 'id' | 'generatedAt'>) => void;
   
+  // Gratitude
+  setGratitude: (date: string, text: string) => void;
+  deleteGratitude: (date: string) => void;
+  
   // Week reflection
   setWeekWord: (weekStart: string, word: string) => void;
   setWeekTakeaway: (weekStart: string, takeaway: string) => void;
@@ -81,6 +84,7 @@ const initialState: UserState = {
   entries: [],
   insights: [],
   reflections: [],
+  gratitudeEntries: [],
   preferredTone: 'gentle',
   preferences: defaultPreferences,
 };
@@ -215,6 +219,25 @@ export const useFlowNautStore = create<FlowNautStore>()(
           },
           ...state.insights,
         ].slice(0, 20), // Keep last 20 insights
+      })),
+
+      // Gratitude
+      setGratitude: (date, text) => set((state) => {
+        const existing = state.gratitudeEntries.find((e) => e.date === date);
+        if (existing) {
+          return {
+            gratitudeEntries: state.gratitudeEntries.map((e) =>
+              e.date === date ? { ...e, text } : e
+            ),
+          };
+        }
+        return {
+          gratitudeEntries: [...state.gratitudeEntries, { date, text }],
+        };
+      }),
+
+      deleteGratitude: (date) => set((state) => ({
+        gratitudeEntries: state.gratitudeEntries.filter((e) => e.date !== date),
       })),
 
       setWeekWord: (weekStart, word) => set((state) => {

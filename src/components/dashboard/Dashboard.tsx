@@ -10,6 +10,7 @@ import { InsightCard, DEMO_INSIGHTS } from '@/components/insights/InsightCard';
 import { RestingHabits } from '@/components/habits/RestingHabits';
 import { HabitTimeline } from '@/components/insights/HabitTimeline';
 import { Settings } from '@/components/settings/Settings';
+import { GratitudeJournal } from '@/components/gratitude/GratitudeJournal';
 import { useFlowNautStore } from '@/store/flownaut-store';
 
 export function Dashboard() {
@@ -180,6 +181,15 @@ export function Dashboard() {
             )}
           </motion.section>
         )}
+
+        {/* Gratitude Journal */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.38 }}
+        >
+          <GratitudeJournal />
+        </motion.section>
 
         {/* Insights */}
         {insights.length > 0 && (
