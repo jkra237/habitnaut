@@ -43,7 +43,7 @@ export function HabitMatrix() {
   };
 
   const getCellStyle = (state: HabitState | undefined, isCurrentDay: boolean) => {
-    const baseClasses = 'w-10 h-10 rounded-xl transition-all duration-300 flex items-center justify-center text-sm';
+    const baseClasses = 'w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl transition-all duration-300 flex items-center justify-center text-xs sm:text-sm';
     
     if (state === 'done') {
       return `${baseClasses} bg-primary/30 border-2 border-primary/50`;
@@ -92,18 +92,18 @@ export function HabitMatrix() {
   return (
     <div className="space-y-4">
       {/* Day headers */}
-      <div className="flex gap-2 justify-end pr-1">
+      <div className="flex gap-1.5 sm:gap-2 justify-end pr-1">
         {weekDates.map((date, idx) => {
           const isCurrent = isToday(date);
           return (
             <div
               key={idx}
-              className={`w-10 text-center text-xs font-medium ${
+              className={`w-8 sm:w-10 text-center text-[10px] sm:text-xs font-medium ${
                 isCurrent ? 'text-primary' : 'text-muted-foreground'
               }`}
             >
               <div>{DAYS[idx]}</div>
-              <div className={`text-[10px] ${isCurrent ? 'text-primary' : 'text-muted-foreground/60'}`}>
+              <div className={`text-[9px] sm:text-[10px] ${isCurrent ? 'text-primary' : 'text-muted-foreground/60'}`}>
                 {format(date, 'd')}
               </div>
             </div>
@@ -120,18 +120,18 @@ export function HabitMatrix() {
           transition={{ delay: habitIdx * 0.1 }}
           className="space-y-2"
         >
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             {/* Habit name and controls */}
-            <div className="flex-1 min-w-0 flex items-center gap-2">
-              <span className="text-xl">{habit.emoji || '🌱'}</span>
-              <span className="text-sm font-medium text-foreground truncate">
+            <div className="flex-1 min-w-0 flex items-center gap-1.5 sm:gap-2">
+              <span className="text-base sm:text-xl flex-shrink-0">{habit.emoji || '🌱'}</span>
+              <span className="text-xs sm:text-sm font-medium text-foreground truncate max-w-[60px] sm:max-w-none">
                 {habit.name}
               </span>
               
               {/* Bell icon for reminder toggle */}
               <button
                 onClick={() => setActiveReminderId(activeReminderId === habit.id ? null : habit.id)}
-                className={`p-1.5 rounded-lg transition-all ${
+                className={`p-1 sm:p-1.5 rounded-lg transition-all flex-shrink-0 ${
                   habit.reminder?.enabled
                     ? 'text-primary hover:bg-primary/10'
                     : 'text-muted-foreground/50 hover:text-muted-foreground hover:bg-secondary'
@@ -139,23 +139,23 @@ export function HabitMatrix() {
                 title={habit.reminder?.enabled ? 'Reminder on' : 'Set reminder'}
               >
                 {habit.reminder?.enabled ? (
-                  <Bell className="w-3.5 h-3.5" />
+                  <Bell className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                 ) : (
-                  <BellOff className="w-3.5 h-3.5" />
+                  <BellOff className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                 )}
               </button>
 
               {/* Options menu */}
               <button
                 onClick={() => setActiveOptionsId(activeOptionsId === habit.id ? null : habit.id)}
-                className="p-1.5 rounded-lg text-muted-foreground/50 hover:text-muted-foreground hover:bg-secondary transition-all"
+                className="p-1 sm:p-1.5 rounded-lg text-muted-foreground/50 hover:text-muted-foreground hover:bg-secondary transition-all flex-shrink-0"
               >
-                <MoreHorizontal className="w-3.5 h-3.5" />
+                <MoreHorizontal className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
               </button>
             </div>
 
             {/* Day cells */}
-            <div className="flex gap-2">
+            <div className="flex gap-1.5 sm:gap-2 flex-shrink-0">
               {weekDates.map((date, dateIdx) => {
                 const state = getStateForCell(habit.id, date);
                 const isCurrent = isToday(date);
@@ -214,17 +214,17 @@ export function HabitMatrix() {
       ))}
 
       {/* Legend */}
-      <div className="flex justify-center gap-6 pt-4 text-xs text-muted-foreground">
-        <div className="flex items-center gap-1.5">
-          <div className="w-4 h-4 rounded bg-primary/30 border border-primary/50 flex items-center justify-center text-[10px]">✓</div>
+      <div className="flex flex-wrap justify-center gap-3 sm:gap-6 pt-4 text-[10px] sm:text-xs text-muted-foreground">
+        <div className="flex items-center gap-1">
+          <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded bg-primary/30 border border-primary/50 flex items-center justify-center text-[8px] sm:text-[10px]">✓</div>
           <span>Done</span>
         </div>
-        <div className="flex items-center gap-1.5">
-          <div className="w-4 h-4 rounded bg-accent/30 border border-accent/50 flex items-center justify-center text-[10px]">🌱</div>
-          <span>Consciously skipped</span>
+        <div className="flex items-center gap-1">
+          <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded bg-accent/30 border border-accent/50 flex items-center justify-center text-[8px] sm:text-[10px]">🌱</div>
+          <span>Skipped</span>
         </div>
-        <div className="flex items-center gap-1.5">
-          <div className="w-4 h-4 rounded bg-secondary border border-border/50 flex items-center justify-center text-[10px]">○</div>
+        <div className="flex items-center gap-1">
+          <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded bg-secondary border border-border/50 flex items-center justify-center text-[8px] sm:text-[10px]">○</div>
           <span>Not done</span>
         </div>
       </div>
