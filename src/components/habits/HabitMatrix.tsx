@@ -6,6 +6,7 @@ import { format, startOfWeek, addDays, isToday } from 'date-fns';
 import { Bell, BellOff, MoreHorizontal } from 'lucide-react';
 import { ReminderSettings } from './ReminderSettings';
 import { HabitOptions } from './HabitOptions';
+import { useNotifications } from '@/hooks/use-notifications';
 
 const DAYS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
@@ -15,7 +16,7 @@ export function HabitMatrix() {
   const habits = useFlowNautStore((s) => s.getActiveHabits());
   const entries = useFlowNautStore((s) => s.entries);
   const setHabitState = useFlowNautStore((s) => s.setHabitState);
-  const updateHabitReminder = useFlowNautStore((s) => s.updateHabitReminder);
+  const { enableReminder, permission, isSupported } = useNotifications();
 
   const weekDates = useMemo(() => {
     const start = startOfWeek(new Date(), { weekStartsOn: 1 });
@@ -68,8 +69,8 @@ export function HabitMatrix() {
     return '';
   };
 
-  const handleReminderUpdate = (habitId: string, reminder: HabitReminder) => {
-    updateHabitReminder(habitId, reminder);
+  const handleReminderUpdate = async (habitId: string, reminder: HabitReminder) => {
+    await enableReminder(habitId, reminder);
   };
 
   if (habits.length === 0) {
