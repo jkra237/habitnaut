@@ -169,7 +169,7 @@ export function Dashboard() {
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
                 >
-                  <HabitTimeline daysToShow={30} />
+                  <HabitTimeline initialRange="month" />
                 </motion.div>
               )}
             </AnimatePresence>
