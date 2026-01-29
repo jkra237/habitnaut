@@ -20,8 +20,6 @@ export interface OnboardingAnswer {
 export type TimeAnchor = 'morning' | 'midday' | 'evening' | 'none';
 export type SoftFrequency = 'daily' | 'few-times-week' | 'free';
 export type ReminderFrequency = 'none' | 'daily' | 'weekly';
-export type ReminderTone = 'gentle' | 'clear';
-export type VisualCalmLevel = 'default' | 'extra-calm';
 export type InsightFrequency = 'rare' | 'occasional' | 'weekly';
 export type WeekStart = 'monday' | 'sunday';
 
@@ -54,9 +52,11 @@ export interface DayEntry {
   note?: string;
 }
 
+export type InsightType = 'correlation' | 'pattern' | 'prompt';
+
 export interface Insight {
   id: string;
-  type: 'correlation' | 'pattern' | 'reflection';
+  type: InsightType;
   message: string;
   generatedAt: Date;
 }
@@ -69,10 +69,8 @@ export interface WeekReflection {
 
 export interface AppPreferences {
   language: string;
-  visualCalmLevel: VisualCalmLevel;
   insightFrequency: InsightFrequency;
   weekStart: WeekStart;
-  reminderTone: ReminderTone;
   globalRemindersEnabled: boolean;
 }
 

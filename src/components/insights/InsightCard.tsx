@@ -10,13 +10,13 @@ interface InsightCardProps {
 const iconMap = {
   correlation: <TrendingUp className="w-5 h-5" />,
   pattern: <Sparkles className="w-5 h-5" />,
-  reflection: <Lightbulb className="w-5 h-5" />,
+  prompt: <Lightbulb className="w-5 h-5" />,
 };
 
 const bgMap = {
   correlation: 'bg-calm/20 border-calm/30 text-calm-foreground',
   pattern: 'bg-awareness/20 border-awareness/30 text-awareness-foreground',
-  reflection: 'bg-accent/20 border-accent/30 text-accent-foreground',
+  prompt: 'bg-accent/20 border-accent/30 text-accent-foreground',
 };
 
 export function InsightCard({ insight, index = 0 }: InsightCardProps) {
@@ -38,7 +38,7 @@ export function InsightCard({ insight, index = 0 }: InsightCardProps) {
           <p className="text-xs opacity-60">
             {insight.type === 'correlation' && 'Noticed a connection'}
             {insight.type === 'pattern' && 'A pattern emerged'}
-            {insight.type === 'reflection' && 'Something to consider'}
+            {insight.type === 'prompt' && 'Something to consider'}
           </p>
         </div>
       </div>
@@ -57,7 +57,7 @@ export const DEMO_INSIGHTS: Omit<Insight, 'id' | 'generatedAt'>[] = [
     message: 'You\'ve been more consistent on Tuesday and Wednesday. The middle of the week seems to suit your rhythm.',
   },
   {
-    type: 'reflection',
-    message: 'Three conscious skips this week. That\'s not failure – it\'s awareness. Something else mattered more.',
+    type: 'prompt',
+    message: 'What did this habit bring you this week?',
   },
 ];

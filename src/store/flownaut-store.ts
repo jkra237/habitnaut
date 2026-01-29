@@ -11,8 +11,6 @@ import type {
   SoftFrequency,
   HabitReminder,
   AppPreferences,
-  ReminderTone,
-  VisualCalmLevel,
   InsightFrequency,
   WeekStart
 } from '@/types/flownaut';
@@ -27,10 +25,8 @@ interface AddHabitOptions {
 
 const defaultPreferences: AppPreferences = {
   language: 'en',
-  visualCalmLevel: 'default',
   insightFrequency: 'occasional',
   weekStart: 'monday',
-  reminderTone: 'gentle',
   globalRemindersEnabled: true,
 };
 
@@ -66,6 +62,7 @@ interface FlowNautStore extends UserState {
   // Data management
   clearLocalLogs: () => void;
   exportData: () => string;
+  importData: (jsonData: string) => { success: boolean; error?: string };
   
   // Helpers
   getEntry: (date: string) => DayEntry | undefined;
@@ -267,6 +264,31 @@ export const useFlowNautStore = create<FlowNautStore>()(
           preferences: state.preferences,
           exportedAt: new Date().toISOString(),
         }, null, 2);
+      },
+
+      importData: (jsonData: string) => {
+        try {
+          const data = JSON.parse(jsonData);
+          
+          // Validate required structure
+          if (!data || typeof data !== 'object') {
+            return { success: false, error: 'Invalid data format' };
+          }
+
+          // Import what we can
+          set((state) => ({
+            personality: data.personality || state.personality,
+            habits: Array.isArray(data.habits) ? data.habits : state.habits,
+            entries: Array.isArray(data.entries) ? data.entries : state.entries,
+            reflections: Array.isArray(data.reflections) ? data.reflections : state.reflections,
+            preferences: data.preferences ? { ...state.preferences, ...data.preferences } : state.preferences,
+            hasCompletedOnboarding: data.personality ? true : state.hasCompletedOnboarding,
+          }));
+
+          return { success: true };
+        } catch (error) {
+          return { success: false, error: 'Could not parse the file' };
+        }
       },
 
       // Profile management
