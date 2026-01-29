@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Cloud, 
@@ -18,27 +18,27 @@ import {
   Shield,
   HelpCircle,
   Download,
+  Upload,
   Eye,
   Calendar,
   MessageCircle,
   ExternalLink,
   Edit3,
-  Sun,
-  Moon
+  Sparkles
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { useCloudSync } from '@/hooks/use-cloud-sync';
 import { useFlowNautStore } from '@/store/flownaut-store';
-import type { VisualCalmLevel, InsightFrequency, WeekStart, ReminderTone } from '@/types/flownaut';
+import type { InsightFrequency, WeekStart } from '@/types/flownaut';
 
 interface SettingsProps {
   onClose: () => void;
   onEditProfile?: () => void;
 }
 
-type SettingsSection = 'main' | 'profile' | 'cloud' | 'auth' | 'reset' | 'delete' | 'habits' | 'experience' | 'privacy' | 'about';
+type SettingsSection = 'main' | 'profile' | 'cloud' | 'auth' | 'reset' | 'delete' | 'habits' | 'experience' | 'privacy' | 'about' | 'google-cloud';
 
 const PERSONALITY_DESCRIPTIONS: Record<string, Record<string, string>> = {
   rhythm: {
@@ -78,6 +78,12 @@ const PERSONALITY_DESCRIPTIONS: Record<string, Record<string, string>> = {
   },
 };
 
+const INSIGHT_DESCRIPTIONS: Record<InsightFrequency, string> = {
+  rare: 'About once a month — quiet observation',
+  occasional: 'Every 1-2 weeks — gentle reflections',
+  weekly: 'Weekly — regular self-observation prompts',
+};
+
 export function Settings({ onClose, onEditProfile }: SettingsProps) {
   const [section, setSection] = useState<SettingsSection>('main');
   const [email, setEmail] = useState('');
@@ -87,6 +93,9 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
   const [confirmReset, setConfirmReset] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [confirmClearLogs, setConfirmClearLogs] = useState(false);
+  const [importError, setImportError] = useState<string | null>(null);
+  const [importSuccess, setImportSuccess] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const {
     isAuthenticated,
@@ -104,7 +113,6 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
   } = useCloudSync();
 
   const personality = useFlowNautStore((s) => s.personality);
-  const preferredTone = useFlowNautStore((s) => s.preferredTone);
   const preferences = useFlowNautStore((s) => s.preferences);
   const habits = useFlowNautStore((s) => s.habits);
   const entries = useFlowNautStore((s) => s.entries);
@@ -112,6 +120,7 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
   const setGlobalReminders = useFlowNautStore((s) => s.setGlobalReminders);
   const clearLocalLogs = useFlowNautStore((s) => s.clearLocalLogs);
   const exportData = useFlowNautStore((s) => s.exportData);
+  const importData = useFlowNautStore((s) => s.importData);
   const reopenOnboarding = useFlowNautStore((s) => s.reopenOnboarding);
 
   const handleAuth = async () => {
@@ -164,6 +173,37 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
     a.download = `flownaut-export-${new Date().toISOString().split('T')[0]}.json`;
     a.click();
     URL.revokeObjectURL(url);
+  };
+
+  const handleImportClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleImportFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setImportError(null);
+    setImportSuccess(false);
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const content = event.target?.result as string;
+      const result = importData(content);
+      if (result.success) {
+        setImportSuccess(true);
+        setTimeout(() => setImportSuccess(false), 3000);
+      } else {
+        setImportError(result.error || 'Import failed');
+      }
+    };
+    reader.onerror = () => {
+      setImportError('Could not read the file');
+    };
+    reader.readAsText(file);
+
+    // Reset input
+    e.target.value = '';
   };
 
   const handleEditProfile = () => {
@@ -250,9 +290,9 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
       <div className="space-y-2">
         <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide px-1">App Experience</h3>
         <SettingsRow 
-          icon={Palette} 
-          label="Appearance & Tone" 
-          sublabel="Choose what feels supportive to you"
+          icon={Sparkles} 
+          label="Insights & Reflections" 
+          sublabel="How often reflections appear"
           onClick={() => setSection('experience')}
         />
       </div>
@@ -263,7 +303,7 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
         <SettingsRow 
           icon={Shield} 
           label="Your Data" 
-          sublabel="Export, manage, or clear your data"
+          sublabel="Export, import, or manage your data"
           onClick={() => setSection('privacy')}
         />
       </div>
@@ -342,34 +382,13 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
           <Bell className="w-5 h-5 text-muted-foreground" />
           <div>
             <p className="font-medium text-sm text-foreground">Enable reminders</p>
-            <p className="text-xs text-muted-foreground">Receive gentle nudges</p>
+            <p className="text-xs text-muted-foreground">Uses your device's notification settings</p>
           </div>
         </div>
         <Switch
           checked={preferences.globalRemindersEnabled}
           onCheckedChange={setGlobalReminders}
         />
-      </div>
-
-      {/* Reminder Tone */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium text-foreground">Reminder tone</label>
-        <p className="text-xs text-muted-foreground mb-2">Choose what feels supportive to you.</p>
-        <div className="flex gap-2">
-          {(['gentle', 'clear'] as ReminderTone[]).map((tone) => (
-            <button
-              key={tone}
-              onClick={() => updatePreferences({ reminderTone: tone })}
-              className={`flex-1 py-3 px-4 rounded-xl text-sm font-medium transition-all ${
-                preferences.reminderTone === tone
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-secondary text-foreground hover:bg-secondary/80'
-              }`}
-            >
-              {tone === 'gentle' ? '🌿 Gentle' : '💡 Clear'}
-            </button>
-          ))}
-        </div>
       </div>
 
       {/* Habit count */}
@@ -388,49 +407,39 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
   const renderExperience = () => (
     <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-5">
       <div className="text-center mb-4">
-        <h3 className="font-medium text-foreground">App Experience</h3>
-        <p className="text-sm text-muted-foreground">Shape the emotional tone of the app.</p>
-      </div>
-
-      {/* Visual Calm Level */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium text-foreground">Visual calm level</label>
-        <div className="flex gap-2">
-          {(['default', 'extra-calm'] as VisualCalmLevel[]).map((level) => (
-            <button
-              key={level}
-              onClick={() => updatePreferences({ visualCalmLevel: level })}
-              className={`flex-1 py-3 px-4 rounded-xl text-sm font-medium transition-all ${
-                preferences.visualCalmLevel === level
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-secondary text-foreground hover:bg-secondary/80'
-              }`}
-            >
-              {level === 'default' ? 'Default' : 'Extra calm'}
-            </button>
-          ))}
-        </div>
+        <h3 className="font-medium text-foreground">Insights & Reflections</h3>
+        <p className="text-sm text-muted-foreground">How often you'd like reflections to appear.</p>
       </div>
 
       {/* Insight Frequency */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium text-foreground">Insight frequency</label>
-        <p className="text-xs text-muted-foreground mb-2">How often you'd like reflections to appear.</p>
-        <div className="flex gap-2">
-          {(['rare', 'occasional', 'weekly'] as InsightFrequency[]).map((freq) => (
-            <button
-              key={freq}
-              onClick={() => updatePreferences({ insightFrequency: freq })}
-              className={`flex-1 py-3 px-3 rounded-xl text-sm font-medium transition-all ${
-                preferences.insightFrequency === freq
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-secondary text-foreground hover:bg-secondary/80'
-              }`}
-            >
-              {freq.charAt(0).toUpperCase() + freq.slice(1)}
-            </button>
-          ))}
-        </div>
+      <div className="space-y-3">
+        {(['rare', 'occasional', 'weekly'] as InsightFrequency[]).map((freq) => (
+          <button
+            key={freq}
+            onClick={() => updatePreferences({ insightFrequency: freq })}
+            className={`w-full p-4 rounded-xl text-left transition-all ${
+              preferences.insightFrequency === freq
+                ? 'bg-primary/10 border-2 border-primary/30'
+                : 'bg-secondary/50 border-2 border-transparent hover:bg-secondary/80'
+            }`}
+          >
+            <p className="font-medium text-sm text-foreground capitalize">{freq}</p>
+            <p className="text-xs text-muted-foreground mt-1">{INSIGHT_DESCRIPTIONS[freq]}</p>
+          </button>
+        ))}
+      </div>
+
+      {/* Info about insight types */}
+      <div className="p-4 rounded-xl bg-secondary/30 space-y-2">
+        <p className="text-xs font-medium text-foreground">Types of reflections:</p>
+        <ul className="text-xs text-muted-foreground space-y-1">
+          <li>• <span className="font-medium">Patterns</span> — observing trends over time</li>
+          <li>• <span className="font-medium">Connections</span> — highlighting possible links</li>
+          <li>• <span className="font-medium">Prompts</span> — gentle questions for introspection</li>
+        </ul>
+        <p className="text-xs text-muted-foreground mt-2 italic">
+          Never prescriptive. Never "you should". Just observations.
+        </p>
       </div>
 
       {/* Week Start */}
@@ -485,12 +494,43 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
         )}
       </div>
 
+      {/* Google Cloud sync (placeholder) */}
+      <SettingsRow 
+        icon={Cloud} 
+        label="Connect to Google Drive" 
+        sublabel="Save your data to Google Cloud"
+        onClick={() => setSection('google-cloud')}
+      />
+
       <SettingsRow 
         icon={Download} 
         label="Export Data" 
         sublabel="Download as JSON"
         onClick={handleExport}
       />
+
+      {/* Import Data */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept=".json"
+        onChange={handleImportFile}
+        className="hidden"
+      />
+      <div className="space-y-2">
+        <SettingsRow 
+          icon={Upload} 
+          label="Import Data" 
+          sublabel="Restore from a previous export"
+          onClick={handleImportClick}
+        />
+        {importError && (
+          <p className="text-xs text-destructive text-center">{importError}</p>
+        )}
+        {importSuccess && (
+          <p className="text-xs text-primary text-center">Data imported successfully!</p>
+        )}
+      </div>
 
       {/* Clear Local Logs */}
       <div className="space-y-2">
@@ -528,6 +568,29 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
       </a>
 
       <BackButton />
+    </motion.div>
+  );
+
+  const renderGoogleCloud = () => (
+    <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-5">
+      <div className="text-center">
+        <div className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-primary/10 flex items-center justify-center">
+          <Cloud className="w-7 h-7 text-primary" />
+        </div>
+        <h3 className="text-lg font-serif font-medium text-foreground">Google Drive Sync</h3>
+        <p className="text-sm text-muted-foreground mt-2 max-w-xs mx-auto">
+          Save your data to Google Drive for additional backup.
+        </p>
+      </div>
+
+      <div className="p-4 rounded-xl bg-secondary/30 space-y-3">
+        <p className="text-sm text-foreground">This feature is coming soon.</p>
+        <p className="text-xs text-muted-foreground">
+          In the meantime, you can use the Export/Import functions to backup your data manually.
+        </p>
+      </div>
+
+      <BackButton to="privacy" />
     </motion.div>
   );
 
@@ -740,11 +803,12 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
             {section === 'main' && 'Settings'}
             {section === 'profile' && 'Your Profile'}
             {section === 'habits' && 'Reminders'}
-            {section === 'experience' && 'Experience'}
+            {section === 'experience' && 'Insights'}
             {section === 'privacy' && 'Data & Privacy'}
             {section === 'about' && 'About'}
             {section === 'auth' && 'Cloud Sync'}
             {section === 'cloud' && 'Cloud Sync'}
+            {section === 'google-cloud' && 'Google Drive'}
             {section === 'reset' && 'Reset'}
             {section === 'delete' && 'Delete'}
           </h2>
@@ -763,6 +827,7 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
             {section === 'about' && renderAbout()}
             {section === 'auth' && renderAuth()}
             {section === 'cloud' && renderCloud()}
+            {section === 'google-cloud' && renderGoogleCloud()}
             {section === 'reset' && renderReset()}
             {section === 'delete' && renderDelete()}
           </AnimatePresence>
