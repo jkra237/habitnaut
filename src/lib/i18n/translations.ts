@@ -322,6 +322,10 @@ export interface Translations {
     testSent: string;
     preview: string;
     fewTimesWeek: string;
+    timesPerWeek: string;
+    perWeek: string;
+    confirmationNote: string;
+    howOften: string;
     // Reminder copy
     invitationNote: string;
     dailyCopy: {
@@ -688,6 +692,10 @@ export const translations: Record<SupportedLanguage, Translations> = {
       testSent: 'Test sent!',
       preview: 'Preview',
       fewTimesWeek: 'Few times/week',
+      timesPerWeek: '{count}× per week',
+      perWeek: 'per week',
+      confirmationNote: 'This reminder is just a gentle nudge. You can change or turn it off anytime.',
+      howOften: 'How often would you like a reminder?',
       invitationNote: 'This is just a gentle nudge. You can turn it off anytime.',
       dailyCopy: {
         reconnect: 'Want to reconnect with your habit?',
@@ -1060,6 +1068,10 @@ export const translations: Record<SupportedLanguage, Translations> = {
       testSent: '¡Prueba enviada!',
       preview: 'Vista previa',
       fewTimesWeek: 'Algunas veces/semana',
+      timesPerWeek: '{count}× por semana',
+      perWeek: 'por semana',
+      confirmationNote: 'Este recordatorio es solo un suave aviso. Puedes cambiarlo o desactivarlo cuando quieras.',
+      howOften: '¿Con qué frecuencia te gustaría un recordatorio?',
       invitationNote: 'Es solo un recordatorio suave. Puedes desactivarlo cuando quieras.',
       dailyCopy: {
         reconnect: '¿Quieres reconectar con tu hábito?',
@@ -1432,6 +1444,10 @@ export const translations: Record<SupportedLanguage, Translations> = {
       testSent: 'Test gesendet!',
       preview: 'Vorschau',
       fewTimesWeek: 'Einige Male/Woche',
+      timesPerWeek: '{count}× pro Woche',
+      perWeek: 'pro Woche',
+      confirmationNote: 'Diese Erinnerung ist nur ein sanfter Hinweis. Du kannst sie jederzeit ändern oder ausschalten.',
+      howOften: 'Wie oft möchtest du erinnert werden?',
       invitationNote: 'Das ist nur ein sanfter Hinweis. Du kannst ihn jederzeit ausschalten.',
       dailyCopy: {
         reconnect: 'Möchtest du dich mit deiner Gewohnheit verbinden?',

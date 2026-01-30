@@ -168,7 +168,7 @@ export async function syncHabitsToCloud(habits: Habit[]): Promise<{ success: boo
         soft_frequency: habit.softFrequency,
         is_resting: habit.isResting,
         resting_note: habit.restingNote || null,
-        reminder_frequency: habit.reminder?.frequency || 'none',
+        reminder_frequency: String(habit.reminder?.frequency ?? 'none'),
         reminder_time_anchor: habit.reminder?.timeAnchor || 'none',
         reminder_enabled: habit.reminder?.enabled || false,
       }, {

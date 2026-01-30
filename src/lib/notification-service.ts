@@ -160,17 +160,16 @@ export function scheduleHabitReminder(habit: Habit): void {
   const timeoutId = window.setTimeout(() => {
     showHabitNotification(habit);
     
-    // Reschedule for daily reminders
-    if (habit.reminder.frequency === 'daily') {
-      scheduleHabitReminder(habit);
-    }
-    
-    // For weekly, reschedule 7 days later
-    if (habit.reminder.frequency === 'weekly') {
-      const weekDelay = 7 * 24 * 60 * 60 * 1000;
+    // Reschedule based on frequency (1-7 times per week)
+    if (typeof habit.reminder.frequency === 'number' && habit.reminder.frequency > 0) {
+      // Calculate days between reminders based on frequency
+      // e.g., 7x/week = every day, 1x/week = every 7 days
+      const daysInterval = Math.floor(7 / habit.reminder.frequency);
+      const intervalDelay = daysInterval * 24 * 60 * 60 * 1000;
+      
       scheduledNotifications.set(
         habit.id,
-        window.setTimeout(() => scheduleHabitReminder(habit), weekDelay)
+        window.setTimeout(() => scheduleHabitReminder(habit), intervalDelay)
       );
     }
   }, delay);

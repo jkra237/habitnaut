@@ -21,19 +21,23 @@ export function getRandomReminderCopy(options: ReminderCopyOptions): string {
     return '';
   }
 
+  // frequency is now 1-7 (times per week)
+  // Use daily copy for frequent reminders (5-7x), weekly copy for less frequent (1-4x)
+  const isFrequent = typeof frequency === 'number' && frequency >= 5;
+
   // Use translations if available
   if (t) {
-    if (frequency === 'daily') {
+    if (isFrequent) {
       const dailyCopies = Object.values(t.dailyCopy);
       return dailyCopies[Math.floor(Math.random() * dailyCopies.length)];
     }
-    // Weekly
+    // Less frequent
     const weeklyCopies = Object.values(t.weeklyCopy);
     return weeklyCopies[Math.floor(Math.random() * weeklyCopies.length)];
   }
 
   // Fallback to English
-  const DAILY_REMINDERS = [
+  const FREQUENT_REMINDERS = [
     "Want to reconnect with your habit?",
     "A small pause, if it fits.",
     "If now feels right, this habit is here.",
@@ -41,7 +45,7 @@ export function getRandomReminderCopy(options: ReminderCopyOptions): string {
     "This is here when you're ready.",
   ];
 
-  const WEEKLY_REMINDERS = [
+  const GENTLE_REMINDERS = [
     "This habit checked in this week.",
     "Want to gently pick this up again?",
     "A reminder without pressure.",
@@ -49,11 +53,11 @@ export function getRandomReminderCopy(options: ReminderCopyOptions): string {
     "A soft invitation to reconnect.",
   ];
 
-  if (frequency === 'daily') {
-    return DAILY_REMINDERS[Math.floor(Math.random() * DAILY_REMINDERS.length)];
+  if (isFrequent) {
+    return FREQUENT_REMINDERS[Math.floor(Math.random() * FREQUENT_REMINDERS.length)];
   }
 
-  return WEEKLY_REMINDERS[Math.floor(Math.random() * WEEKLY_REMINDERS.length)];
+  return GENTLE_REMINDERS[Math.floor(Math.random() * GENTLE_REMINDERS.length)];
 }
 
 /**
