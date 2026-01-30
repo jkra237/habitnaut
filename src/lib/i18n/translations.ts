@@ -213,6 +213,34 @@ export interface Translations {
     delete: string;
   };
   
+  // Reminders
+  reminders: {
+    gentleReminder: string;
+    frequency: string;
+    when: string;
+    off: string;
+    daily: string;
+    weekly: string;
+    morning: string;
+    midday: string;
+    evening: string;
+    custom: string;
+    customTimeLabel: string;
+    on: string;
+    permissionDenied: string;
+    permissionPending: string;
+    testNotification: string;
+    testSent: string;
+    preview: string;
+    fewTimesWeek: string;
+  };
+  
+  // Time formatting
+  time: {
+    today: string;
+    yesterday: string;
+  };
+  
   // Recommended habits
   recommendedHabits: {
     morningPages: { name: string; reason: string };
@@ -443,6 +471,30 @@ export const translations: Record<SupportedLanguage, Translations> = {
       noEntries: 'No past entries yet',
       delete: 'Delete',
     },
+    reminders: {
+      gentleReminder: 'Gentle Reminder',
+      frequency: 'Frequency',
+      when: 'When',
+      off: 'Off',
+      daily: 'Daily',
+      weekly: 'Weekly',
+      morning: 'Morning',
+      midday: 'Midday',
+      evening: 'Evening',
+      custom: 'Custom',
+      customTimeLabel: 'Set your preferred time',
+      on: 'On',
+      permissionDenied: 'Browser notifications are blocked. Please enable them in your browser settings to receive gentle reminders.',
+      permissionPending: "When you save, we'll ask for notification permission.",
+      testNotification: 'Send a test notification',
+      testSent: 'Test sent!',
+      preview: 'Preview',
+      fewTimesWeek: 'Few times/week',
+    },
+    time: {
+      today: 'Today',
+      yesterday: 'Yesterday',
+    },
     recommendedHabits: {
       morningPages: { name: 'Morning pages', reason: 'Aligns with your morning clarity' },
       sunriseWalk: { name: 'Sunrise walk', reason: 'Captures your peak energy time' },
@@ -671,6 +723,30 @@ export const translations: Record<SupportedLanguage, Translations> = {
       noEntries: 'Aún no hay entradas anteriores',
       delete: 'Eliminar',
     },
+    reminders: {
+      gentleReminder: 'Recordatorio suave',
+      frequency: 'Frecuencia',
+      when: 'Cuándo',
+      off: 'Desactivado',
+      daily: 'Diario',
+      weekly: 'Semanal',
+      morning: 'Mañana',
+      midday: 'Mediodía',
+      evening: 'Tarde',
+      custom: 'Personalizado',
+      customTimeLabel: 'Elige tu hora preferida',
+      on: 'Activado',
+      permissionDenied: 'Las notificaciones están bloqueadas. Actívalas en la configuración de tu navegador para recibir recordatorios.',
+      permissionPending: 'Al guardar, te pediremos permiso para las notificaciones.',
+      testNotification: 'Enviar notificación de prueba',
+      testSent: '¡Prueba enviada!',
+      preview: 'Vista previa',
+      fewTimesWeek: 'Algunas veces/semana',
+    },
+    time: {
+      today: 'Hoy',
+      yesterday: 'Ayer',
+    },
     recommendedHabits: {
       morningPages: { name: 'Páginas matutinas', reason: 'Aprovecha tu claridad por las mañanas' },
       sunriseWalk: { name: 'Paseo al amanecer', reason: 'Captura tu momento de máxima energía' },
@@ -898,6 +974,30 @@ export const translations: Record<SupportedLanguage, Translations> = {
       pastEntries: 'Vergangene Einträge',
       noEntries: 'Noch keine vergangenen Einträge',
       delete: 'Löschen',
+    },
+    reminders: {
+      gentleReminder: 'Sanfte Erinnerung',
+      frequency: 'Häufigkeit',
+      when: 'Wann',
+      off: 'Aus',
+      daily: 'Täglich',
+      weekly: 'Wöchentlich',
+      morning: 'Morgens',
+      midday: 'Mittags',
+      evening: 'Abends',
+      custom: 'Individuell',
+      customTimeLabel: 'Wähle deine bevorzugte Zeit',
+      on: 'An',
+      permissionDenied: 'Browser-Benachrichtigungen sind blockiert. Bitte aktiviere sie in deinen Browser-Einstellungen, um sanfte Erinnerungen zu erhalten.',
+      permissionPending: 'Beim Speichern fragen wir nach der Berechtigung für Benachrichtigungen.',
+      testNotification: 'Test-Benachrichtigung senden',
+      testSent: 'Test gesendet!',
+      preview: 'Vorschau',
+      fewTimesWeek: 'Einige Male/Woche',
+    },
+    time: {
+      today: 'Heute',
+      yesterday: 'Gestern',
     },
     recommendedHabits: {
       morningPages: { name: 'Morgenseiten', reason: 'Passt zu deiner morgendlichen Klarheit' },

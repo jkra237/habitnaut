@@ -4,10 +4,9 @@ import { Calendar, X, Trash2, Heart, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { useFlowNautStore } from '@/store/flownaut-store';
-import { useTranslations } from '@/hooks/use-translations';
-import { format, parseISO } from 'date-fns';
+import { useTranslations, useLanguage } from '@/hooks/use-translations';
+import { format, parseISO, isToday, isYesterday } from 'date-fns';
 import { de, es, enUS } from 'date-fns/locale';
-import { useLanguage } from '@/hooks/use-translations';
 
 export function GratitudeJournal() {
   const [showHistory, setShowHistory] = useState(false);
@@ -26,6 +25,24 @@ export function GratitudeJournal() {
       case 'es': return es;
       default: return enUS;
     }
+  };
+
+  const formatEntryDate = (dateStr: string, createdAt: string) => {
+    const date = parseISO(dateStr);
+    const time = format(parseISO(createdAt), 'HH:mm');
+    
+    if (isToday(date)) {
+      return `${t.time?.today || 'Heute'}, ${time}`;
+    }
+    if (isYesterday(date)) {
+      return `${t.time?.yesterday || 'Gestern'}, ${time}`;
+    }
+    return format(date, 'EEEE, d. MMMM yyyy', { locale: getLocale() });
+  };
+
+  const formatHistoryDate = (dateStr: string) => {
+    const date = parseISO(dateStr);
+    return format(date, 'EEEE, d. MMMM yyyy', { locale: getLocale() });
   };
 
   const handleSave = () => {
@@ -54,7 +71,7 @@ export function GratitudeJournal() {
       <div className="flex items-center justify-between mb-4">
         <h2 className="font-serif font-medium text-foreground flex items-center gap-2">
           <Heart className="w-4 h-4 text-primary" />
-          {t.gratitude?.title || 'Dankbarkeit'}
+          {t.gratitude?.title}
         </h2>
         <Button
           variant="ghost"
@@ -69,12 +86,12 @@ export function GratitudeJournal() {
       {/* Today's input */}
       <div className="space-y-3">
         <p className="text-sm text-muted-foreground">
-          {t.gratitude?.prompt || 'Wofür bin ich heute dankbar?'}
+          {t.gratitude?.prompt}
         </p>
         <Textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder={t.gratitude?.placeholder || 'Schreibe hier...'}
+          placeholder={t.gratitude?.placeholder}
           className="min-h-[80px] resize-none bg-background/50 border-border/50 focus:border-primary/30"
         />
         <Button
@@ -85,7 +102,7 @@ export function GratitudeJournal() {
           className="w-full flex items-center gap-2"
         >
           <Plus className="w-4 h-4" />
-          {t.gratitude?.save || 'Speichern'}
+          {t.gratitude?.save}
         </Button>
       </div>
 
@@ -93,7 +110,7 @@ export function GratitudeJournal() {
       {todayEntries.length > 0 && (
         <div className="mt-4 pt-4 border-t border-border/50 space-y-2">
           <p className="text-xs text-muted-foreground mb-2">
-            {t.gratitude?.todayEntries || "Heute eingetragen"}
+            {t.gratitude?.todayEntries}
           </p>
           {todayEntries.map((entry) => (
             <motion.div
@@ -103,13 +120,18 @@ export function GratitudeJournal() {
               className="p-3 rounded-xl bg-primary/5 border border-primary/10 group"
             >
               <div className="flex items-start justify-between gap-2">
-                <p className="text-sm text-foreground whitespace-pre-wrap flex-1">
-                  {entry.text}
-                </p>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs text-muted-foreground mb-1">
+                    {formatEntryDate(entry.date, entry.createdAt)}
+                  </p>
+                  <p className="text-sm text-foreground whitespace-pre-wrap">
+                    {entry.text}
+                  </p>
+                </div>
                 <button
                   onClick={() => handleDelete(entry.id)}
                   className="p-1.5 rounded-lg text-muted-foreground/50 hover:text-destructive hover:bg-destructive/10 transition-colors opacity-0 group-hover:opacity-100"
-                  title={t.gratitude?.delete || 'Löschen'}
+                  title={t.gratitude?.delete}
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                 </button>
@@ -130,7 +152,7 @@ export function GratitudeJournal() {
           >
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-sm font-medium text-foreground">
-                {t.gratitude?.pastEntries || 'Vergangene Einträge'}
+                {t.gratitude?.pastEntries}
               </h3>
               <button
                 onClick={() => setShowHistory(false)}
@@ -142,7 +164,7 @@ export function GratitudeJournal() {
 
             {pastEntries.length === 0 ? (
               <p className="text-sm text-muted-foreground italic">
-                {t.gratitude?.noEntries || 'Noch keine vergangenen Einträge'}
+                {t.gratitude?.noEntries}
               </p>
             ) : (
               <div className="space-y-3 max-h-64 overflow-y-auto">
@@ -156,7 +178,7 @@ export function GratitudeJournal() {
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex-1 min-w-0">
                         <p className="text-xs text-muted-foreground mb-1">
-                          {format(parseISO(entry.date), 'EEEE, d. MMMM yyyy', { locale: getLocale() })}
+                          {formatHistoryDate(entry.date)}
                         </p>
                         <p className="text-sm text-foreground whitespace-pre-wrap">
                           {entry.text}
@@ -165,7 +187,7 @@ export function GratitudeJournal() {
                       <button
                         onClick={() => handleDelete(entry.id)}
                         className="p-1.5 rounded-lg text-muted-foreground/50 hover:text-destructive hover:bg-destructive/10 transition-colors opacity-0 group-hover:opacity-100"
-                        title={t.gratitude?.delete || 'Löschen'}
+                        title={t.gratitude?.delete}
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
