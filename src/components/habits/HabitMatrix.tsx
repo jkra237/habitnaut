@@ -9,10 +9,12 @@ import { HabitOptions } from './HabitOptions';
 import { useNotifications } from '@/hooks/use-notifications';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { useTranslations } from '@/hooks/use-translations';
 
 const DAYS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
 export function HabitMatrix() {
+  const t = useTranslations();
   const [activeReminderId, setActiveReminderId] = useState<string | null>(null);
   const [activeOptionsId, setActiveOptionsId] = useState<string | null>(null);
   const [touchedHabitId, setTouchedHabitId] = useState<string | null>(null);
@@ -225,15 +227,15 @@ export function HabitMatrix() {
       <div className="flex flex-wrap justify-center gap-3 sm:gap-6 pt-4 text-[10px] sm:text-xs text-muted-foreground">
         <div className="flex items-center gap-1">
           <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded bg-primary/30 border border-primary/50 flex items-center justify-center text-[8px] sm:text-[10px]">✓</div>
-          <span>Done</span>
+          <span>{t.habits.done}</span>
         </div>
         <div className="flex items-center gap-1">
           <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded bg-accent/30 border border-accent/50 flex items-center justify-center text-[8px] sm:text-[10px]">🌱</div>
-          <span>Skipped</span>
+          <span>{t.habits.skipped}</span>
         </div>
         <div className="flex items-center gap-1">
           <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded bg-secondary border border-border/50 flex items-center justify-center text-[8px] sm:text-[10px]">○</div>
-          <span>Not done</span>
+          <span>{t.habits.notDone}</span>
         </div>
       </div>
     </div>

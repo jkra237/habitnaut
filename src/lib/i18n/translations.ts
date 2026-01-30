@@ -28,6 +28,7 @@ export interface Translations {
     skipForNow: string;
     allSet: string;
     allSetSubtitle: string;
+    allSetMessage: string;
     startObserving: string;
     // Language selection
     chooseLanguage: string;
@@ -375,6 +376,7 @@ export const translations: Record<SupportedLanguage, Translations> = {
       skipForNow: 'Skip for now',
       allSet: "You're all set",
       allSetSubtitle: 'Your space is ready. No streaks. No pressure. Just gentle self-observation.',
+      allSetMessage: 'You\'ve taken a beautiful first step. This is your space to observe yourself with kindness – no expectations, just gentle awareness. Welcome aboard, fellow explorer. 🚀',
       startObserving: 'Start observing',
       chooseLanguage: 'Choose your language',
       languageSubtitle: 'You can change this anytime in settings',
@@ -696,6 +698,7 @@ export const translations: Record<SupportedLanguage, Translations> = {
       skipForNow: 'Saltar por ahora',
       allSet: '¡Todo listo!',
       allSetSubtitle: 'Tu espacio está preparado. Sin rachas. Sin presión. Solo autoobservación amable.',
+      allSetMessage: 'Has dado un primer paso maravilloso. Este es tu espacio para observarte con amabilidad – sin expectativas, solo conciencia suave. Bienvenido a bordo, compañero explorador. 🚀',
       startObserving: 'Empezar a observar',
       chooseLanguage: 'Elige tu idioma',
       languageSubtitle: 'Puedes cambiarlo en cualquier momento en los ajustes',
@@ -1017,6 +1020,7 @@ export const translations: Record<SupportedLanguage, Translations> = {
       skipForNow: 'Erstmal überspringen',
       allSet: 'Alles bereit!',
       allSetSubtitle: 'Dein Raum ist fertig. Keine Streaks. Kein Druck. Nur achtsame Selbstbeobachtung.',
+      allSetMessage: 'Du hast einen wunderbaren ersten Schritt gemacht. Das hier ist dein Raum, dich mit Freundlichkeit zu beobachten – keine Erwartungen, nur sanfte Achtsamkeit. Willkommen an Bord, Mitentdecker. 🚀',
       startObserving: 'Jetzt starten',
       chooseLanguage: 'Wähle deine Sprache',
       languageSubtitle: 'Du kannst das jederzeit in den Einstellungen ändern',

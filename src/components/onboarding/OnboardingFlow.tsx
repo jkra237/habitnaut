@@ -546,13 +546,21 @@ export function OnboardingFlow() {
                 <Check className="w-12 h-12 text-primary" />
               </motion.div>
               
-              <div className="space-y-2">
+              <div className="space-y-4">
                 <h2 className="text-3xl font-serif font-medium text-foreground">
                   {t.onboarding.allSet}
                 </h2>
                 <p className="text-muted-foreground max-w-sm mx-auto">
                   {t.onboarding.allSetSubtitle}
                 </p>
+                <motion.p 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 }}
+                  className="text-sm text-foreground/70 max-w-md mx-auto bg-primary/5 rounded-xl p-4 border border-primary/10"
+                >
+                  {t.onboarding.allSetMessage}
+                </motion.p>
               </div>
 
               <Button 
