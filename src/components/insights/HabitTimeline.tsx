@@ -11,6 +11,7 @@ import {
 } from 'recharts';
 import { useFlowNautStore } from '@/store/flownaut-store';
 import { format, parseISO, subDays, subMonths, subYears, eachDayOfInterval, eachWeekOfInterval, eachMonthOfInterval, startOfWeek, startOfMonth, endOfWeek, endOfMonth } from 'date-fns';
+import { useTranslations } from '@/hooks/use-translations';
 
 type TimeRange = 'week' | 'month' | 'year';
 
@@ -19,6 +20,7 @@ interface HabitTimelineProps {
 }
 
 export function HabitTimeline({ initialRange = 'month' }: HabitTimelineProps) {
+  const t = useTranslations();
   const [timeRange, setTimeRange] = useState<TimeRange>(initialRange);
   const habits = useFlowNautStore((s) => s.getActiveHabits());
   const entries = useFlowNautStore((s) => s.entries);
@@ -153,7 +155,7 @@ export function HabitTimeline({ initialRange = 'month' }: HabitTimelineProps) {
     return (
       <div className="text-center py-12 px-6">
         <p className="text-muted-foreground text-sm">
-          Add habits to see your rhythm visualization.
+          {t.timeline.addHabitsToSee}
         </p>
       </div>
     );
@@ -173,9 +175,7 @@ export function HabitTimeline({ initialRange = 'month' }: HabitTimelineProps) {
                 : 'bg-secondary text-foreground hover:bg-secondary/80'
             }`}
           >
-            {range === 'week' && 'Week'}
-            {range === 'month' && 'Month'}
-            {range === 'year' && 'Year'}
+            {t.timeline[range]}
           </button>
         ))}
       </div>
@@ -214,7 +214,6 @@ export function HabitTimeline({ initialRange = 'month' }: HabitTimelineProps) {
               formatter={(value: number, name: string) => {
                 const habit = habits.find((h) => h.id === name);
                 const label = habit?.name || name;
-                const displayValue = value >= 0.75 ? 'Engaged' : value >= 0.25 ? 'Partial' : 'Not engaged';
                 return [`${Math.round(value * 100)}%`, label];
               }}
             />
@@ -254,8 +253,8 @@ export function HabitTimeline({ initialRange = 'month' }: HabitTimelineProps) {
               </span>
             </div>
             <p className="text-xs text-muted-foreground">
-              {percentage}% engagement 
-              {timeRange === 'year' ? ' (avg)' : ` (${engagedDays}/${totalDays} days)`}
+              {percentage}% {t.timeline.engagement} 
+              {timeRange === 'year' ? ` (${t.timeline.avg})` : ` (${engagedDays}/${totalDays} ${t.timeline.days})`}
             </p>
           </div>
         ))}
