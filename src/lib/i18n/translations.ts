@@ -160,6 +160,18 @@ export interface Translations {
     thisWeek: string;
     insights: string;
     addHabit: string;
+    greetingMorning: string;
+    greetingAfternoon: string;
+    greetingEvening: string;
+    yourRhythm: string;
+    yourRhythmDescription: string;
+    showTimeline: string;
+    hideTimeline: string;
+    gentleObservations: string;
+    startObservingSomething: string;
+    morningHint: string;
+    eveningHint: string;
+    flexibleHint: string;
   };
   
   // Habits
@@ -239,6 +251,29 @@ export interface Translations {
   time: {
     today: string;
     yesterday: string;
+    weekdays: {
+      monday: string;
+      tuesday: string;
+      wednesday: string;
+      thursday: string;
+      friday: string;
+      saturday: string;
+      sunday: string;
+    };
+    months: {
+      january: string;
+      february: string;
+      march: string;
+      april: string;
+      may: string;
+      june: string;
+      july: string;
+      august: string;
+      september: string;
+      october: string;
+      november: string;
+      december: string;
+    };
   };
   
   // Recommended habits
@@ -429,6 +464,18 @@ export const translations: Record<SupportedLanguage, Translations> = {
       thisWeek: 'This week',
       insights: 'Insights',
       addHabit: 'Add habit',
+      greetingMorning: 'Good morning',
+      greetingAfternoon: 'Good afternoon',
+      greetingEvening: 'Good evening',
+      yourRhythm: 'Your Rhythm',
+      yourRhythmDescription: 'See how your habits flow over time.',
+      showTimeline: 'Show timeline',
+      hideTimeline: 'Hide timeline',
+      gentleObservations: 'Gentle Observations',
+      startObservingSomething: 'Start observing something',
+      morningHint: 'Your mornings tend to be clearer – a good time for what matters.',
+      eveningHint: 'You come alive as the day winds down – honor that rhythm.',
+      flexibleHint: 'Your rhythm flows with the day – stay curious about it.',
     },
     habits: {
       letRest: 'Let rest',
@@ -494,6 +541,29 @@ export const translations: Record<SupportedLanguage, Translations> = {
     time: {
       today: 'Today',
       yesterday: 'Yesterday',
+      weekdays: {
+        monday: 'Monday',
+        tuesday: 'Tuesday',
+        wednesday: 'Wednesday',
+        thursday: 'Thursday',
+        friday: 'Friday',
+        saturday: 'Saturday',
+        sunday: 'Sunday',
+      },
+      months: {
+        january: 'January',
+        february: 'February',
+        march: 'March',
+        april: 'April',
+        may: 'May',
+        june: 'June',
+        july: 'July',
+        august: 'August',
+        september: 'September',
+        october: 'October',
+        november: 'November',
+        december: 'December',
+      },
     },
     recommendedHabits: {
       morningPages: { name: 'Morning pages', reason: 'Aligns with your morning clarity' },
@@ -681,6 +751,18 @@ export const translations: Record<SupportedLanguage, Translations> = {
       thisWeek: 'Esta semana',
       insights: 'Reflexiones',
       addHabit: 'Añadir hábito',
+      greetingMorning: 'Buenos días',
+      greetingAfternoon: 'Buenas tardes',
+      greetingEvening: 'Buenas noches',
+      yourRhythm: 'Tu Ritmo',
+      yourRhythmDescription: 'Observa cómo fluyen tus hábitos con el tiempo.',
+      showTimeline: 'Mostrar línea de tiempo',
+      hideTimeline: 'Ocultar línea de tiempo',
+      gentleObservations: 'Observaciones suaves',
+      startObservingSomething: 'Empieza a observar algo',
+      morningHint: 'Tus mañanas suelen ser más claras – un buen momento para lo importante.',
+      eveningHint: 'Cobras vida cuando el día termina – honra ese ritmo.',
+      flexibleHint: 'Tu ritmo fluye con el día – mantén la curiosidad.',
     },
     habits: {
       letRest: 'Pausar',
@@ -746,6 +828,29 @@ export const translations: Record<SupportedLanguage, Translations> = {
     time: {
       today: 'Hoy',
       yesterday: 'Ayer',
+      weekdays: {
+        monday: 'Lunes',
+        tuesday: 'Martes',
+        wednesday: 'Miércoles',
+        thursday: 'Jueves',
+        friday: 'Viernes',
+        saturday: 'Sábado',
+        sunday: 'Domingo',
+      },
+      months: {
+        january: 'Enero',
+        february: 'Febrero',
+        march: 'Marzo',
+        april: 'Abril',
+        may: 'Mayo',
+        june: 'Junio',
+        july: 'Julio',
+        august: 'Agosto',
+        september: 'Septiembre',
+        october: 'Octubre',
+        november: 'Noviembre',
+        december: 'Diciembre',
+      },
     },
     recommendedHabits: {
       morningPages: { name: 'Páginas matutinas', reason: 'Aprovecha tu claridad por las mañanas' },
@@ -933,12 +1038,24 @@ export const translations: Record<SupportedLanguage, Translations> = {
       thisWeek: 'Diese Woche',
       insights: 'Einsichten',
       addHabit: 'Gewohnheit hinzufügen',
+      greetingMorning: 'Guten Morgen',
+      greetingAfternoon: 'Guten Tag',
+      greetingEvening: 'Guten Abend',
+      yourRhythm: 'Dein Rhythmus',
+      yourRhythmDescription: 'Beobachte, wie deine Gewohnheiten über die Zeit fließen.',
+      showTimeline: 'Zeitverlauf anzeigen',
+      hideTimeline: 'Zeitverlauf ausblenden',
+      gentleObservations: 'Sanfte Beobachtungen',
+      startObservingSomething: 'Beginne etwas zu beobachten',
+      morningHint: 'Deine Vormittage sind oft klarer – eine gute Zeit für das Wesentliche.',
+      eveningHint: 'Du blühst auf, wenn der Tag sich neigt – ehre diesen Rhythmus.',
+      flexibleHint: 'Dein Rhythmus fließt mit dem Tag – bleib neugierig darauf.',
     },
     habits: {
       letRest: 'Pausieren',
       letRestSubtitle: 'Sanft auf Pause setzen',
       letGo: 'Loslassen',
-      letGoSubtitle: 'Vollständig freigeben',
+      letGoSubtitle: 'Vollständig entfernen',
       restingHabits: 'Pausierte Gewohnheiten',
       restingNote: 'Manche Gewohnheiten begleiten uns nur eine Weile. Du kannst sie wieder aktivieren, wenn du bereit bist.',
       wake: 'Reaktivieren',
@@ -998,6 +1115,29 @@ export const translations: Record<SupportedLanguage, Translations> = {
     time: {
       today: 'Heute',
       yesterday: 'Gestern',
+      weekdays: {
+        monday: 'Montag',
+        tuesday: 'Dienstag',
+        wednesday: 'Mittwoch',
+        thursday: 'Donnerstag',
+        friday: 'Freitag',
+        saturday: 'Samstag',
+        sunday: 'Sonntag',
+      },
+      months: {
+        january: 'Januar',
+        february: 'Februar',
+        march: 'März',
+        april: 'April',
+        may: 'Mai',
+        june: 'Juni',
+        july: 'Juli',
+        august: 'August',
+        september: 'September',
+        october: 'Oktober',
+        november: 'November',
+        december: 'Dezember',
+      },
     },
     recommendedHabits: {
       morningPages: { name: 'Morgenseiten', reason: 'Passt zu deiner morgendlichen Klarheit' },

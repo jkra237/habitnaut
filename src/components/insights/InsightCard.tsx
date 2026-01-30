@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Lightbulb, TrendingUp, Sparkles } from 'lucide-react';
 import type { Insight } from '@/types/flownaut';
+import { useTranslations } from '@/hooks/use-translations';
 
 interface InsightCardProps {
   insight: Insight;
@@ -20,6 +21,21 @@ const bgMap = {
 };
 
 export function InsightCard({ insight, index = 0 }: InsightCardProps) {
+  const t = useTranslations();
+  
+  const getInsightLabel = (type: Insight['type']) => {
+    switch (type) {
+      case 'correlation':
+        return t.insights.noticedConnection;
+      case 'pattern':
+        return t.insights.patternEmerged;
+      case 'prompt':
+        return t.insights.somethingToConsider;
+      default:
+        return '';
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -36,9 +52,7 @@ export function InsightCard({ insight, index = 0 }: InsightCardProps) {
             {insight.message}
           </p>
           <p className="text-xs opacity-60">
-            {insight.type === 'correlation' && 'Noticed a connection'}
-            {insight.type === 'pattern' && 'A pattern emerged'}
-            {insight.type === 'prompt' && 'Something to consider'}
+            {getInsightLabel(insight.type)}
           </p>
         </div>
       </div>

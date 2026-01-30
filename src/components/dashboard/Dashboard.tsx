@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { format } from 'date-fns';
 import { Plus, Settings as SettingsIcon, Leaf, Moon, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { HabitMatrix } from '@/components/habits/HabitMatrix';
@@ -12,6 +11,7 @@ import { HabitTimeline } from '@/components/insights/HabitTimeline';
 import { Settings } from '@/components/settings/Settings';
 import { GratitudeJournal } from '@/components/gratitude/GratitudeJournal';
 import { useFlowNautStore } from '@/store/flownaut-store';
+import { useTranslations } from '@/hooks/use-translations';
 
 export function Dashboard() {
   const [isAddHabitOpen, setIsAddHabitOpen] = useState(false);
@@ -22,6 +22,7 @@ export function Dashboard() {
   const insights = useFlowNautStore((s) => s.insights);
   const addInsight = useFlowNautStore((s) => s.addInsight);
   const personality = useFlowNautStore((s) => s.personality);
+  const t = useTranslations();
 
   // Add demo insights on first load if none exist
   useEffect(() => {
@@ -34,9 +35,24 @@ export function Dashboard() {
 
   const getGreeting = () => {
     const hour = new Date().getHours();
-    if (hour < 12) return 'Good morning';
-    if (hour < 17) return 'Good afternoon';
-    return 'Good evening';
+    if (hour < 12) return t.dashboard.greetingMorning;
+    if (hour < 17) return t.dashboard.greetingAfternoon;
+    return t.dashboard.greetingEvening;
+  };
+
+  const getFormattedDate = () => {
+    const now = new Date();
+    const dayIndex = now.getDay();
+    const monthIndex = now.getMonth();
+    const dayOfMonth = now.getDate();
+    
+    const weekdayKeys = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'] as const;
+    const monthKeys = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'] as const;
+    
+    const weekday = t.time.weekdays[weekdayKeys[dayIndex]];
+    const month = t.time.months[monthKeys[monthIndex]];
+    
+    return `${weekday}, ${month} ${dayOfMonth}`;
   };
 
   return (
@@ -53,7 +69,7 @@ export function Dashboard() {
               {getGreeting()}
             </h1>
             <p className="text-muted-foreground text-sm">
-              {format(new Date(), 'EEEE, MMMM d')}
+              {getFormattedDate()}
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -80,17 +96,17 @@ export function Dashboard() {
               {personality.rhythm === 'morning' ? (
                 <>
                   <Leaf className="w-3.5 h-3.5 text-primary" />
-                  <span>Your mornings tend to be clearer – a good time for what matters.</span>
+                  <span>{t.dashboard.morningHint}</span>
                 </>
               ) : personality.rhythm === 'evening' ? (
                 <>
                   <Moon className="w-3.5 h-3.5 text-primary" />
-                  <span>You come alive as the day winds down – honor that rhythm.</span>
+                  <span>{t.dashboard.eveningHint}</span>
                 </>
               ) : (
                 <>
                   <Leaf className="w-3.5 h-3.5 text-primary" />
-                  <span>Your rhythm flows with the day – stay curious about it.</span>
+                  <span>{t.dashboard.flexibleHint}</span>
                 </>
               )}
             </p>
@@ -117,14 +133,14 @@ export function Dashboard() {
           className="bg-card rounded-2xl border border-border/50 shadow-card p-5"
         >
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-serif font-medium text-foreground">This Week</h2>
+            <h2 className="font-serif font-medium text-foreground">{t.dashboard.thisWeek}</h2>
             <Button
               variant="gentle"
               size="sm"
               onClick={() => setIsAddHabitOpen(true)}
             >
               <Plus className="w-4 h-4 mr-1" />
-              Add
+              {t.dashboard.addHabit.split(' ')[0]}
             </Button>
           </div>
           <HabitMatrix />
@@ -152,7 +168,7 @@ export function Dashboard() {
             <div className="flex items-center justify-between mb-4">
               <h2 className="font-serif font-medium text-foreground flex items-center gap-2">
                 <TrendingUp className="w-4 h-4 text-primary" />
-                Your Rhythm
+                {t.dashboard.yourRhythm}
               </h2>
               <Button
                 variant="ghost"
@@ -160,7 +176,7 @@ export function Dashboard() {
                 onClick={() => setShowTimeline(!showTimeline)}
                 className="text-xs"
               >
-                {showTimeline ? 'Hide' : 'Show'} timeline
+                {showTimeline ? t.dashboard.hideTimeline : t.dashboard.showTimeline}
               </Button>
             </div>
             <AnimatePresence>
@@ -176,7 +192,7 @@ export function Dashboard() {
             </AnimatePresence>
             {!showTimeline && (
               <p className="text-sm text-muted-foreground">
-                See how your habits flow over time.
+                {t.dashboard.yourRhythmDescription}
               </p>
             )}
           </motion.section>
@@ -200,7 +216,7 @@ export function Dashboard() {
             className="space-y-3"
           >
             <h2 className="font-serif font-medium text-foreground px-1">
-              Gentle Observations
+              {t.dashboard.gentleObservations}
             </h2>
             {insights.slice(0, 3).map((insight, idx) => (
               <InsightCard key={insight.id} insight={insight} index={idx} />
@@ -222,7 +238,7 @@ export function Dashboard() {
               onClick={() => setIsAddHabitOpen(true)}
             >
               <Plus className="w-5 h-5 mr-2" />
-              Start observing something
+              {t.dashboard.startObservingSomething}
             </Button>
           </motion.div>
         )}
