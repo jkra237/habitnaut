@@ -2,93 +2,69 @@
 // "The reminder serves awareness, not compliance."
 
 import type { ReminderFrequency } from '@/types/flownaut';
+import type { Translations } from '@/lib/i18n/translations';
 
 interface ReminderCopyOptions {
   habitName?: string;
   frequency: ReminderFrequency;
+  t?: Translations['reminders'];
 }
-
-const DAILY_REMINDERS = [
-  "Want to reconnect with your habit?",
-  "A small pause, if it fits.",
-  "If now feels right, this habit is here.",
-  "A gentle moment to check in.",
-  "This is here when you're ready.",
-];
-
-const WEEKLY_REMINDERS = [
-  "This habit checked in this week.",
-  "Want to gently pick this up again?",
-  "A reminder without pressure.",
-  "Your habit is resting here, whenever you'd like.",
-  "A soft invitation to reconnect.",
-];
-
-const PERSONALIZED_DAILY = [
-  (name: string) => `Want to reconnect with ${name}?`,
-  (name: string) => `${name} is here, if it fits.`,
-  (name: string) => `A gentle nudge for ${name}.`,
-];
-
-const PERSONALIZED_WEEKLY = [
-  (name: string) => `${name} checked in this week.`,
-  (name: string) => `Want to gently pick up ${name} again?`,
-  (name: string) => `A soft reminder about ${name}.`,
-];
 
 /**
  * Get a random gentle reminder message.
  * Never uses urgency, blame, or streak language.
  */
 export function getRandomReminderCopy(options: ReminderCopyOptions): string {
-  const { habitName, frequency } = options;
+  const { habitName, frequency, t } = options;
 
   if (frequency === 'none') {
     return '';
   }
 
-  if (frequency === 'daily') {
-    if (habitName) {
-      const templates = PERSONALIZED_DAILY;
-      const template = templates[Math.floor(Math.random() * templates.length)];
-      return template(habitName);
+  // Use translations if available
+  if (t) {
+    if (frequency === 'daily') {
+      const dailyCopies = Object.values(t.dailyCopy);
+      return dailyCopies[Math.floor(Math.random() * dailyCopies.length)];
     }
+    // Weekly
+    const weeklyCopies = Object.values(t.weeklyCopy);
+    return weeklyCopies[Math.floor(Math.random() * weeklyCopies.length)];
+  }
+
+  // Fallback to English
+  const DAILY_REMINDERS = [
+    "Want to reconnect with your habit?",
+    "A small pause, if it fits.",
+    "If now feels right, this habit is here.",
+    "A gentle moment to check in.",
+    "This is here when you're ready.",
+  ];
+
+  const WEEKLY_REMINDERS = [
+    "This habit checked in this week.",
+    "Want to gently pick this up again?",
+    "A reminder without pressure.",
+    "Your habit is resting here, whenever you'd like.",
+    "A soft invitation to reconnect.",
+  ];
+
+  if (frequency === 'daily') {
     return DAILY_REMINDERS[Math.floor(Math.random() * DAILY_REMINDERS.length)];
   }
 
-  // Weekly
-  if (habitName) {
-    const templates = PERSONALIZED_WEEKLY;
-    const template = templates[Math.floor(Math.random() * templates.length)];
-    return template(habitName);
-  }
   return WEEKLY_REMINDERS[Math.floor(Math.random() * WEEKLY_REMINDERS.length)];
 }
 
 /**
- * Get all reminder copy variants for a given frequency.
- * Useful for preview/settings screens.
+ * Get the invitation note for reminder settings
  */
-export function getAllReminderCopy(frequency: ReminderFrequency): string[] {
-  if (frequency === 'daily') {
-    return [...DAILY_REMINDERS];
+export function getInvitationNote(t?: Translations['reminders']): string {
+  if (t) {
+    return t.invitationNote;
   }
-  if (frequency === 'weekly') {
-    return [...WEEKLY_REMINDERS];
-  }
-  return [];
+  return "This is just a gentle nudge. You can turn it off anytime.";
 }
-
-/**
- * Micro-invitation for first-time reminder activation.
- * Shown after user has logged a habit at least once.
- */
-export const REMINDER_INVITATION = {
-  question: "Would a gentle reminder help you reconnect with this habit?",
-  optionYes: "Yes, gently",
-  optionNo: "No, thanks",
-  note: "This is just a gentle nudge. You can turn it off anytime.",
-} as const;
 
 /**
  * Get the default time anchor based on habit name heuristics.
