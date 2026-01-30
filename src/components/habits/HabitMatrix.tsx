@@ -126,10 +126,10 @@ export function HabitMatrix() {
           transition={{ delay: habitIdx * 0.1 }}
           className="space-y-2"
         >
-          <div className="flex items-center gap-2 sm:gap-3">
-            {/* Habit name and controls */}
-            <div className="flex-1 min-w-0 flex items-center gap-1.5 sm:gap-2">
-              <span className="text-base sm:text-xl flex-shrink-0">{habit.emoji || '🌱'}</span>
+          <div className="flex items-center gap-1.5 sm:gap-3">
+            {/* Habit name and controls - fixed width for consistent alignment */}
+            <div className="flex items-center gap-1 sm:gap-2 min-w-0" style={{ width: 'calc(100% - 220px)', maxWidth: '120px' }}>
+              <span className="text-sm sm:text-xl flex-shrink-0">{habit.emoji || '🌱'}</span>
               
               {/* Mobile: Tooltip on touch, Desktop: normal display */}
               {isMobile ? (
@@ -137,35 +137,35 @@ export function HabitMatrix() {
                   <Tooltip open={touchedHabitId === habit.id}>
                     <TooltipTrigger asChild>
                       <span 
-                        className="text-xs sm:text-sm font-medium text-foreground truncate max-w-[60px] sm:max-w-none cursor-default"
+                        className="text-[10px] sm:text-sm font-medium text-foreground truncate flex-1 cursor-default leading-tight"
                         onTouchStart={() => setTouchedHabitId(habit.id)}
                         onTouchEnd={() => setTimeout(() => setTouchedHabitId(null), 1500)}
                       >
                         {habit.name}
                       </span>
                     </TooltipTrigger>
-                    <TooltipContent side="top" className="max-w-[200px]">
+                    <TooltipContent side="top" className="max-w-[200px] z-50">
                       <p>{habit.name}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
               ) : (
-                <span className="text-xs sm:text-sm font-medium text-foreground truncate max-w-[60px] sm:max-w-none">
+                <span className="text-[10px] sm:text-sm font-medium text-foreground truncate flex-1 leading-tight">
                   {habit.name}
                 </span>
               )}
-
-              {/* Options menu (now includes reminder option) */}
-              <button
-                onClick={() => setActiveOptionsId(activeOptionsId === habit.id ? null : habit.id)}
-                className="p-1 sm:p-1.5 rounded-lg text-muted-foreground/50 hover:text-muted-foreground hover:bg-secondary transition-all flex-shrink-0"
-              >
-                <MoreHorizontal className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-              </button>
             </div>
 
-            {/* Day cells */}
-            <div className="flex gap-1 sm:gap-2 flex-shrink-0">
+            {/* Options menu - fixed position */}
+            <button
+              onClick={() => setActiveOptionsId(activeOptionsId === habit.id ? null : habit.id)}
+              className="p-1.5 rounded-lg text-muted-foreground/60 hover:text-muted-foreground hover:bg-secondary transition-all flex-shrink-0"
+            >
+              <MoreHorizontal className="w-4 h-4" />
+            </button>
+
+            {/* Day cells - always aligned to the right */}
+            <div className="flex gap-1 sm:gap-2 flex-shrink-0 ml-auto">
               {weekDates.map((date, dateIdx) => {
                 const state = getStateForCell(habit.id, date);
                 const isCurrent = isToday(date);
