@@ -39,28 +39,34 @@ export function InsightCard({ insight, index = 0 }: InsightCardProps) {
   const getLocalizedMessage = (insight: Insight): string => {
     // If there's a messageKey, use the translation system
     if (insight.messageKey) {
-      const [category, key] = insight.messageKey.split('.') as [
-        'patterns' | 'correlations' | 'prompts',
-        string
-      ];
-      
-      const categoryTranslations = t.insights[category];
-      if (categoryTranslations && key in categoryTranslations) {
-        let message = (categoryTranslations as Record<string, string>)[key];
+      try {
+        const [category, key] = insight.messageKey.split('.') as [
+          'patterns' | 'correlations' | 'prompts',
+          string
+        ];
         
-        // Replace placeholders with actual values
-        if (insight.messageParams) {
-          Object.entries(insight.messageParams).forEach(([param, value]) => {
-            message = message.replace(`{${param}}`, value);
-          });
+        const categoryTranslations = t.insights[category];
+        if (categoryTranslations && typeof categoryTranslations === 'object' && key in categoryTranslations) {
+          let message = (categoryTranslations as Record<string, string>)[key];
+          
+          // Replace placeholders with actual values
+          if (insight.messageParams && message) {
+            Object.entries(insight.messageParams).forEach(([param, value]) => {
+              message = message.replace(`{${param}}`, value);
+            });
+          }
+          
+          if (message) {
+            return message;
+          }
         }
-        
-        return message;
+      } catch {
+        // Fall through to fallback
       }
     }
     
     // Fallback to the stored message (for demo insights or legacy data)
-    return insight.message;
+    return insight.message || '';
   };
 
   return (

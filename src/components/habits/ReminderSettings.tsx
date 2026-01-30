@@ -4,7 +4,7 @@ import { Bell, BellOff, Sun, Cloud, Moon, X, Sparkles, Clock } from 'lucide-reac
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import type { HabitReminder, TimeAnchor, ReminderFrequency } from '@/types/flownaut';
-import { REMINDER_INVITATION, getRandomReminderCopy } from '@/lib/reminder-copy';
+import { getRandomReminderCopy, getInvitationNote } from '@/lib/reminder-copy';
 import { useNotifications } from '@/hooks/use-notifications';
 import { useTranslations } from '@/hooks/use-translations';
 
@@ -33,21 +33,21 @@ export const ReminderSettings = forwardRef<HTMLDivElement, ReminderSettingsProps
     const [customTimeValue, setCustomTimeValue] = useState(reminder.customTime || '09:00');
     const t = useTranslations();
 
-    const timeAnchors: { value: TimeAnchorOption; labelKey: keyof typeof t.reminders }[] = [
-      { value: 'morning', labelKey: 'morning' },
-      { value: 'midday', labelKey: 'midday' },
-      { value: 'evening', labelKey: 'evening' },
-      { value: 'custom', labelKey: 'custom' },
+    const timeAnchors: { value: TimeAnchorOption; label: string }[] = [
+      { value: 'morning', label: t.reminders.morning },
+      { value: 'midday', label: t.reminders.midday },
+      { value: 'evening', label: t.reminders.evening },
+      { value: 'custom', label: t.reminders.custom },
     ];
 
-    const frequencies: { value: ReminderFrequency; labelKey: keyof typeof t.reminders }[] = [
-      { value: 'none', labelKey: 'off' },
-      { value: 'daily', labelKey: 'daily' },
-      { value: 'weekly', labelKey: 'weekly' },
+    const frequencies: { value: ReminderFrequency; label: string }[] = [
+      { value: 'none', label: t.reminders.off },
+      { value: 'daily', label: t.reminders.daily },
+      { value: 'weekly', label: t.reminders.weekly },
     ];
 
     const previewCopy = reminder.frequency !== 'none' 
-      ? getRandomReminderCopy({ habitName, frequency: reminder.frequency })
+      ? getRandomReminderCopy({ habitName, frequency: reminder.frequency, t: t.reminders })
       : null;
 
     const handleTestNotification = async () => {
@@ -116,14 +116,14 @@ export const ReminderSettings = forwardRef<HTMLDivElement, ReminderSettingsProps
         </div>
 
         <p className="text-sm text-muted-foreground">
-          {REMINDER_INVITATION.note}
+          {getInvitationNote(t.reminders)}
         </p>
 
         {/* Frequency selection */}
         <div className="space-y-2">
           <label className="text-sm font-medium text-foreground">{t.reminders.frequency}</label>
           <div className="flex gap-2">
-            {frequencies.map(({ value, labelKey }) => (
+            {frequencies.map(({ value, label }) => (
               <button
                 key={value}
                 onClick={() => onUpdate({ 
@@ -137,7 +137,7 @@ export const ReminderSettings = forwardRef<HTMLDivElement, ReminderSettingsProps
                     : 'bg-secondary text-foreground hover:bg-secondary/80'
                 }`}
               >
-                {t.reminders[labelKey]}
+                {label}
               </button>
             ))}
           </div>
@@ -152,7 +152,7 @@ export const ReminderSettings = forwardRef<HTMLDivElement, ReminderSettingsProps
           >
             <label className="text-sm font-medium text-foreground">{t.reminders.when}</label>
             <div className="grid grid-cols-4 gap-2">
-              {timeAnchors.map(({ value, labelKey }) => (
+              {timeAnchors.map(({ value, label }) => (
                 <button
                   key={value}
                   onClick={() => handleTimeAnchorSelect(value)}
@@ -163,7 +163,7 @@ export const ReminderSettings = forwardRef<HTMLDivElement, ReminderSettingsProps
                   }`}
                 >
                   {TIME_ANCHOR_ICONS[value]}
-                  {t.reminders[labelKey]}
+                  {label}
                 </button>
               ))}
             </div>

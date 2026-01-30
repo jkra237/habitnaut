@@ -322,6 +322,22 @@ export interface Translations {
     testSent: string;
     preview: string;
     fewTimesWeek: string;
+    // Reminder copy
+    invitationNote: string;
+    dailyCopy: {
+      reconnect: string;
+      smallPause: string;
+      ifNowFeelsRight: string;
+      gentleMoment: string;
+      hereWhenReady: string;
+    };
+    weeklyCopy: {
+      habitCheckedIn: string;
+      gentlyPickUp: string;
+      withoutPressure: string;
+      restingHere: string;
+      softInvitation: string;
+    };
   };
   
   // Time formatting
@@ -672,6 +688,21 @@ export const translations: Record<SupportedLanguage, Translations> = {
       testSent: 'Test sent!',
       preview: 'Preview',
       fewTimesWeek: 'Few times/week',
+      invitationNote: 'This is just a gentle nudge. You can turn it off anytime.',
+      dailyCopy: {
+        reconnect: 'Want to reconnect with your habit?',
+        smallPause: 'A small pause, if it fits.',
+        ifNowFeelsRight: 'If now feels right, this habit is here.',
+        gentleMoment: 'A gentle moment to check in.',
+        hereWhenReady: "This is here when you're ready.",
+      },
+      weeklyCopy: {
+        habitCheckedIn: 'This habit checked in this week.',
+        gentlyPickUp: 'Want to gently pick this up again?',
+        withoutPressure: 'A reminder without pressure.',
+        restingHere: "Your habit is resting here, whenever you'd like.",
+        softInvitation: 'A soft invitation to reconnect.',
+      },
     },
     time: {
       today: 'Today',
@@ -1029,6 +1060,21 @@ export const translations: Record<SupportedLanguage, Translations> = {
       testSent: '¡Prueba enviada!',
       preview: 'Vista previa',
       fewTimesWeek: 'Algunas veces/semana',
+      invitationNote: 'Es solo un recordatorio suave. Puedes desactivarlo cuando quieras.',
+      dailyCopy: {
+        reconnect: '¿Quieres reconectar con tu hábito?',
+        smallPause: 'Una pequeña pausa, si encaja.',
+        ifNowFeelsRight: 'Si ahora se siente bien, este hábito está aquí.',
+        gentleMoment: 'Un momento suave para registrar.',
+        hereWhenReady: 'Esto está aquí cuando estés listo.',
+      },
+      weeklyCopy: {
+        habitCheckedIn: 'Este hábito se registró esta semana.',
+        gentlyPickUp: '¿Quieres retomar esto suavemente?',
+        withoutPressure: 'Un recordatorio sin presión.',
+        restingHere: 'Tu hábito descansa aquí, cuando quieras.',
+        softInvitation: 'Una invitación suave para reconectar.',
+      },
     },
     time: {
       today: 'Hoy',
@@ -1386,6 +1432,21 @@ export const translations: Record<SupportedLanguage, Translations> = {
       testSent: 'Test gesendet!',
       preview: 'Vorschau',
       fewTimesWeek: 'Einige Male/Woche',
+      invitationNote: 'Das ist nur ein sanfter Hinweis. Du kannst ihn jederzeit ausschalten.',
+      dailyCopy: {
+        reconnect: 'Möchtest du dich mit deiner Gewohnheit verbinden?',
+        smallPause: 'Eine kleine Pause, wenn es passt.',
+        ifNowFeelsRight: 'Wenn es sich jetzt richtig anfühlt, ist diese Gewohnheit hier.',
+        gentleMoment: 'Ein sanfter Moment zum Eintragen.',
+        hereWhenReady: 'Das ist hier, wenn du bereit bist.',
+      },
+      weeklyCopy: {
+        habitCheckedIn: 'Diese Gewohnheit wurde diese Woche eingetragen.',
+        gentlyPickUp: 'Möchtest du das sanft wieder aufnehmen?',
+        withoutPressure: 'Eine Erinnerung ohne Druck.',
+        restingHere: 'Deine Gewohnheit ruht hier, wann immer du möchtest.',
+        softInvitation: 'Eine sanfte Einladung, dich wieder zu verbinden.',
+      },
     },
     time: {
       today: 'Heute',
