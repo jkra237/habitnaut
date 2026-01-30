@@ -86,10 +86,10 @@ export function HabitMatrix() {
           <span className="text-2xl">🌿</span>
         </div>
         <h3 className="text-lg font-serif font-medium text-foreground mb-2">
-          Your observation space is empty
+          {t.habits.emptyTitle}
         </h3>
         <p className="text-muted-foreground text-sm max-w-xs mx-auto">
-          Add something you'd like to observe – not to perfect, just to notice.
+          {t.habits.emptySubtitle}
         </p>
       </div>
     );

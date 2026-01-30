@@ -7,6 +7,7 @@ import { useFlowNautStore } from '@/store/flownaut-store';
 import { Plus, Leaf, Droplets, Moon, Heart, BookOpen, Dumbbell, Music, Coffee, Sun, Cloud, ChevronDown, ChevronUp } from 'lucide-react';
 import type { TimeAnchor, SoftFrequency } from '@/types/flownaut';
 import { suggestTimeAnchor } from '@/lib/reminder-copy';
+import { useTranslations } from '@/hooks/use-translations';
 
 const EMOJI_OPTIONS = [
   { emoji: '🌱', icon: <Leaf className="w-4 h-4" /> },
@@ -19,25 +20,13 @@ const EMOJI_OPTIONS = [
   { emoji: '☕', icon: <Coffee className="w-4 h-4" /> },
 ];
 
-const TIME_ANCHORS: { value: TimeAnchor; label: string; icon: React.ReactNode }[] = [
-  { value: 'none', label: 'Anytime', icon: null },
-  { value: 'morning', label: 'Morning', icon: <Sun className="w-3.5 h-3.5" /> },
-  { value: 'midday', label: 'Midday', icon: <Cloud className="w-3.5 h-3.5" /> },
-  { value: 'evening', label: 'Evening', icon: <Moon className="w-3.5 h-3.5" /> },
-];
-
-const FREQUENCIES: { value: SoftFrequency; label: string }[] = [
-  { value: 'free', label: 'When it fits' },
-  { value: 'daily', label: 'Daily' },
-  { value: 'few-times-week', label: 'A few times/week' },
-];
-
 interface AddHabitDialogProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
 export function AddHabitDialog({ isOpen, onClose }: AddHabitDialogProps) {
+  const t = useTranslations();
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [selectedEmoji, setSelectedEmoji] = useState('🌱');
@@ -45,6 +34,19 @@ export function AddHabitDialog({ isOpen, onClose }: AddHabitDialogProps) {
   const [softFrequency, setSoftFrequency] = useState<SoftFrequency>('free');
   const [showAdvanced, setShowAdvanced] = useState(false);
   const addHabit = useFlowNautStore((s) => s.addHabit);
+
+  const TIME_ANCHORS: { value: TimeAnchor; labelKey: keyof typeof t.addHabitDialog; icon: React.ReactNode }[] = [
+    { value: 'none', labelKey: 'anytime', icon: null },
+    { value: 'morning', labelKey: 'morning', icon: <Sun className="w-3.5 h-3.5" /> },
+    { value: 'midday', labelKey: 'midday', icon: <Cloud className="w-3.5 h-3.5" /> },
+    { value: 'evening', labelKey: 'evening', icon: <Moon className="w-3.5 h-3.5" /> },
+  ];
+
+  const FREQUENCIES: { value: SoftFrequency; labelKey: keyof typeof t.addHabitDialog }[] = [
+    { value: 'free', labelKey: 'whenItFits' },
+    { value: 'daily', labelKey: 'daily' },
+    { value: 'few-times-week', labelKey: 'fewTimesWeek' },
+  ];
 
   const handleNameChange = (value: string) => {
     setName(value);
@@ -101,10 +103,10 @@ export function AddHabitDialog({ isOpen, onClose }: AddHabitDialogProps) {
             <div className="bg-card rounded-3xl shadow-elevated p-6 space-y-6">
               <div className="text-center space-y-2">
                 <h3 className="text-xl font-serif font-medium text-foreground">
-                  What would you like to observe?
+                  {t.addHabitDialog.title}
                 </h3>
                 <p className="text-sm text-muted-foreground">
-                  Add something you'd like to pay attention to
+                  {t.addHabitDialog.subtitle}
                 </p>
               </div>
 
@@ -131,7 +133,7 @@ export function AddHabitDialog({ isOpen, onClose }: AddHabitDialogProps) {
                 <Input
                   value={name}
                   onChange={(e) => handleNameChange(e.target.value)}
-                  placeholder="e.g., Morning walk, Journaling, Reading..."
+                  placeholder={t.addHabitDialog.placeholder}
                   className="h-14 text-lg rounded-xl bg-secondary border-border/50 focus:border-primary"
                   autoFocus
                 />
@@ -143,9 +145,9 @@ export function AddHabitDialog({ isOpen, onClose }: AddHabitDialogProps) {
                   className="flex items-center justify-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
                   {showAdvanced ? (
-                    <>Less options <ChevronUp className="w-4 h-4" /></>
+                    <>{t.addHabitDialog.lessOptions} <ChevronUp className="w-4 h-4" /></>
                   ) : (
-                    <>More options <ChevronDown className="w-4 h-4" /></>
+                    <>{t.addHabitDialog.moreOptions} <ChevronDown className="w-4 h-4" /></>
                   )}
                 </button>
 
@@ -161,12 +163,12 @@ export function AddHabitDialog({ isOpen, onClose }: AddHabitDialogProps) {
                       {/* Description */}
                       <div className="space-y-1.5">
                         <label className="text-xs text-muted-foreground">
-                          Description (optional)
+                          {t.addHabitDialog.descriptionLabel}
                         </label>
                         <Textarea
                           value={description}
                           onChange={(e) => setDescription(e.target.value)}
-                          placeholder="A short note about this habit..."
+                          placeholder={t.addHabitDialog.descriptionPlaceholder}
                           className="min-h-[60px] text-sm rounded-xl bg-secondary border-border/50 focus:border-primary resize-none"
                         />
                       </div>
@@ -174,10 +176,10 @@ export function AddHabitDialog({ isOpen, onClose }: AddHabitDialogProps) {
                       {/* Time anchor */}
                       <div className="space-y-1.5">
                         <label className="text-xs text-muted-foreground">
-                          Time of day
+                          {t.addHabitDialog.timeOfDay}
                         </label>
                         <div className="flex gap-1.5">
-                          {TIME_ANCHORS.map(({ value, label, icon }) => (
+                          {TIME_ANCHORS.map(({ value, labelKey, icon }) => (
                             <button
                               key={value}
                               type="button"
@@ -189,7 +191,7 @@ export function AddHabitDialog({ isOpen, onClose }: AddHabitDialogProps) {
                               }`}
                             >
                               {icon}
-                              {label}
+                              {t.addHabitDialog[labelKey]}
                             </button>
                           ))}
                         </div>
@@ -198,10 +200,10 @@ export function AddHabitDialog({ isOpen, onClose }: AddHabitDialogProps) {
                       {/* Soft frequency */}
                       <div className="space-y-1.5">
                         <label className="text-xs text-muted-foreground">
-                          How often
+                          {t.addHabitDialog.howOften}
                         </label>
                         <div className="flex gap-1.5">
-                          {FREQUENCIES.map(({ value, label }) => (
+                          {FREQUENCIES.map(({ value, labelKey }) => (
                             <button
                               key={value}
                               type="button"
@@ -212,14 +214,14 @@ export function AddHabitDialog({ isOpen, onClose }: AddHabitDialogProps) {
                                   : 'bg-secondary text-muted-foreground hover:text-foreground border border-transparent'
                               }`}
                             >
-                              {label}
+                              {t.addHabitDialog[labelKey]}
                             </button>
                           ))}
                         </div>
                       </div>
 
                       <p className="text-xs text-muted-foreground text-center">
-                        You can change or pause habits anytime.
+                        {t.addHabitDialog.canChangeAnytime}
                       </p>
                     </motion.div>
                   )}
@@ -233,7 +235,7 @@ export function AddHabitDialog({ isOpen, onClose }: AddHabitDialogProps) {
                     onClick={onClose}
                     className="flex-1"
                   >
-                    Maybe later
+                    {t.addHabitDialog.maybeLater}
                   </Button>
                   <Button
                     type="submit"
@@ -241,7 +243,7 @@ export function AddHabitDialog({ isOpen, onClose }: AddHabitDialogProps) {
                     className="flex-1"
                   >
                     <Plus className="w-4 h-4 mr-1" />
-                    Add
+                    {t.addHabitDialog.add}
                   </Button>
                 </div>
               </form>

@@ -175,6 +175,20 @@ export interface Translations {
     flexibleHint: string;
   };
   
+  // Timeline
+  timeline: {
+    week: string;
+    month: string;
+    year: string;
+    addHabitsToSee: string;
+    engagement: string;
+    avg: string;
+    days: string;
+    engaged: string;
+    partial: string;
+    notEngaged: string;
+  };
+  
   // Habits
   habits: {
     letRest: string;
@@ -187,6 +201,31 @@ export interface Translations {
     done: string;
     skipped: string;
     notDone: string;
+    emptyTitle: string;
+    emptySubtitle: string;
+  };
+  
+  // Add Habit Dialog
+  addHabitDialog: {
+    title: string;
+    subtitle: string;
+    placeholder: string;
+    descriptionLabel: string;
+    descriptionPlaceholder: string;
+    timeOfDay: string;
+    howOften: string;
+    anytime: string;
+    morning: string;
+    midday: string;
+    evening: string;
+    whenItFits: string;
+    daily: string;
+    fewTimesWeek: string;
+    moreOptions: string;
+    lessOptions: string;
+    canChangeAnytime: string;
+    maybeLater: string;
+    add: string;
   };
   
   // Mood options
@@ -527,6 +566,29 @@ export const translations: Record<SupportedLanguage, Translations> = {
       done: 'Done',
       skipped: 'Skipped',
       notDone: 'Not done',
+      emptyTitle: 'Your observation space is empty',
+      emptySubtitle: 'Add something you\'d like to observe – not to perfect, just to notice.',
+    },
+    addHabitDialog: {
+      title: 'What would you like to observe?',
+      subtitle: 'Add something you\'d like to pay attention to',
+      placeholder: 'e.g., Morning walk, Journaling, Reading...',
+      descriptionLabel: 'Description (optional)',
+      descriptionPlaceholder: 'A short note about this habit...',
+      timeOfDay: 'Time of day',
+      howOften: 'How often',
+      anytime: 'Anytime',
+      morning: 'Morning',
+      midday: 'Midday',
+      evening: 'Evening',
+      whenItFits: 'When it fits',
+      daily: 'Daily',
+      fewTimesWeek: 'A few times/week',
+      moreOptions: 'More options',
+      lessOptions: 'Less options',
+      canChangeAnytime: 'You can change or pause habits anytime.',
+      maybeLater: 'Maybe later',
+      add: 'Add',
     },
     mood: {
       heavy: 'Heavy',
@@ -672,6 +734,18 @@ export const translations: Record<SupportedLanguage, Translations> = {
       connectSomeone: { name: 'Connect with someone', reason: 'Energizes through others' },
       slowMorning: { name: 'Slow morning', reason: 'Honors your natural pace' },
       quickWins: { name: 'Quick wins', reason: 'Matches your momentum' },
+    },
+    timeline: {
+      week: 'Week',
+      month: 'Month',
+      year: 'Year',
+      addHabitsToSee: 'Add habits to see your rhythm visualization.',
+      engagement: 'engagement',
+      avg: 'avg',
+      days: 'days',
+      engaged: 'Engaged',
+      partial: 'Partial',
+      notEngaged: 'Not engaged',
     },
   },
   
@@ -849,6 +923,29 @@ export const translations: Record<SupportedLanguage, Translations> = {
       done: 'Hecho',
       skipped: 'Saltado',
       notDone: 'Sin hacer',
+      emptyTitle: 'Tu espacio de observación está vacío',
+      emptySubtitle: 'Añade algo que te gustaría observar – no para perfeccionar, solo para notar.',
+    },
+    addHabitDialog: {
+      title: '¿Qué te gustaría observar?',
+      subtitle: 'Añade algo a lo que quieras prestar atención',
+      placeholder: 'p.ej., Paseo matutino, Escribir, Leer...',
+      descriptionLabel: 'Descripción (opcional)',
+      descriptionPlaceholder: 'Una nota breve sobre este hábito...',
+      timeOfDay: 'Momento del día',
+      howOften: 'Con qué frecuencia',
+      anytime: 'Cualquier momento',
+      morning: 'Mañana',
+      midday: 'Mediodía',
+      evening: 'Tarde',
+      whenItFits: 'Cuando encaje',
+      daily: 'Diario',
+      fewTimesWeek: 'Algunas veces/semana',
+      moreOptions: 'Más opciones',
+      lessOptions: 'Menos opciones',
+      canChangeAnytime: 'Puedes cambiar o pausar hábitos en cualquier momento.',
+      maybeLater: 'Quizás luego',
+      add: 'Añadir',
     },
     mood: {
       heavy: 'Pesado',
@@ -994,6 +1091,18 @@ export const translations: Record<SupportedLanguage, Translations> = {
       connectSomeone: { name: 'Conectar con alguien', reason: 'Te energiza a través de otros' },
       slowMorning: { name: 'Mañana tranquila', reason: 'Respeta tu ritmo natural' },
       quickWins: { name: 'Victorias rápidas', reason: 'Acompaña tu impulso' },
+    },
+    timeline: {
+      week: 'Semana',
+      month: 'Mes',
+      year: 'Año',
+      addHabitsToSee: 'Añade hábitos para ver tu visualización de ritmo.',
+      engagement: 'participación',
+      avg: 'prom',
+      days: 'días',
+      engaged: 'Activo',
+      partial: 'Parcial',
+      notEngaged: 'No activo',
     },
   },
   
@@ -1171,6 +1280,29 @@ export const translations: Record<SupportedLanguage, Translations> = {
       done: 'Erledigt',
       skipped: 'Übersprungen',
       notDone: 'Nicht erledigt',
+      emptyTitle: 'Dein Beobachtungsraum ist leer',
+      emptySubtitle: 'Füge etwas hinzu, das du beobachten möchtest – nicht um es zu perfektionieren, nur um es wahrzunehmen.',
+    },
+    addHabitDialog: {
+      title: 'Was möchtest du beobachten?',
+      subtitle: 'Füge etwas hinzu, dem du Aufmerksamkeit schenken möchtest',
+      placeholder: 'z.B. Morgenspaziergang, Tagebuch, Lesen...',
+      descriptionLabel: 'Beschreibung (optional)',
+      descriptionPlaceholder: 'Eine kurze Notiz zu dieser Gewohnheit...',
+      timeOfDay: 'Tageszeit',
+      howOften: 'Wie oft',
+      anytime: 'Jederzeit',
+      morning: 'Morgens',
+      midday: 'Mittags',
+      evening: 'Abends',
+      whenItFits: 'Wenn es passt',
+      daily: 'Täglich',
+      fewTimesWeek: 'Einige Male/Woche',
+      moreOptions: 'Mehr Optionen',
+      lessOptions: 'Weniger Optionen',
+      canChangeAnytime: 'Du kannst Gewohnheiten jederzeit ändern oder pausieren.',
+      maybeLater: 'Vielleicht später',
+      add: 'Hinzufügen',
     },
     mood: {
       heavy: 'Schwer',
@@ -1316,6 +1448,18 @@ export const translations: Record<SupportedLanguage, Translations> = {
       connectSomeone: { name: 'Mit jemandem verbinden', reason: 'Gibt Energie durch Austausch' },
       slowMorning: { name: 'Langsamer Morgen', reason: 'Respektiert dein natürliches Tempo' },
       quickWins: { name: 'Schnelle Erfolge', reason: 'Passt zu deinem Schwung' },
+    },
+    timeline: {
+      week: 'Woche',
+      month: 'Monat',
+      year: 'Jahr',
+      addHabitsToSee: 'Füge Gewohnheiten hinzu, um deine Rhythmus-Visualisierung zu sehen.',
+      engagement: 'Aktivität',
+      avg: 'Ø',
+      days: 'Tage',
+      engaged: 'Aktiv',
+      partial: 'Teilweise',
+      notEngaged: 'Nicht aktiv',
     },
   },
 };
