@@ -27,22 +27,36 @@ export function GratitudeJournal() {
     }
   };
 
-  const formatEntryDate = (dateStr: string, createdAt: string) => {
-    const date = parseISO(dateStr);
-    const time = format(parseISO(createdAt), 'HH:mm');
-    
-    if (isToday(date)) {
-      return `${t.time?.today || 'Heute'}, ${time}`;
+  const formatEntryDate = (dateStr: string | undefined, createdAt: string | undefined) => {
+    if (!dateStr || !createdAt) {
+      return t.time?.today || 'Today';
     }
-    if (isYesterday(date)) {
-      return `${t.time?.yesterday || 'Gestern'}, ${time}`;
+    try {
+      const date = parseISO(dateStr);
+      const time = format(parseISO(createdAt), 'HH:mm');
+      
+      if (isToday(date)) {
+        return `${t.time?.today || 'Heute'}, ${time}`;
+      }
+      if (isYesterday(date)) {
+        return `${t.time?.yesterday || 'Gestern'}, ${time}`;
+      }
+      return format(date, 'EEEE, d. MMMM yyyy', { locale: getLocale() });
+    } catch {
+      return t.time?.today || 'Today';
     }
-    return format(date, 'EEEE, d. MMMM yyyy', { locale: getLocale() });
   };
 
-  const formatHistoryDate = (dateStr: string) => {
-    const date = parseISO(dateStr);
-    return format(date, 'EEEE, d. MMMM yyyy', { locale: getLocale() });
+  const formatHistoryDate = (dateStr: string | undefined) => {
+    if (!dateStr) {
+      return '';
+    }
+    try {
+      const date = parseISO(dateStr);
+      return format(date, 'EEEE, d. MMMM yyyy', { locale: getLocale() });
+    } catch {
+      return '';
+    }
   };
 
   const handleSave = () => {
