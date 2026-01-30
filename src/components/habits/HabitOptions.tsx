@@ -63,12 +63,14 @@ export function HabitOptions({ habit, onClose }: HabitOptionsProps) {
       <div className="flex gap-2 text-xs text-muted-foreground">
         {habit.timeAnchor !== 'none' && (
           <span className="px-2 py-1 rounded-md bg-secondary">
-            {habit.timeAnchor}
+            {habit.timeAnchor === 'morning' ? t.reminders?.morning :
+             habit.timeAnchor === 'midday' ? t.reminders?.midday :
+             habit.timeAnchor === 'evening' ? t.reminders?.evening : habit.timeAnchor}
           </span>
         )}
         {habit.softFrequency !== 'free' && (
           <span className="px-2 py-1 rounded-md bg-secondary">
-            {habit.softFrequency === 'daily' ? 'Daily' : 'Few times/week'}
+            {habit.softFrequency === 'daily' ? t.reminders?.daily : t.reminders?.fewTimesWeek}
           </span>
         )}
       </div>
@@ -85,9 +87,9 @@ export function HabitOptions({ habit, onClose }: HabitOptionsProps) {
           ) : (
             <BellOff className="w-4 h-4 mr-2" />
           )}
-          {t.settings?.habits?.title || 'Reminders'}
+          {t.settings?.habits?.title}
           <span className="text-xs text-muted-foreground ml-auto">
-            {habit.reminder?.enabled ? 'On' : 'Off'}
+            {habit.reminder?.enabled ? t.reminders?.on : t.reminders?.off}
           </span>
         </Button>
 

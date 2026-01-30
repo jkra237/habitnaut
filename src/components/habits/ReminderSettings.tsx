@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import type { HabitReminder, TimeAnchor, ReminderFrequency } from '@/types/flownaut';
 import { REMINDER_INVITATION, getRandomReminderCopy } from '@/lib/reminder-copy';
 import { useNotifications } from '@/hooks/use-notifications';
+import { useTranslations } from '@/hooks/use-translations';
 
 interface ReminderSettingsProps {
   reminder: HabitReminder;
@@ -14,18 +15,15 @@ interface ReminderSettingsProps {
   onClose: () => void;
 }
 
-const TIME_ANCHORS: { value: TimeAnchor | 'custom'; label: string; icon: React.ReactNode }[] = [
-  { value: 'morning', label: 'Morning', icon: <Sun className="w-4 h-4" /> },
-  { value: 'midday', label: 'Midday', icon: <Cloud className="w-4 h-4" /> },
-  { value: 'evening', label: 'Evening', icon: <Moon className="w-4 h-4" /> },
-  { value: 'custom', label: 'Custom', icon: <Clock className="w-4 h-4" /> },
-];
+type TimeAnchorOption = TimeAnchor | 'custom';
 
-const FREQUENCIES: { value: ReminderFrequency; label: string }[] = [
-  { value: 'none', label: 'Off' },
-  { value: 'daily', label: 'Daily' },
-  { value: 'weekly', label: 'Weekly' },
-];
+const TIME_ANCHOR_ICONS: Record<TimeAnchorOption, React.ReactNode> = {
+  morning: <Sun className="w-4 h-4" />,
+  midday: <Cloud className="w-4 h-4" />,
+  evening: <Moon className="w-4 h-4" />,
+  none: <Clock className="w-4 h-4" />,
+  custom: <Clock className="w-4 h-4" />,
+};
 
 export const ReminderSettings = forwardRef<HTMLDivElement, ReminderSettingsProps>(
   function ReminderSettings({ reminder, habitName, onUpdate, onClose }, ref) {
@@ -33,6 +31,20 @@ export const ReminderSettings = forwardRef<HTMLDivElement, ReminderSettingsProps
     const [testSent, setTestSent] = useState(false);
     const [showCustomTime, setShowCustomTime] = useState(!!reminder.customTime);
     const [customTimeValue, setCustomTimeValue] = useState(reminder.customTime || '09:00');
+    const t = useTranslations();
+
+    const timeAnchors: { value: TimeAnchorOption; labelKey: keyof typeof t.reminders }[] = [
+      { value: 'morning', labelKey: 'morning' },
+      { value: 'midday', labelKey: 'midday' },
+      { value: 'evening', labelKey: 'evening' },
+      { value: 'custom', labelKey: 'custom' },
+    ];
+
+    const frequencies: { value: ReminderFrequency; labelKey: keyof typeof t.reminders }[] = [
+      { value: 'none', labelKey: 'off' },
+      { value: 'daily', labelKey: 'daily' },
+      { value: 'weekly', labelKey: 'weekly' },
+    ];
 
     const previewCopy = reminder.frequency !== 'none' 
       ? getRandomReminderCopy({ habitName, frequency: reminder.frequency })
@@ -46,7 +58,7 @@ export const ReminderSettings = forwardRef<HTMLDivElement, ReminderSettingsProps
       }
     };
 
-    const handleTimeAnchorSelect = (value: TimeAnchor | 'custom') => {
+    const handleTimeAnchorSelect = (value: TimeAnchorOption) => {
       if (value === 'custom') {
         setShowCustomTime(true);
         onUpdate({ 
@@ -73,7 +85,7 @@ export const ReminderSettings = forwardRef<HTMLDivElement, ReminderSettingsProps
       });
     };
 
-    const getCurrentTimeSelection = (): TimeAnchor | 'custom' => {
+    const getCurrentTimeSelection = (): TimeAnchorOption => {
       if (showCustomTime || reminder.customTime) return 'custom';
       return reminder.timeAnchor || 'morning';
     };
@@ -93,7 +105,7 @@ export const ReminderSettings = forwardRef<HTMLDivElement, ReminderSettingsProps
             ) : (
               <BellOff className="w-5 h-5 text-muted-foreground" />
             )}
-            <h3 className="font-medium text-foreground">Gentle Reminder</h3>
+            <h3 className="font-medium text-foreground">{t.reminders.gentleReminder}</h3>
           </div>
           <button
             onClick={onClose}
@@ -109,9 +121,9 @@ export const ReminderSettings = forwardRef<HTMLDivElement, ReminderSettingsProps
 
         {/* Frequency selection */}
         <div className="space-y-2">
-          <label className="text-sm font-medium text-foreground">Frequency</label>
+          <label className="text-sm font-medium text-foreground">{t.reminders.frequency}</label>
           <div className="flex gap-2">
-            {FREQUENCIES.map(({ value, label }) => (
+            {frequencies.map(({ value, labelKey }) => (
               <button
                 key={value}
                 onClick={() => onUpdate({ 
@@ -125,7 +137,7 @@ export const ReminderSettings = forwardRef<HTMLDivElement, ReminderSettingsProps
                     : 'bg-secondary text-foreground hover:bg-secondary/80'
                 }`}
               >
-                {label}
+                {t.reminders[labelKey]}
               </button>
             ))}
           </div>
@@ -138,9 +150,9 @@ export const ReminderSettings = forwardRef<HTMLDivElement, ReminderSettingsProps
             animate={{ opacity: 1, height: 'auto' }}
             className="space-y-3"
           >
-            <label className="text-sm font-medium text-foreground">When</label>
+            <label className="text-sm font-medium text-foreground">{t.reminders.when}</label>
             <div className="grid grid-cols-4 gap-2">
-              {TIME_ANCHORS.map(({ value, label, icon }) => (
+              {timeAnchors.map(({ value, labelKey }) => (
                 <button
                   key={value}
                   onClick={() => handleTimeAnchorSelect(value)}
@@ -150,8 +162,8 @@ export const ReminderSettings = forwardRef<HTMLDivElement, ReminderSettingsProps
                       : 'bg-secondary text-foreground hover:bg-secondary/80 border-2 border-transparent'
                   }`}
                 >
-                  {icon}
-                  {label}
+                  {TIME_ANCHOR_ICONS[value]}
+                  {t.reminders[labelKey]}
                 </button>
               ))}
             </div>
@@ -163,7 +175,7 @@ export const ReminderSettings = forwardRef<HTMLDivElement, ReminderSettingsProps
                 animate={{ opacity: 1, height: 'auto' }}
                 className="space-y-2"
               >
-                <label className="text-sm text-muted-foreground">Set your preferred time</label>
+                <label className="text-sm text-muted-foreground">{t.reminders.customTimeLabel}</label>
                 <Input
                   type="time"
                   value={customTimeValue}
@@ -184,13 +196,13 @@ export const ReminderSettings = forwardRef<HTMLDivElement, ReminderSettingsProps
           >
             {permission === 'denied' && (
               <div className="p-3 rounded-xl bg-accent/20 border border-accent/30 text-sm text-foreground">
-                <p>Browser notifications are blocked. Please enable them in your browser settings to receive gentle reminders.</p>
+                <p>{t.reminders.permissionDenied}</p>
               </div>
             )}
             
             {permission === 'pending' && (
               <div className="p-3 rounded-xl bg-secondary border border-border text-sm text-muted-foreground">
-                <p>When you save, we'll ask for notification permission.</p>
+                <p>{t.reminders.permissionPending}</p>
               </div>
             )}
 
@@ -201,7 +213,7 @@ export const ReminderSettings = forwardRef<HTMLDivElement, ReminderSettingsProps
                 className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors disabled:opacity-50"
               >
                 <Sparkles className="w-4 h-4" />
-                {testSent ? 'Test sent!' : 'Send a test notification'}
+                {testSent ? t.reminders.testSent : t.reminders.testNotification}
               </button>
             )}
           </motion.div>
@@ -214,7 +226,7 @@ export const ReminderSettings = forwardRef<HTMLDivElement, ReminderSettingsProps
             animate={{ opacity: 1 }}
             className="p-4 rounded-xl bg-secondary/50 border border-border/50"
           >
-            <p className="text-xs text-muted-foreground mb-1">Preview:</p>
+            <p className="text-xs text-muted-foreground mb-1">{t.reminders.preview}:</p>
             <p className="text-sm text-foreground italic">"{previewCopy}"</p>
           </motion.div>
         )}
@@ -224,7 +236,7 @@ export const ReminderSettings = forwardRef<HTMLDivElement, ReminderSettingsProps
           className="w-full"
           variant="gentle"
         >
-          Done
+          {t.common.done}
         </Button>
       </motion.div>
     );
