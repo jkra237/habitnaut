@@ -168,9 +168,6 @@ export async function syncHabitsToCloud(habits: Habit[]): Promise<{ success: boo
         soft_frequency: habit.softFrequency,
         is_resting: habit.isResting,
         resting_note: habit.restingNote || null,
-        reminder_frequency: String(habit.reminder?.frequency ?? 'none'),
-        reminder_time_anchor: habit.reminder?.timeAnchor || 'none',
-        reminder_enabled: habit.reminder?.enabled || false,
       }, {
         onConflict: 'user_id,local_id',
       });
@@ -301,11 +298,6 @@ export async function fetchCloudHabits(): Promise<Habit[]> {
     createdAt: new Date(h.created_at),
     isResting: h.is_resting,
     restingNote: h.resting_note || undefined,
-    reminder: {
-      frequency: h.reminder_frequency as any,
-      timeAnchor: h.reminder_time_anchor as any,
-      enabled: h.reminder_enabled,
-    },
   }));
 }
 

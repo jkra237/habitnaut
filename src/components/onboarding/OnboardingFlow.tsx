@@ -2,13 +2,31 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { useFlowNautStore } from '@/store/flownaut-store';
-import type { PersonalityProfile, OnboardingAnswer } from '@/types/flownaut';
+import type { PersonalityProfile, OnboardingAnswer, TimeAnchor } from '@/types/flownaut';
 import { Moon, Sun, Zap, Heart, Compass, Check, Globe, Leaf } from 'lucide-react';
-import { suggestTimeAnchor } from '@/lib/reminder-copy';
 import { useTranslations, useSetLanguage } from '@/hooks/use-translations';
 import { LANGUAGE_OPTIONS, type SupportedLanguage } from '@/lib/i18n/translations';
 import { FlagComponents } from '@/components/ui/language-flags';
 import habitnautMascot from '@/assets/habitnaut-mascot.png';
+
+/**
+ * Suggest a time anchor based on habit name heuristics.
+ */
+function suggestTimeAnchor(habitName: string): TimeAnchor {
+  const lowerName = habitName.toLowerCase();
+  
+  if (lowerName.includes('morning') || lowerName.includes('sunrise') || lowerName.includes('wake')) {
+    return 'morning';
+  }
+  if (lowerName.includes('evening') || lowerName.includes('night') || lowerName.includes('wind-down') || lowerName.includes('reflection')) {
+    return 'evening';
+  }
+  if (lowerName.includes('lunch') || lowerName.includes('midday') || lowerName.includes('afternoon')) {
+    return 'midday';
+  }
+  
+  return 'none';
+}
 interface RecommendedHabit {
   id: string;
   name: string;

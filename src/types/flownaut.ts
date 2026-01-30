@@ -19,17 +19,8 @@ export interface OnboardingAnswer {
 
 export type TimeAnchor = 'morning' | 'midday' | 'evening' | 'none';
 export type SoftFrequency = 'daily' | 'few-times-week' | 'free';
-// 1-7 times per week, or 'none' for no reminder
-export type ReminderFrequency = 'none' | 1 | 2 | 3 | 4 | 5 | 6 | 7;
 export type InsightFrequency = 'rare' | 'occasional' | 'weekly';
 export type WeekStart = 'monday' | 'sunday';
-
-export interface HabitReminder {
-  frequency: ReminderFrequency;
-  timeAnchor: TimeAnchor;
-  customTime?: string; // HH:MM format for custom time
-  enabled: boolean;
-}
 
 export interface Habit {
   id: string;
@@ -41,7 +32,6 @@ export interface Habit {
   createdAt: Date;
   isResting: boolean; // "let rest" instead of deleted
   restingNote?: string;
-  reminder: HabitReminder;
 }
 
 export type HabitState = 'done' | 'not-done' | 'conscious-skip';
@@ -75,7 +65,6 @@ export interface AppPreferences {
   language: string;
   insightFrequency: InsightFrequency;
   weekStart: WeekStart;
-  globalRemindersEnabled: boolean;
 }
 
 export interface GratitudeEntry {

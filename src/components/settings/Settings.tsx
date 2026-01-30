@@ -202,7 +202,6 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
   const habits = useFlowNautStore((s) => s.habits);
   const entries = useFlowNautStore((s) => s.entries);
   const updatePreferences = useFlowNautStore((s) => s.updatePreferences);
-  const setGlobalReminders = useFlowNautStore((s) => s.setGlobalReminders);
   const clearLocalLogs = useFlowNautStore((s) => s.clearLocalLogs);
   const exportData = useFlowNautStore((s) => s.exportData);
   const importData = useFlowNautStore((s) => s.importData);
@@ -374,13 +373,13 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
         />
       </div>
 
-      {/* Habits & Reminders */}
+      {/* Habits Overview */}
       <div className="space-y-2">
         <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide px-1">{t.settings.sections.habitsReminders}</h3>
         <SettingsRow 
-          icon={preferences.globalRemindersEnabled ? Bell : BellOff} 
+          icon={Leaf} 
           label={t.settings.habits.title} 
-          sublabel={t.settings.habits.subtitle}
+          sublabel={`${habits.length} ${t.settings.habits.habitsObserving}`}
           onClick={() => setSection('habits')}
         />
       </div>
@@ -500,21 +499,6 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
       <div className="text-center mb-4">
         <h3 className="font-medium text-foreground">{t.settings.habits.title}</h3>
         <p className="text-sm text-muted-foreground">{t.settings.habits.subtitle}</p>
-      </div>
-
-      {/* Global toggle */}
-      <div className="p-4 rounded-xl bg-secondary/50 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Bell className="w-5 h-5 text-muted-foreground" />
-          <div>
-            <p className="font-medium text-sm text-foreground">{t.settings.habits.enableReminders}</p>
-            <p className="text-xs text-muted-foreground">{t.settings.habits.deviceSettings}</p>
-          </div>
-        </div>
-        <Switch
-          checked={preferences.globalRemindersEnabled}
-          onCheckedChange={setGlobalReminders}
-        />
       </div>
 
       {/* Habit count */}
