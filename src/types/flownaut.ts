@@ -26,6 +26,7 @@ export type WeekStart = 'monday' | 'sunday';
 export interface HabitReminder {
   frequency: ReminderFrequency;
   timeAnchor: TimeAnchor;
+  customTime?: string; // HH:MM format for custom time
   enabled: boolean;
 }
 

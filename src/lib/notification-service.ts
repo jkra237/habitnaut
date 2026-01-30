@@ -89,6 +89,20 @@ export function showHabitNotification(habit: Habit): void {
 }
 
 /**
+ * Get the time for a reminder - either from custom time or time anchor
+ */
+function getReminderTime(reminder: Habit['reminder']): { hour: number; minute: number } {
+  // If custom time is set, use it
+  if (reminder.customTime) {
+    const [hours, minutes] = reminder.customTime.split(':').map(Number);
+    return { hour: hours, minute: minutes };
+  }
+  
+  // Otherwise use time anchor
+  return getTimeForAnchor(reminder.timeAnchor);
+}
+
+/**
  * Get the approximate time for a time anchor
  */
 function getTimeForAnchor(anchor: TimeAnchor): { hour: number; minute: number } {
@@ -140,7 +154,7 @@ export function scheduleHabitReminder(habit: Habit): void {
     return;
   }
 
-  const time = getTimeForAnchor(habit.reminder.timeAnchor);
+  const time = getReminderTime(habit.reminder);
   const delay = getMillisecondsUntilTime(time.hour, time.minute);
 
   const timeoutId = window.setTimeout(() => {
