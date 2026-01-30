@@ -19,7 +19,8 @@ export interface OnboardingAnswer {
 
 export type TimeAnchor = 'morning' | 'midday' | 'evening' | 'none';
 export type SoftFrequency = 'daily' | 'few-times-week' | 'free';
-export type ReminderFrequency = 'none' | 'daily' | 'weekly';
+// 1-7 times per week, or 'none' for no reminder
+export type ReminderFrequency = 'none' | 1 | 2 | 3 | 4 | 5 | 6 | 7;
 export type InsightFrequency = 'rare' | 'occasional' | 'weekly';
 export type WeekStart = 'monday' | 'sunday';
 

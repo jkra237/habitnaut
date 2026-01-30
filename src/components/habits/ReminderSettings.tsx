@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Bell, BellOff, Sun, Cloud, Moon, X, Sparkles, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Slider } from '@/components/ui/slider';
 import type { HabitReminder, TimeAnchor, ReminderFrequency } from '@/types/flownaut';
 import { getRandomReminderCopy, getInvitationNote } from '@/lib/reminder-copy';
 import { useNotifications } from '@/hooks/use-notifications';
@@ -33,17 +34,14 @@ export const ReminderSettings = forwardRef<HTMLDivElement, ReminderSettingsProps
     const [customTimeValue, setCustomTimeValue] = useState(reminder.customTime || '09:00');
     const t = useTranslations();
 
+    // Frequency as number for slider (0 = off, 1-7 = times per week)
+    const frequencyValue = reminder.frequency === 'none' ? 0 : reminder.frequency;
+
     const timeAnchors: { value: TimeAnchorOption; label: string }[] = [
       { value: 'morning', label: t.reminders.morning },
       { value: 'midday', label: t.reminders.midday },
       { value: 'evening', label: t.reminders.evening },
       { value: 'custom', label: t.reminders.custom },
-    ];
-
-    const frequencies: { value: ReminderFrequency; label: string }[] = [
-      { value: 'none', label: t.reminders.off },
-      { value: 'daily', label: t.reminders.daily },
-      { value: 'weekly', label: t.reminders.weekly },
     ];
 
     const previewCopy = reminder.frequency !== 'none' 
@@ -119,27 +117,34 @@ export const ReminderSettings = forwardRef<HTMLDivElement, ReminderSettingsProps
           {getInvitationNote(t.reminders)}
         </p>
 
-        {/* Frequency selection */}
-        <div className="space-y-2">
-          <label className="text-sm font-medium text-foreground">{t.reminders.frequency}</label>
-          <div className="flex gap-2">
-            {frequencies.map(({ value, label }) => (
-              <button
-                key={value}
-                onClick={() => onUpdate({ 
-                  ...reminder, 
-                  frequency: value, 
-                  enabled: value !== 'none' 
-                })}
-                className={`flex-1 py-2.5 px-4 rounded-xl text-sm font-medium transition-all ${
-                  reminder.frequency === value
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-secondary text-foreground hover:bg-secondary/80'
-                }`}
-              >
-                {label}
-              </button>
-            ))}
+        {/* Frequency selection - slider 0-7 */}
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <label className="text-sm font-medium text-foreground">{t.reminders.frequency}</label>
+            <span className="text-sm font-medium text-primary">
+              {frequencyValue === 0 
+                ? t.reminders.off 
+                : t.reminders.timesPerWeek?.replace('{count}', String(frequencyValue)) || `${frequencyValue}× ${t.reminders.perWeek || 'per week'}`}
+            </span>
+          </div>
+          <Slider
+            value={[frequencyValue]}
+            onValueChange={([val]) => {
+              const newFreq: ReminderFrequency = val === 0 ? 'none' : (val as 1 | 2 | 3 | 4 | 5 | 6 | 7);
+              onUpdate({ 
+                ...reminder, 
+                frequency: newFreq, 
+                enabled: val > 0 
+              });
+            }}
+            min={0}
+            max={7}
+            step={1}
+            className="w-full"
+          />
+          <div className="flex justify-between text-xs text-muted-foreground">
+            <span>{t.reminders.off}</span>
+            <span>7×</span>
           </div>
         </div>
 
@@ -224,11 +229,22 @@ export const ReminderSettings = forwardRef<HTMLDivElement, ReminderSettingsProps
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="p-4 rounded-xl bg-secondary/50 border border-border/50"
+            className="p-4 rounded-xl bg-secondary/50 border border-border/50 space-y-2"
           >
             <p className="text-xs text-muted-foreground mb-1">{t.reminders.preview}:</p>
             <p className="text-sm text-foreground italic">"{previewCopy}"</p>
           </motion.div>
+        )}
+
+        {/* Confirmation note - localized */}
+        {reminder.frequency !== 'none' && (
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-xs text-muted-foreground text-center px-4"
+          >
+            {t.reminders.confirmationNote}
+          </motion.p>
         )}
 
         <Button
