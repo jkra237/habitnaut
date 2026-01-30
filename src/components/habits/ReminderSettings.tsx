@@ -1,7 +1,8 @@
 import { useState, forwardRef } from 'react';
 import { motion } from 'framer-motion';
-import { Bell, BellOff, Sun, Cloud, Moon, X, Sparkles } from 'lucide-react';
+import { Bell, BellOff, Sun, Cloud, Moon, X, Sparkles, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import type { HabitReminder, TimeAnchor, ReminderFrequency } from '@/types/flownaut';
 import { REMINDER_INVITATION, getRandomReminderCopy } from '@/lib/reminder-copy';
 import { useNotifications } from '@/hooks/use-notifications';
@@ -13,10 +14,11 @@ interface ReminderSettingsProps {
   onClose: () => void;
 }
 
-const TIME_ANCHORS: { value: TimeAnchor; label: string; icon: React.ReactNode }[] = [
+const TIME_ANCHORS: { value: TimeAnchor | 'custom'; label: string; icon: React.ReactNode }[] = [
   { value: 'morning', label: 'Morning', icon: <Sun className="w-4 h-4" /> },
   { value: 'midday', label: 'Midday', icon: <Cloud className="w-4 h-4" /> },
   { value: 'evening', label: 'Evening', icon: <Moon className="w-4 h-4" /> },
+  { value: 'custom', label: 'Custom', icon: <Clock className="w-4 h-4" /> },
 ];
 
 const FREQUENCIES: { value: ReminderFrequency; label: string }[] = [
@@ -29,6 +31,8 @@ export const ReminderSettings = forwardRef<HTMLDivElement, ReminderSettingsProps
   function ReminderSettings({ reminder, habitName, onUpdate, onClose }, ref) {
     const { permission, isSupported, testNotification } = useNotifications();
     const [testSent, setTestSent] = useState(false);
+    const [showCustomTime, setShowCustomTime] = useState(!!reminder.customTime);
+    const [customTimeValue, setCustomTimeValue] = useState(reminder.customTime || '09:00');
 
     const previewCopy = reminder.frequency !== 'none' 
       ? getRandomReminderCopy({ habitName, frequency: reminder.frequency })
@@ -40,6 +44,38 @@ export const ReminderSettings = forwardRef<HTMLDivElement, ReminderSettingsProps
         setTestSent(true);
         setTimeout(() => setTestSent(false), 3000);
       }
+    };
+
+    const handleTimeAnchorSelect = (value: TimeAnchor | 'custom') => {
+      if (value === 'custom') {
+        setShowCustomTime(true);
+        onUpdate({ 
+          ...reminder, 
+          timeAnchor: 'none',
+          customTime: customTimeValue 
+        });
+      } else {
+        setShowCustomTime(false);
+        onUpdate({ 
+          ...reminder, 
+          timeAnchor: value,
+          customTime: undefined 
+        });
+      }
+    };
+
+    const handleCustomTimeChange = (time: string) => {
+      setCustomTimeValue(time);
+      onUpdate({ 
+        ...reminder, 
+        timeAnchor: 'none',
+        customTime: time 
+      });
+    };
+
+    const getCurrentTimeSelection = (): TimeAnchor | 'custom' => {
+      if (showCustomTime || reminder.customTime) return 'custom';
+      return reminder.timeAnchor || 'morning';
     };
 
     return (
@@ -95,21 +131,21 @@ export const ReminderSettings = forwardRef<HTMLDivElement, ReminderSettingsProps
           </div>
         </div>
 
-        {/* Time anchor selection - only show when frequency is set */}
+        {/* Time selection - only show when frequency is set */}
         {reminder.frequency !== 'none' && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
-            className="space-y-2"
+            className="space-y-3"
           >
             <label className="text-sm font-medium text-foreground">When</label>
-            <div className="flex gap-2">
+            <div className="grid grid-cols-4 gap-2">
               {TIME_ANCHORS.map(({ value, label, icon }) => (
                 <button
                   key={value}
-                  onClick={() => onUpdate({ ...reminder, timeAnchor: value })}
-                  className={`flex-1 py-2.5 px-3 rounded-xl text-sm font-medium transition-all flex items-center justify-center gap-1.5 ${
-                    reminder.timeAnchor === value
+                  onClick={() => handleTimeAnchorSelect(value)}
+                  className={`py-2.5 px-2 rounded-xl text-xs font-medium transition-all flex flex-col items-center justify-center gap-1 ${
+                    getCurrentTimeSelection() === value
                       ? 'bg-primary/20 text-primary border-2 border-primary/50'
                       : 'bg-secondary text-foreground hover:bg-secondary/80 border-2 border-transparent'
                   }`}
@@ -119,6 +155,23 @@ export const ReminderSettings = forwardRef<HTMLDivElement, ReminderSettingsProps
                 </button>
               ))}
             </div>
+
+            {/* Custom time input */}
+            {showCustomTime && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                className="space-y-2"
+              >
+                <label className="text-sm text-muted-foreground">Set your preferred time</label>
+                <Input
+                  type="time"
+                  value={customTimeValue}
+                  onChange={(e) => handleCustomTimeChange(e.target.value)}
+                  className="w-full bg-secondary border-border text-center text-lg font-medium"
+                />
+              </motion.div>
+            )}
           </motion.div>
         )}
 

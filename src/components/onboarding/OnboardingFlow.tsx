@@ -7,8 +7,8 @@ import { Moon, Sun, Zap, Heart, Compass, Check, Globe, Leaf } from 'lucide-react
 import { suggestTimeAnchor } from '@/lib/reminder-copy';
 import { useTranslations, useSetLanguage } from '@/hooks/use-translations';
 import { LANGUAGE_OPTIONS, type SupportedLanguage } from '@/lib/i18n/translations';
+import { FlagComponents } from '@/components/ui/language-flags';
 import habitnautMascot from '@/assets/habitnaut-mascot.png';
-
 interface RecommendedHabit {
   id: string;
   name: string;
@@ -325,18 +325,23 @@ export function OnboardingFlow() {
               </div>
               
               <div className="space-y-3">
-                {LANGUAGE_OPTIONS.map((option) => (
-                  <motion.button
-                    key={option.value}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() => handleLanguageSelect(option.value)}
-                    className="w-full p-5 rounded-2xl bg-card border-2 border-border hover:border-primary hover:bg-primary/5 shadow-soft transition-all duration-300 flex items-center gap-4"
-                  >
-                    <span className="text-3xl">{option.flag}</span>
-                    <span className="text-lg font-medium text-foreground">{option.label}</span>
-                  </motion.button>
-                ))}
+                {LANGUAGE_OPTIONS.map((option) => {
+                  const FlagComponent = FlagComponents[option.value];
+                  return (
+                    <motion.button
+                      key={option.value}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => handleLanguageSelect(option.value)}
+                      className="w-full p-5 rounded-2xl bg-card border-2 border-border hover:border-primary hover:bg-primary/5 shadow-soft transition-all duration-300 flex items-center gap-4"
+                    >
+                      <div className="w-12 h-8 rounded overflow-hidden shadow-sm flex items-center justify-center">
+                        <FlagComponent className="w-full h-full" />
+                      </div>
+                      <span className="text-lg font-medium text-foreground">{option.label}</span>
+                    </motion.button>
+                  );
+                })}
               </div>
             </motion.div>
           )}
