@@ -59,6 +59,8 @@ export interface Insight {
   id: string;
   type: InsightType;
   message: string;
+  messageKey?: string; // Translation key for localized message
+  messageParams?: Record<string, string>; // Parameters for interpolation
   generatedAt: Date;
 }
 
