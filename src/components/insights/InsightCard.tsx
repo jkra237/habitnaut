@@ -36,6 +36,33 @@ export function InsightCard({ insight, index = 0 }: InsightCardProps) {
     }
   };
 
+  const getLocalizedMessage = (insight: Insight): string => {
+    // If there's a messageKey, use the translation system
+    if (insight.messageKey) {
+      const [category, key] = insight.messageKey.split('.') as [
+        'patterns' | 'correlations' | 'prompts',
+        string
+      ];
+      
+      const categoryTranslations = t.insights[category];
+      if (categoryTranslations && key in categoryTranslations) {
+        let message = (categoryTranslations as Record<string, string>)[key];
+        
+        // Replace placeholders with actual values
+        if (insight.messageParams) {
+          Object.entries(insight.messageParams).forEach(([param, value]) => {
+            message = message.replace(`{${param}}`, value);
+          });
+        }
+        
+        return message;
+      }
+    }
+    
+    // Fallback to the stored message (for demo insights or legacy data)
+    return insight.message;
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -49,7 +76,7 @@ export function InsightCard({ insight, index = 0 }: InsightCardProps) {
         </div>
         <div className="space-y-1">
           <p className="text-sm font-medium text-foreground leading-relaxed">
-            {insight.message}
+            {getLocalizedMessage(insight)}
           </p>
           <p className="text-xs opacity-60">
             {getInsightLabel(insight.type)}
@@ -60,18 +87,21 @@ export function InsightCard({ insight, index = 0 }: InsightCardProps) {
   );
 }
 
-// Sample insights for demo
+// Sample insights for demo - now with translation keys
 export const DEMO_INSIGHTS: Omit<Insight, 'id' | 'generatedAt'>[] = [
   {
     type: 'correlation',
-    message: 'Your calmest days tend to have movement in them. Not because exercise fixes everything – but the pattern is interesting.',
+    messageKey: 'correlations.highEnergyMoreCheckins',
+    message: '',
   },
   {
     type: 'pattern',
-    message: 'You\'ve been more consistent on Tuesday and Wednesday. The middle of the week seems to suit your rhythm.',
+    messageKey: 'patterns.consistentDays',
+    message: '',
   },
   {
     type: 'prompt',
-    message: 'What did this habit bring you this week?',
+    messageKey: 'prompts.mostNaturalHabit',
+    message: '',
   },
 ];

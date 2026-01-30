@@ -7,7 +7,8 @@ import { subDays, parseISO } from 'date-fns';
 
 interface InsightCandidate {
   type: InsightType;
-  message: string;
+  messageKey: string;
+  messageParams?: Record<string, string>;
   weight: number; // Higher = more relevant
 }
 
@@ -66,7 +67,9 @@ export function generateInsights(
   return selected.map(c => ({
     id: crypto.randomUUID(),
     type: c.type,
-    message: c.message,
+    messageKey: c.messageKey,
+    messageParams: c.messageParams,
+    message: '', // Will be filled by the component using translations
     generatedAt: new Date(),
   }));
 }
@@ -123,9 +126,11 @@ function generatePatternInsights(
     .sort((a, b) => b.rate - a.rate);
 
   if (anchors.length > 0 && anchors[0].rate > 0.6) {
+    const anchorKey = anchors[0].anchor === 'morning' ? 'morningAnchor' :
+                      anchors[0].anchor === 'midday' ? 'middayAnchor' : 'eveningAnchor';
     insights.push({
       type: 'pattern',
-      message: `You tended to start habits in the ${anchors[0].anchor} more often this week.`,
+      messageKey: `patterns.${anchorKey}`,
       weight: anchors[0].rate * 10,
     });
   }
@@ -138,7 +143,7 @@ function generatePatternInsights(
     if (thisWeekEntries > lastWeekEntries && lastWeekEntries > 0) {
       insights.push({
         type: 'pattern',
-        message: `You checked in more often this week than last — notice the difference, not the numbers.`,
+        messageKey: 'patterns.moreCheckinsThisWeek',
         weight: 6,
       });
     }
@@ -152,8 +157,17 @@ function generatePatternInsights(
   if (consciousSkips >= 2) {
     insights.push({
       type: 'pattern',
-      message: `You chose to pause some habits this week. Noticing when to rest is awareness too.`,
+      messageKey: 'patterns.consciousSkips',
       weight: 7,
+    });
+  }
+
+  // Consistent days pattern
+  if (last7Days.length >= 5) {
+    insights.push({
+      type: 'pattern',
+      messageKey: 'patterns.consistentDays',
+      weight: 4,
     });
   }
 
@@ -183,10 +197,18 @@ function generateCorrelationInsights(
     if (avgCompletionsHighEnergy >= 2) {
       insights.push({
         type: 'correlation',
-        message: `On days you logged energy as high, you also checked in more frequently.`,
+        messageKey: 'correlations.highEnergyMoreCheckins',
         weight: 8,
       });
     }
+  }
+
+  if (lowEnergyDays.length >= 2) {
+    insights.push({
+      type: 'correlation',
+      messageKey: 'correlations.lowEnergyFewerCheckins',
+      weight: 5,
+    });
   }
 
   // Mood correlation with habits
@@ -211,7 +233,8 @@ function generateCorrelationInsights(
       if (habit) {
         insights.push({
           type: 'correlation',
-          message: `Your calmest days coincided with "${habit.emoji || ''} ${habit.name}".`,
+          messageKey: 'correlations.goodMoodHabit',
+          messageParams: { habitName: `${habit.emoji || ''} ${habit.name}`.trim() },
           weight: 9,
         });
       }
@@ -233,7 +256,11 @@ function generateCorrelationInsights(
       if (sequenceCount >= 3) {
         insights.push({
           type: 'correlation',
-          message: `"${habitB.emoji || ''} ${habitB.name}" often appeared alongside "${habitA.emoji || ''} ${habitA.name}".`,
+          messageKey: 'correlations.habitsTogether',
+          messageParams: {
+            habitA: `${habitA.emoji || ''} ${habitA.name}`.trim(),
+            habitB: `${habitB.emoji || ''} ${habitB.name}`.trim(),
+          },
           weight: 5 + sequenceCount,
         });
       }
@@ -272,7 +299,8 @@ function generatePromptInsights(
     if (habit) {
       insights.push({
         type: 'prompt',
-        message: `What did "${habit.emoji || ''} ${habit.name}" bring you this week?`,
+        messageKey: 'prompts.whatDidHabitBring',
+        messageParams: { habitName: `${habit.emoji || ''} ${habit.name}`.trim() },
         weight: 7,
       });
     }
@@ -288,7 +316,8 @@ function generatePromptInsights(
     if (habit) {
       insights.push({
         type: 'prompt',
-        message: `Which moment felt easiest for "${habit.emoji || ''} ${habit.name}"?`,
+        messageKey: 'prompts.easiestMoment',
+        messageParams: { habitName: `${habit.emoji || ''} ${habit.name}`.trim() },
         weight: 5,
       });
     }
@@ -301,7 +330,7 @@ function generatePromptInsights(
       if (habit && habit.timeAnchor === 'morning') {
         insights.push({
           type: 'prompt',
-          message: `Your morning rhythm seems aligned with your habits. How does that feel?`,
+          messageKey: 'prompts.morningRhythmAligned',
           weight: 6,
         });
       }
@@ -310,7 +339,7 @@ function generatePromptInsights(
     if (personality.energy === 'waves') {
       insights.push({
         type: 'prompt',
-        message: `Notice the natural rhythm of your energy this week. When were the peaks?`,
+        messageKey: 'prompts.energyWavesPeaks',
         weight: 4,
       });
     }
@@ -318,15 +347,19 @@ function generatePromptInsights(
 
   // Generic prompts if nothing specific applies
   if (insights.length === 0 && last7Days.length >= 3) {
-    const prompts = [
-      `Even small moments of practice count as awareness.`,
-      `What patterns are you noticing in your daily rhythm?`,
-      `Which habit felt most natural this week?`,
+    const promptKeys = [
+      'prompts.smallMomentsCount',
+      'prompts.patternsNoticing',
+      'prompts.mostNaturalHabit',
+      'prompts.gentleReminder',
+      'prompts.celebrateConsistency',
+      'prompts.restIsProgress',
+      'prompts.weekReflection',
     ];
     
     insights.push({
       type: 'prompt',
-      message: prompts[Math.floor(Math.random() * prompts.length)],
+      messageKey: promptKeys[Math.floor(Math.random() * promptKeys.length)],
       weight: 3,
     });
   }
