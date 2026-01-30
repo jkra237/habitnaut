@@ -9,7 +9,6 @@ import type {
   Insight,
   TimeAnchor,
   SoftFrequency,
-  HabitReminder,
   AppPreferences,
   GratitudeEntry,
 } from '@/types/flownaut';
@@ -26,7 +25,6 @@ const defaultPreferences: AppPreferences = {
   language: 'en',
   insightFrequency: 'occasional',
   weekStart: 'monday',
-  globalRemindersEnabled: true,
 };
 
 interface FlowNautStore extends UserState {
@@ -37,7 +35,6 @@ interface FlowNautStore extends UserState {
   
   // Habits
   addHabit: (nameOrOptions: string | AddHabitOptions, emoji?: string) => void;
-  updateHabitReminder: (habitId: string, reminder: HabitReminder) => void;
   letHabitRest: (habitId: string, note?: string) => void;
   wakeHabit: (habitId: string) => void;
   deleteHabit: (habitId: string) => void;
@@ -61,7 +58,6 @@ interface FlowNautStore extends UserState {
   
   // Preferences
   updatePreferences: (updates: Partial<AppPreferences>) => void;
-  setGlobalReminders: (enabled: boolean) => void;
   
   // Data management
   clearLocalLogs: () => void;
@@ -115,23 +111,12 @@ export const useFlowNautStore = create<FlowNautStore>()(
           softFrequency: options.softFrequency || 'free',
           createdAt: new Date(),
           isResting: false,
-          reminder: {
-            frequency: 'none',
-            timeAnchor: options.timeAnchor || 'none',
-            enabled: false,
-          },
         };
         
         return {
           habits: [...state.habits, newHabit],
         };
       }),
-
-      updateHabitReminder: (habitId, reminder) => set((state) => ({
-        habits: state.habits.map((h) =>
-          h.id === habitId ? { ...h, reminder } : h
-        ),
-      })),
 
       letHabitRest: (habitId, note) => set((state) => ({
         habits: state.habits.map((h) =>
@@ -269,10 +254,6 @@ export const useFlowNautStore = create<FlowNautStore>()(
       // Preferences
       updatePreferences: (updates) => set((state) => ({
         preferences: { ...state.preferences, ...updates },
-      })),
-
-      setGlobalReminders: (enabled) => set((state) => ({
-        preferences: { ...state.preferences, globalRemindersEnabled: enabled },
       })),
 
       // Data management

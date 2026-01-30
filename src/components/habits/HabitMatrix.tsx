@@ -1,12 +1,10 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useFlowNautStore } from '@/store/flownaut-store';
-import type { HabitState, HabitReminder } from '@/types/flownaut';
+import type { HabitState } from '@/types/flownaut';
 import { format, startOfWeek, addDays, isToday } from 'date-fns';
 import { MoreHorizontal } from 'lucide-react';
-import { ReminderSettings } from './ReminderSettings';
 import { HabitOptions } from './HabitOptions';
-import { useNotifications } from '@/hooks/use-notifications';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useTranslations } from '@/hooks/use-translations';
@@ -21,7 +19,6 @@ export function HabitMatrix() {
   const habits = useFlowNautStore((s) => s.getActiveHabits());
   const entries = useFlowNautStore((s) => s.entries);
   const setHabitState = useFlowNautStore((s) => s.setHabitState);
-  const { enableReminder } = useNotifications();
   const isMobile = useIsMobile();
 
   const weekDates = useMemo(() => {
@@ -73,10 +70,6 @@ export function HabitMatrix() {
     if (state === 'conscious-skip') return '🌱';
     if (state === 'not-done') return '○';
     return '';
-  };
-
-  const handleReminderUpdate = async (habitId: string, reminder: HabitReminder) => {
-    await enableReminder(habitId, reminder);
   };
 
   if (habits.length === 0) {
@@ -184,25 +177,6 @@ export function HabitMatrix() {
               })}
             </div>
           </div>
-
-          {/* Reminder settings panel */}
-          <AnimatePresence>
-            {activeReminderId === habit.id && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                className="ml-8"
-              >
-                <ReminderSettings
-                  reminder={habit.reminder || { frequency: 'none', timeAnchor: 'none', enabled: false }}
-                  habitName={habit.name}
-                  onUpdate={(reminder) => handleReminderUpdate(habit.id, reminder)}
-                  onClose={() => setActiveReminderId(null)}
-                />
-              </motion.div>
-            )}
-          </AnimatePresence>
 
           {/* Options menu */}
           <AnimatePresence>

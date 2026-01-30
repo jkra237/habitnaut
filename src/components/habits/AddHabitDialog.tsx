@@ -6,8 +6,26 @@ import { Textarea } from '@/components/ui/textarea';
 import { useFlowNautStore } from '@/store/flownaut-store';
 import { Plus, Leaf, Droplets, Moon, Heart, BookOpen, Dumbbell, Music, Coffee, Sun, Cloud, ChevronDown, ChevronUp } from 'lucide-react';
 import type { TimeAnchor, SoftFrequency } from '@/types/flownaut';
-import { suggestTimeAnchor } from '@/lib/reminder-copy';
 import { useTranslations } from '@/hooks/use-translations';
+
+/**
+ * Suggest a time anchor based on habit name heuristics.
+ */
+function suggestTimeAnchor(habitName: string): TimeAnchor {
+  const lowerName = habitName.toLowerCase();
+  
+  if (lowerName.includes('morning') || lowerName.includes('sunrise') || lowerName.includes('wake')) {
+    return 'morning';
+  }
+  if (lowerName.includes('evening') || lowerName.includes('night') || lowerName.includes('wind-down') || lowerName.includes('reflection')) {
+    return 'evening';
+  }
+  if (lowerName.includes('lunch') || lowerName.includes('midday') || lowerName.includes('afternoon')) {
+    return 'midday';
+  }
+  
+  return 'none';
+}
 
 const EMOJI_OPTIONS = [
   { emoji: '🌱', icon: <Leaf className="w-4 h-4" /> },
