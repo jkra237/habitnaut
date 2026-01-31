@@ -24,6 +24,8 @@ interface SelectedObservation {
   text: string;
   habitId?: string;
   habitName?: string;
+  habitIds?: string[];
+  habitNames?: string[];
 }
 
 /**
@@ -70,24 +72,47 @@ export function selectObservation({
   const selected = weightedCandidates[0];
   if (!selected) return null;
 
-  // Get the habit name if applicable
+  // Get the habit name(s) if applicable
   let habitName: string | undefined;
-  if (selected.habitId) {
+  let habitNames: string[] | undefined;
+  let habitIds: string[] | undefined;
+  
+  // For multi-habit patterns, get both habit names
+  if (selected.habitIds && selected.habitIds.length >= 2) {
+    habitIds = selected.habitIds;
+    habitNames = selected.habitIds
+      .map(id => habits.find(h => h.id === id))
+      .filter(Boolean)
+      .map(h => `${h!.emoji || ''} ${h!.name}`.trim());
+  } else if (selected.habitId) {
     const habit = habits.find(h => h.id === selected.habitId);
     habitName = habit ? `${habit.emoji || ''} ${habit.name}`.trim() : undefined;
   }
 
+  // Build the observation text with habit names interpolated
+  let observationText = selected.observation.text[language];
+  
+  // Replace placeholders for multi-habit observations
+  if (habitNames && habitNames.length >= 2) {
+    observationText = observationText
+      .replace('{habitA}', habitNames[0])
+      .replace('{habitB}', habitNames[1]);
+  }
+
   return {
     observation: selected.observation,
-    text: selected.observation.text[language],
+    text: observationText,
     habitId: selected.habitId,
     habitName,
+    habitIds,
+    habitNames,
   };
 }
 
 interface WeightedCandidate {
   observation: Observation;
   habitId?: string;
+  habitIds?: string[];
   weight: number;
 }
 
@@ -144,6 +169,7 @@ function getCandidateObservations(
       candidates.push({
         observation: obs,
         habitId: pattern.habitId || (pattern.habitIds ? pattern.habitIds[0] : undefined),
+        habitIds: pattern.habitIds,
         weight,
       });
     }

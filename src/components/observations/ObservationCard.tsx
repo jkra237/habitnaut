@@ -62,7 +62,12 @@ export function ObservationCard({ className = '' }: ObservationCardProps) {
             <p className="text-sm font-medium text-foreground leading-relaxed">
               {observation.text}
             </p>
-            {observation.habitName && (
+            {/* Show habit names for multi-habit observations or single habit */}
+            {observation.habitNames && observation.habitNames.length >= 2 ? (
+              <p className="mt-1.5 text-xs text-muted-foreground opacity-70">
+                {observation.habitNames.join(' • ')}
+              </p>
+            ) : observation.habitName && (
               <p className="mt-1.5 text-xs text-muted-foreground opacity-70">
                 {observation.habitName}
               </p>
