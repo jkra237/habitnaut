@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Settings as SettingsIcon, Leaf, Moon, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { HabitMatrix } from '@/components/habits/HabitMatrix';
 import { AddHabitDialog } from '@/components/habits/AddHabitDialog';
 import { DailyCheckin } from '@/components/checkin/DailyCheckin';
-import { InsightCard, DEMO_INSIGHTS } from '@/components/insights/InsightCard';
+import { ObservationCard } from '@/components/observations/ObservationCard';
 import { RestingHabits } from '@/components/habits/RestingHabits';
 import { HabitTimeline } from '@/components/insights/HabitTimeline';
 import { Settings } from '@/components/settings/Settings';
@@ -19,19 +19,8 @@ export function Dashboard() {
   const [showTimeline, setShowTimeline] = useState(false);
   const habits = useFlowNautStore((s) => s.getActiveHabits());
   const restingHabits = useFlowNautStore((s) => s.getRestingHabits());
-  const insights = useFlowNautStore((s) => s.insights);
-  const addInsight = useFlowNautStore((s) => s.addInsight);
   const personality = useFlowNautStore((s) => s.personality);
   const t = useTranslations();
-
-  // Add demo insights on first load if none exist
-  useEffect(() => {
-    if (insights.length === 0 && habits.length > 0) {
-      DEMO_INSIGHTS.forEach((insight, i) => {
-        setTimeout(() => addInsight(insight), i * 500);
-      });
-    }
-  }, [habits.length]);
 
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -207,20 +196,14 @@ export function Dashboard() {
           <GratitudeJournal />
         </motion.section>
 
-        {/* Insights */}
-        {insights.length > 0 && (
+        {/* Gentle Observation - Rule-based pattern detection */}
+        {habits.length >= 1 && (
           <motion.section
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="space-y-3"
           >
-            <h2 className="font-serif font-medium text-foreground px-1">
-              {t.dashboard.gentleObservations}
-            </h2>
-            {insights.slice(0, 3).map((insight, idx) => (
-              <InsightCard key={insight.id} insight={insight} index={idx} />
-            ))}
+            <ObservationCard />
           </motion.section>
         )}
 
