@@ -10,6 +10,8 @@ import { RestingHabits } from '@/components/habits/RestingHabits';
 import { HabitTimeline } from '@/components/insights/HabitTimeline';
 import { Settings } from '@/components/settings/Settings';
 import { GratitudeJournal } from '@/components/gratitude/GratitudeJournal';
+import { ActivityCalendar } from '@/components/calendar/ActivityCalendar';
+import { HabitStatistics } from '@/components/statistics/HabitStatistics';
 import { useFlowNautStore } from '@/store/flownaut-store';
 import { useTranslations } from '@/hooks/use-translations';
 
@@ -135,6 +137,17 @@ export function Dashboard() {
           <HabitMatrix />
         </motion.section>
 
+        {/* Activity Calendar */}
+        {habits.length > 0 && (
+          <motion.section
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.25 }}
+          >
+            <ActivityCalendar />
+          </motion.section>
+        )}
+
         {/* Resting habits */}
         {restingHabits.length > 0 && (
           <motion.section
@@ -187,11 +200,22 @@ export function Dashboard() {
           </motion.section>
         )}
 
+        {/* Habit Statistics */}
+        {habits.length > 0 && (
+          <motion.section
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.38 }}
+          >
+            <HabitStatistics />
+          </motion.section>
+        )}
+
         {/* Gratitude Journal */}
         <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.38 }}
+          transition={{ delay: 0.4 }}
         >
           <GratitudeJournal />
         </motion.section>
@@ -201,7 +225,7 @@ export function Dashboard() {
           <motion.section
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
+            transition={{ delay: 0.42 }}
           >
             <ObservationCard />
           </motion.section>

@@ -426,20 +426,20 @@ export const observations: Observation[] = [
     conditions: { patternType: 'habits-together', requiresMultiHabit: true },
     cooldownDays: 14,
     text: {
-      en: 'Some habits appear together.',
-      de: 'Manche Gewohnheiten tauchen gemeinsam auf.',
-      es: 'Algunos hábitos aparecen juntos.',
+      en: '{habitA} and {habitB} often appear together.',
+      de: '{habitA} und {habitB} tauchen oft gemeinsam auf.',
+      es: '{habitA} y {habitB} suelen aparecer juntos.',
     },
   },
   {
     id: 'multi-2',
     category: 'multi-habit',
-    conditions: { patternType: 'habits-together', requiresHabit: true },
+    conditions: { patternType: 'habits-together', requiresMultiHabit: true },
     cooldownDays: 14,
     text: {
-      en: "This habit doesn't stand alone.",
-      de: 'Diese Gewohnheit steht nicht für sich allein.',
-      es: 'Este hábito no está solo.',
+      en: '{habitA} seems to find space alongside {habitB}.',
+      de: '{habitA} scheint neben {habitB} Raum zu finden.',
+      es: '{habitA} parece encontrar espacio junto a {habitB}.',
     },
   },
   {
@@ -448,20 +448,20 @@ export const observations: Observation[] = [
     conditions: { patternType: 'habits-together', requiresMultiHabit: true },
     cooldownDays: 14,
     text: {
-      en: 'There are connections between your habits.',
-      de: 'Zwischen deinen Gewohnheiten gibt es Verbindungen.',
-      es: 'Hay conexiones entre tus hábitos.',
+      en: 'There is a connection between {habitA} and {habitB}.',
+      de: 'Es gibt eine Verbindung zwischen {habitA} und {habitB}.',
+      es: 'Hay una conexión entre {habitA} y {habitB}.',
     },
   },
   {
     id: 'multi-4',
     category: 'multi-habit',
-    conditions: { patternType: 'habits-together', requiresHabit: true },
+    conditions: { patternType: 'habits-together', requiresMultiHabit: true },
     cooldownDays: 14,
     text: {
-      en: 'This habit often appears alongside others.',
-      de: 'Diese Gewohnheit erscheint oft neben anderen.',
-      es: 'Este hábito suele aparecer junto a otros.',
+      en: '{habitA} and {habitB} often meet on the same day.',
+      de: '{habitA} und {habitB} begegnen sich oft am selben Tag.',
+      es: '{habitA} y {habitB} a menudo se encuentran el mismo día.',
     },
   },
   {
@@ -470,9 +470,9 @@ export const observations: Observation[] = [
     conditions: { patternType: 'habits-together', requiresMultiHabit: true },
     cooldownDays: 14,
     text: {
-      en: 'Some habits seem to accompany each other.',
-      de: 'Einige Gewohnheiten scheinen sich gegenseitig zu begleiten.',
-      es: 'Algunos hábitos parecen acompañarse mutuamente.',
+      en: '{habitA} and {habitB} seem to accompany each other.',
+      de: '{habitA} und {habitB} scheinen sich gegenseitig zu begleiten.',
+      es: '{habitA} y {habitB} parecen acompañarse mutuamente.',
     },
   },
 
