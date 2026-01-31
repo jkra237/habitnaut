@@ -4,7 +4,6 @@ import { Plus, Settings as SettingsIcon, Leaf, Moon, TrendingUp } from 'lucide-r
 import { Button } from '@/components/ui/button';
 import { HabitMatrix } from '@/components/habits/HabitMatrix';
 import { AddHabitDialog } from '@/components/habits/AddHabitDialog';
-import { HabitLimitModal } from '@/components/habits/HabitLimitModal';
 import { DailyCheckin } from '@/components/checkin/DailyCheckin';
 import { InsightCard, DEMO_INSIGHTS } from '@/components/insights/InsightCard';
 import { RestingHabits } from '@/components/habits/RestingHabits';
@@ -14,24 +13,12 @@ import { GratitudeJournal } from '@/components/gratitude/GratitudeJournal';
 import { useFlowNautStore } from '@/store/flownaut-store';
 import { useTranslations } from '@/hooks/use-translations';
 
-const FREE_HABIT_LIMIT = 5;
-
 export function Dashboard() {
   const [isAddHabitOpen, setIsAddHabitOpen] = useState(false);
-  const [isLimitModalOpen, setIsLimitModalOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [showTimeline, setShowTimeline] = useState(false);
   const habits = useFlowNautStore((s) => s.getActiveHabits());
-  const allHabits = useFlowNautStore((s) => s.habits);
   const restingHabits = useFlowNautStore((s) => s.getRestingHabits());
-
-  const handleAddHabitClick = () => {
-    if (allHabits.length >= FREE_HABIT_LIMIT) {
-      setIsLimitModalOpen(true);
-    } else {
-      setIsAddHabitOpen(true);
-    }
-  };
   const insights = useFlowNautStore((s) => s.insights);
   const addInsight = useFlowNautStore((s) => s.addInsight);
   const personality = useFlowNautStore((s) => s.personality);
@@ -150,7 +137,7 @@ export function Dashboard() {
             <Button
               variant="gentle"
               size="sm"
-              onClick={handleAddHabitClick}
+              onClick={() => setIsAddHabitOpen(true)}
             >
               <Plus className="w-4 h-4 mr-1" />
               {t.dashboard.addHabit.split(' ')[0]}
@@ -248,7 +235,7 @@ export function Dashboard() {
             <Button
               variant="gentle"
               size="lg"
-              onClick={handleAddHabitClick}
+              onClick={() => setIsAddHabitOpen(true)}
             >
               <Plus className="w-5 h-5 mr-2" />
               {t.dashboard.startObservingSomething}
@@ -261,12 +248,6 @@ export function Dashboard() {
       <AddHabitDialog
         isOpen={isAddHabitOpen}
         onClose={() => setIsAddHabitOpen(false)}
-      />
-
-      {/* Habit Limit Modal */}
-      <HabitLimitModal
-        isOpen={isLimitModalOpen}
-        onClose={() => setIsLimitModalOpen(false)}
       />
 
       {/* Settings */}
