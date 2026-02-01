@@ -1,8 +1,9 @@
 // Habit Statistics Component
 // Displays gentle, non-judgmental statistics about habit patterns
 
-import { useMemo } from 'react';
+import { useMemo, useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
+import { Button } from '@/components/ui/button';
 import { 
   TrendingUp, 
   TrendingDown, 
@@ -13,6 +14,7 @@ import {
   Pause,
   Link2,
   BarChart3,
+  RefreshCw,
 } from 'lucide-react';
 import { useFlowNautStore } from '@/store/flownaut-store';
 import { useTranslations, useLanguage } from '@/hooks/use-translations';
@@ -35,9 +37,15 @@ export function HabitStatistics({ className = '' }: HabitStatisticsProps) {
   const habits = useFlowNautStore(s => s.getActiveHabits());
   const language = useLanguage();
   const t = useTranslations();
+  const [updateKey, setUpdateKey] = useState(0);
 
-  // Calculate statistics
+  const handleUpdate = useCallback(() => {
+    setUpdateKey(prev => prev + 1);
+  }, []);
+
+  // Calculate statistics - updateKey forces recalculation
   const stats = useMemo(() => {
+    void updateKey; // Reference updateKey to trigger recalculation
     if (habits.length === 0 || entries.length === 0) return null;
 
     const lookbackDays = 30;
@@ -339,10 +347,21 @@ export function HabitStatistics({ className = '' }: HabitStatisticsProps) {
 
   return (
     <div className={`bg-card rounded-2xl border border-border/50 shadow-card p-5 ${className}`}>
-      <h2 className="font-serif font-medium text-foreground mb-4 flex items-center gap-2">
-        <BarChart3 className="w-4 h-4 text-primary" />
-        {language === 'de' ? 'Dein Überblick' : language === 'es' ? 'Tu Resumen' : 'Your Overview'}
-      </h2>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="font-serif font-medium text-foreground flex items-center gap-2">
+          <BarChart3 className="w-4 h-4 text-primary" />
+          {language === 'de' ? 'Dein Überblick' : language === 'es' ? 'Tu Resumen' : 'Your Overview'}
+        </h2>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={handleUpdate}
+          className="text-xs"
+        >
+          <RefreshCw className="w-3.5 h-3.5 mr-1" />
+          Update
+        </Button>
+      </div>
 
       <div className="space-y-4">
         {statItems.map((item, index) => (
