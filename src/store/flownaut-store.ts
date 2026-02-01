@@ -12,6 +12,7 @@ import type {
   AppPreferences,
   GratitudeEntry,
 } from '@/types/flownaut';
+import { validateImportData } from '@/lib/import-validation';
 
 interface AddHabitOptions {
   name: string;
@@ -274,28 +275,27 @@ export const useFlowNautStore = create<FlowNautStore>()(
       },
 
       importData: (jsonData: string) => {
-        try {
-          const data = JSON.parse(jsonData);
-          
-          // Validate required structure
-          if (!data || typeof data !== 'object') {
-            return { success: false, error: 'Invalid data format' };
-          }
-
-          // Import what we can
-          set((state) => ({
-            personality: data.personality || state.personality,
-            habits: Array.isArray(data.habits) ? data.habits : state.habits,
-            entries: Array.isArray(data.entries) ? data.entries : state.entries,
-            reflections: Array.isArray(data.reflections) ? data.reflections : state.reflections,
-            preferences: data.preferences ? { ...state.preferences, ...data.preferences } : state.preferences,
-            hasCompletedOnboarding: data.personality ? true : state.hasCompletedOnboarding,
-          }));
-
-          return { success: true };
-        } catch (error) {
-          return { success: false, error: 'Could not parse the file' };
+        // Validate and sanitize the imported data
+        const validation = validateImportData(jsonData);
+        
+        if (!validation.success || !validation.data) {
+          return { success: false, error: validation.error };
         }
+
+        const data = validation.data;
+
+        // Import validated data - cast types to match store expectations
+        set((state) => ({
+          personality: (data.personality as PersonalityProfile) || state.personality,
+          habits: (data.habits as Habit[]) || state.habits,
+          entries: (data.entries as DayEntry[]) || state.entries,
+          reflections: (data.reflections as typeof state.reflections) || state.reflections,
+          gratitudeEntries: (data.gratitudeEntries as GratitudeEntry[]) || state.gratitudeEntries,
+          preferences: data.preferences ? { ...state.preferences, ...data.preferences } : state.preferences,
+          hasCompletedOnboarding: data.personality ? true : state.hasCompletedOnboarding,
+        }));
+
+        return { success: true };
       },
 
       // Profile management

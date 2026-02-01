@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useFlowNautStore } from '@/store/flownaut-store';
+import { logError } from '@/lib/error-messages';
 import {
   checkAuthStatus,
   syncProfileToCloud,
@@ -185,8 +186,12 @@ export function useCloudSync() {
       const cloudHabits = await fetchCloudHabits();
       const cloudLogs = await fetchCloudLogs();
 
-      // This would need store methods to restore - simplified for now
-      console.log('Restore from cloud:', { profile, cloudHabits, cloudLogs });
+      // Log in development only for debugging
+      logError('restoreFromCloud:data', { 
+        hasProfile: !!profile, 
+        habitsCount: cloudHabits.length, 
+        logsCount: cloudLogs.length 
+      });
 
       setState((prev) => ({ ...prev, isSyncing: false }));
       return { success: true };
