@@ -4,6 +4,7 @@
 import { supabase } from '@/integrations/supabase/client';
 import type { Habit, PersonalityProfile, DayEntry, WeekReflection } from '@/types/flownaut';
 import type { Json } from '@/integrations/supabase/types';
+import { getSafeErrorMessage, logError } from './error-messages';
 
 interface CloudProfile {
   personality_axes: PersonalityProfile | null;
@@ -43,7 +44,8 @@ export async function signUpWithEmail(email: string, password: string): Promise<
   });
 
   if (error) {
-    return { success: false, error: error.message };
+    logError('signUpWithEmail', error);
+    return { success: false, error: getSafeErrorMessage(error) };
   }
 
   return { success: true };
@@ -59,7 +61,8 @@ export async function signInWithEmail(email: string, password: string): Promise<
   });
 
   if (error) {
-    return { success: false, error: error.message };
+    logError('signInWithEmail', error);
+    return { success: false, error: getSafeErrorMessage(error) };
   }
 
   return { success: true };
@@ -104,7 +107,8 @@ export async function syncProfileToCloud(
       .eq('user_id', userId);
 
     if (error) {
-      return { success: false, error: error.message };
+      logError('syncProfileToCloud:update', error);
+      return { success: false, error: getSafeErrorMessage(error) };
     }
   } else {
     // Insert new profile
@@ -119,7 +123,8 @@ export async function syncProfileToCloud(
       });
 
     if (error) {
-      return { success: false, error: error.message };
+      logError('syncProfileToCloud:insert', error);
+      return { success: false, error: getSafeErrorMessage(error) };
     }
   }
 
@@ -173,7 +178,7 @@ export async function syncHabitsToCloud(habits: Habit[]): Promise<{ success: boo
       });
 
     if (error) {
-      console.error('Error syncing habit:', error);
+      logError('syncHabitsToCloud', error);
     }
   }
 
@@ -215,7 +220,7 @@ export async function syncLogsToCloud(entries: DayEntry[]): Promise<{ success: b
       });
 
     if (error) {
-      console.error('Error syncing log:', error);
+      logError('syncLogsToCloud', error);
     }
   }
 
@@ -244,7 +249,7 @@ export async function syncReflectionsToCloud(reflections: WeekReflection[]): Pro
       });
 
     if (error) {
-      console.error('Error syncing reflection:', error);
+      logError('syncReflectionsToCloud', error);
     }
   }
 
