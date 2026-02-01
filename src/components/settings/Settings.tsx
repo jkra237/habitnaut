@@ -710,7 +710,7 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
         <div className="w-16 h-16 mx-auto mb-3 rounded-2xl bg-primary/10 flex items-center justify-center">
           <Leaf className="w-8 h-8 text-primary" />
         </div>
-        <h3 className="font-serif text-lg font-medium text-foreground">FlowNaut</h3>
+        <h3 className="font-serif text-lg font-medium text-foreground">HabitNaut</h3>
         <p className="text-xs text-muted-foreground">{t.settings.about.version} 1.0.0</p>
       </div>
 
@@ -723,19 +723,22 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
         </p>
       </div>
 
-      <SettingsRow 
-        icon={HelpCircle} 
-        label="How This App Works" 
-        sublabel="Short explanations of core ideas"
-        onClick={() => {}}
-      />
-
-      <SettingsRow 
-        icon={MessageCircle} 
-        label="Contact Support" 
-        sublabel="We'd love to hear from you"
-        onClick={() => {}}
-      />
+      <div className="p-4 rounded-xl bg-secondary/50">
+        <p className="text-sm text-foreground">
+          {t.settings.about.hobbyMessage}
+        </p>
+        <p className="text-sm text-foreground mt-3">
+          <a 
+            href="mailto:tj.kraj23@gmail.com" 
+            className="text-primary hover:underline"
+          >
+            tj.kraj23@gmail.com
+          </a>
+        </p>
+        <p className="text-sm text-muted-foreground mt-3 italic">
+          {t.settings.about.warmRegards} Tom
+        </p>
+      </div>
 
       <BackButton />
     </motion.div>

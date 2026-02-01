@@ -136,6 +136,8 @@ export interface Translations {
       philosophy: string;
       philosophyText: string;
       version: string;
+      hobbyMessage: string;
+      warmRegards: string;
     };
     language: {
       title: string;
@@ -539,6 +541,8 @@ export const translations: Record<SupportedLanguage, Translations> = {
         philosophy: 'Philosophy',
         philosophyText: 'HabitNaut is about observation, not optimization. No streaks, no guilt, no pressure.',
         version: 'Version',
+        hobbyMessage: 'HabitNaut is a hobby project and will be improved in the future. Feedback and requests can be sent to the email address (or via comments in the App Store).',
+        warmRegards: 'Warm regards,',
       },
       language: {
         title: 'Language',
@@ -915,6 +919,8 @@ export const translations: Record<SupportedLanguage, Translations> = {
         philosophy: 'Filosofía',
         philosophyText: 'HabitNaut va de observar, no de optimizar. Sin rachas, sin culpa, sin presión.',
         version: 'Versión',
+        hobbyMessage: 'HabitNaut es un proyecto personal y se mejorará en el futuro. Los comentarios y solicitudes pueden enviarse a la dirección de correo electrónico (o a través de los comentarios en la App Store).',
+        warmRegards: 'Con cariño,',
       },
       language: {
         title: 'Idioma',
@@ -1291,6 +1297,8 @@ export const translations: Record<SupportedLanguage, Translations> = {
         philosophy: 'Philosophie',
         philosophyText: 'Bei HabitNaut geht es ums Beobachten, nicht ums Optimieren. Keine Streaks, keine Schuld, kein Druck.',
         version: 'Version',
+        hobbyMessage: 'HabitNaut ist ein Hobbyprojekt und wird in Zukunft verbessert. Feedback und Anfragen können gern an die E-Mail-Adresse (oder über die Kommentare im App Store) eingesendet werden.',
+        warmRegards: 'Mit warmen Grüßen,',
       },
       language: {
         title: 'Sprache',
