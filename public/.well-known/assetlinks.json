@@ -1,8 +1,8 @@
 [{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target": {
-        "namespace": "android_app",
-        "package_name": "app.vercel.habitnaut.twa",
-        "sha256_cert_fingerprints": ["B9:D7:49:9A:7F:58:F0:3B:AF:12:86:28:95:57:AA:C1:59:34:C2:24:D4:67:3B:EF:BC:47:5E:2E:0D:0A:4F:63"]
-      }
-    }]
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "app.vercel.habitnaut.twa",
+    "sha256_cert_fingerprints": ["A7:3C:9A:81:3A:49:4B:32:13:14:2B:FA:D5:74:50:B7:31:26:87:B9:24:C3:E2:BC:56:99:E7:F7:E3:26:DB:94"]
+  }
+}]
