@@ -192,19 +192,19 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
                       {format(day, 'd')}
                     </span>
                     
-                    {/* Activity indicator */}
-                    {fillLevel > 0 && (
+                    {/* Activity indicator - based on number of done habits */}
+                    {activity && activity.doneCount > 0 && (
                       <div className="flex gap-0.5 mt-0.5">
-                        {fillLevel > 0 && fillLevel <= 0.33 && (
-                          <div className="w-1 h-1 rounded-full bg-primary/50" />
+                        {activity.doneCount === 1 && (
+                          <div className="w-1 h-1 rounded-full bg-primary/60" />
                         )}
-                        {fillLevel > 0.33 && fillLevel <= 0.66 && (
+                        {activity.doneCount === 2 && (
                           <>
-                            <div className="w-1 h-1 rounded-full bg-primary/70" />
-                            <div className="w-1 h-1 rounded-full bg-primary/70" />
+                            <div className="w-1 h-1 rounded-full bg-primary/80" />
+                            <div className="w-1 h-1 rounded-full bg-primary/80" />
                           </>
                         )}
-                        {fillLevel > 0.66 && (
+                        {activity.doneCount >= 3 && (
                           <>
                             <div className="w-1 h-1 rounded-full bg-primary" />
                             <div className="w-1 h-1 rounded-full bg-primary" />
@@ -271,8 +271,15 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
             {/* Legend */}
             <div className="mt-4 pt-3 border-t border-border/30 flex items-center justify-center gap-4 text-[10px] text-muted-foreground">
               <div className="flex items-center gap-1.5">
-                <div className="w-1.5 h-1.5 rounded-full bg-primary/50" />
-                <span>{t.timeline.partial}</span>
+                <div className="w-1.5 h-1.5 rounded-full bg-primary/60" />
+                <span>1 {language === 'de' ? 'Gewohnheit' : language === 'es' ? 'hábito' : 'habit'}</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <div className="flex gap-0.5">
+                  <div className="w-1.5 h-1.5 rounded-full bg-primary/80" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-primary/80" />
+                </div>
+                <span>2 {language === 'de' ? 'Gewohnheiten' : language === 'es' ? 'hábitos' : 'habits'}</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <div className="flex gap-0.5">
@@ -280,7 +287,7 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
                   <div className="w-1.5 h-1.5 rounded-full bg-primary" />
                   <div className="w-1.5 h-1.5 rounded-full bg-primary" />
                 </div>
-                <span>{t.timeline.engaged}</span>
+                <span>3+ {language === 'de' ? 'Gewohnheiten' : language === 'es' ? 'hábitos' : 'habits'}</span>
               </div>
             </div>
           </motion.div>
