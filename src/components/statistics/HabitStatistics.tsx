@@ -79,12 +79,19 @@ export function HabitStatistics({ className = '' }: HabitStatisticsProps) {
     const mostPracticed = sortedByCount[0];
     const leastPracticed = sortedByCount[sortedByCount.length - 1];
 
-    // 2. Average days with any habit per week
-    const weeksInPeriod = Math.ceil(lookbackDays / 7);
-    const daysWithActivity = recentEntries.filter(e => 
+    // 2. Activity rate in the last 7 days (as percentage)
+    const last7Days = subDays(new Date(), 7);
+    const last7DaysEntries = entries.filter(e => {
+      try {
+        return parseISO(e.date) >= last7Days;
+      } catch {
+        return false;
+      }
+    });
+    const daysWithActivityLast7 = last7DaysEntries.filter(e => 
       Object.values(e.habits).some(s => s === 'done')
     ).length;
-    const avgDaysPerWeek = Math.round((daysWithActivity / weeksInPeriod) * 10) / 10;
+    const activityPercentage = Math.round((daysWithActivityLast7 / 7) * 100);
 
     // 3. Most common time of day
     const timeAnchorCounts: Record<string, number> = { morning: 0, midday: 0, evening: 0 };
@@ -190,7 +197,7 @@ export function HabitStatistics({ className = '' }: HabitStatisticsProps) {
     return {
       mostPracticed,
       leastPracticed,
-      avgDaysPerWeek,
+      activityPercentage,
       mostCommonTime,
       mostActiveDay: Number(mostActiveDay[0]),
       weekdayVsWeekend,
@@ -240,17 +247,16 @@ export function HabitStatistics({ className = '' }: HabitStatisticsProps) {
     });
   }
 
-  // Average days per week
+  // Activity rate in the last 7 days
   statItems.push({
-    id: 'avg-days',
+    id: 'activity-rate',
     icon: <Calendar className="w-4 h-4 text-primary" />,
     label: language === 'de'
-      ? 'Durchschnittliche Tage mit Gewohnheiten pro Woche.'
+      ? 'Aktivität in den letzten 7 Tagen.'
       : language === 'es'
-      ? 'Días promedio con hábitos por semana.'
-      : 'Average days with habits per week.',
-    value: `${stats.avgDaysPerWeek}`,
-    sublabel: language === 'de' ? 'Tage' : language === 'es' ? 'días' : 'days',
+      ? 'Actividad en los últimos 7 días.'
+      : 'Activity in the last 7 days.',
+    value: `${stats.activityPercentage}%`,
   });
 
   // Most common time of day
