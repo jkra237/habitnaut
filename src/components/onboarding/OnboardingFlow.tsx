@@ -579,6 +579,14 @@ export function OnboardingFlow() {
                 >
                   {t.onboarding.allSetMessage}
                 </motion.p>
+                <motion.p 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.8 }}
+                  className="text-xs text-muted-foreground max-w-md mx-auto bg-secondary/50 rounded-xl p-4 border border-border"
+                >
+                  {t.onboarding.localDataNotice}
+                </motion.p>
               </div>
 
               <Button 
