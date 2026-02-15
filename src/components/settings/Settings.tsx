@@ -384,16 +384,6 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
         />
       </div>
 
-      {/* App Experience */}
-      <div className="space-y-2">
-        <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide px-1">{t.settings.sections.appExperience}</h3>
-        <SettingsRow 
-          icon={Sparkles} 
-          label={t.settings.experience.title} 
-          sublabel={t.settings.experience.subtitle}
-          onClick={() => setSection('experience')}
-        />
-      </div>
 
       {/* Data & Privacy */}
       <div className="space-y-2">
