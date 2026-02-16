@@ -717,14 +717,6 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
         <p className="text-sm text-foreground">
           {t.settings.about.hobbyMessage}
         </p>
-        <p className="text-sm text-foreground mt-3">
-          <a 
-            href="mailto:tj.kraj23@gmail.com" 
-            className="text-primary hover:underline"
-          >
-            tj.kraj23@gmail.com
-          </a>
-        </p>
         <p className="text-sm text-muted-foreground mt-3 italic">
           {t.settings.about.warmRegards} Tom
         </p>

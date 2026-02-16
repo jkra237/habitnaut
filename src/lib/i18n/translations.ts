@@ -543,7 +543,7 @@ export const translations: Record<SupportedLanguage, Translations> = {
         philosophy: 'Philosophy',
         philosophyText: 'HabitNaut is about observation, not optimization. No streaks, no guilt, no pressure.',
         version: 'Version',
-        hobbyMessage: 'HabitNaut is a hobby project and will be improved in the future. Feedback and requests can be sent to the email address (or via comments in the App Store).',
+        hobbyMessage: 'HabitNaut is the first version of my habit tracker and will be continuously improved. This app is free and without restrictions. Do you have feedback or other thoughts? I\'m looking forward to hear it. Just send it as a comment in your App Store.',
         warmRegards: 'Warm regards,',
       },
       language: {
@@ -922,7 +922,7 @@ export const translations: Record<SupportedLanguage, Translations> = {
         philosophy: 'Filosofía',
         philosophyText: 'HabitNaut va de observar, no de optimizar. Sin rachas, sin culpa, sin presión.',
         version: 'Versión',
-        hobbyMessage: 'HabitNaut es un proyecto personal y se mejorará en el futuro. Los comentarios y solicitudes pueden enviarse a la dirección de correo electrónico (o a través de los comentarios en la App Store).',
+        hobbyMessage: 'HabitNaut es la primera versión de mi rastreador de hábitos y se mejorará continuamente. Esta app es gratuita y sin restricciones. ¿Tienes comentarios u otras ideas? Me encantaría escucharlos. Simplemente envíalos como comentario en tu App Store.',
         warmRegards: 'Con cariño,',
       },
       language: {
@@ -1301,7 +1301,7 @@ export const translations: Record<SupportedLanguage, Translations> = {
         philosophy: 'Philosophie',
         philosophyText: 'Bei HabitNaut geht es ums Beobachten, nicht ums Optimieren. Keine Streaks, keine Schuld, kein Druck.',
         version: 'Version',
-        hobbyMessage: 'HabitNaut ist ein Hobbyprojekt und wird in Zukunft verbessert. Feedback und Anfragen können gern an die E-Mail-Adresse (oder über die Kommentare im App Store) eingesendet werden.',
+        hobbyMessage: 'HabitNaut ist die erste Version meines Habit-Trackers und wird stetig verbessert. Diese App ist kostenlos und ohne Einschränkungen. Hast du Feedback oder andere Gedanken? Ich freue mich darauf! Schreib es einfach als Kommentar in deinem App Store.',
         warmRegards: 'Mit warmen Grüßen,',
       },
       language: {
