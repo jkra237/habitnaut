@@ -2,8 +2,8 @@ import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useFlowNautStore } from '@/store/flownaut-store';
 import type { HabitState } from '@/types/flownaut';
-import { format, startOfWeek, addDays, isToday } from 'date-fns';
-import { MoreHorizontal } from 'lucide-react';
+import { format, startOfWeek, addDays, addWeeks, isToday, isBefore, startOfDay } from 'date-fns';
+import { MoreHorizontal, ChevronLeft, ChevronRight } from 'lucide-react';
 import { HabitOptions } from './HabitOptions';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
@@ -16,15 +16,26 @@ export function HabitMatrix() {
   const [activeReminderId, setActiveReminderId] = useState<string | null>(null);
   const [activeOptionsId, setActiveOptionsId] = useState<string | null>(null);
   const [touchedHabitId, setTouchedHabitId] = useState<string | null>(null);
+  const [weekOffset, setWeekOffset] = useState(0);
   const habits = useFlowNautStore((s) => s.getActiveHabits());
   const entries = useFlowNautStore((s) => s.entries);
   const setHabitState = useFlowNautStore((s) => s.setHabitState);
   const isMobile = useIsMobile();
 
   const weekDates = useMemo(() => {
-    const start = startOfWeek(new Date(), { weekStartsOn: 1 });
-    return Array.from({ length: 7 }, (_, i) => addDays(start, i));
-  }, []);
+    const currentWeekStart = startOfWeek(new Date(), { weekStartsOn: 1 });
+    const targetWeekStart = addWeeks(currentWeekStart, weekOffset);
+    return Array.from({ length: 7 }, (_, i) => addDays(targetWeekStart, i));
+  }, [weekOffset]);
+
+  const isFutureWeek = weekOffset > 0;
+
+  const getWeekLabel = () => {
+    if (weekOffset === 0) return t.dashboard.thisWeek;
+    if (weekOffset === 1) return t.dashboard.nextWeek;
+    if (weekOffset === 2) return t.dashboard.weekAfterNext;
+    return t.dashboard.thisWeek;
+  };
 
   const getStateForCell = (habitId: string, date: Date): HabitState | undefined => {
     const dateStr = format(date, 'yyyy-MM-dd');
@@ -35,7 +46,27 @@ export function HabitMatrix() {
   const cycleState = (habitId: string, date: Date) => {
     const dateStr = format(date, 'yyyy-MM-dd');
     const currentState = getStateForCell(habitId, date);
-    
+    const today = startOfDay(new Date());
+    const isFutureDate = isBefore(today, startOfDay(date));
+
+    if (isFutureDate) {
+      // Future dates: toggle between planned and undefined
+      const nextState: HabitState | undefined =
+        currentState === 'planned' ? 'done' : // cycle: planned -> done (in case they want to clear)
+        currentState === undefined ? 'planned' :
+        'planned';
+      if (currentState === 'planned') {
+        // Remove the state by setting not-done temporarily, then we handle it
+        // Actually let's just cycle: undefined -> planned -> undefined
+        // We need a way to "unset". Let's use not-done as a clear for future
+        setHabitState(dateStr, habitId, 'not-done');
+      } else {
+        setHabitState(dateStr, habitId, nextState);
+      }
+      return;
+    }
+
+    // Past/today: normal cycle
     const nextState: HabitState = 
       currentState === undefined ? 'done' :
       currentState === 'done' ? 'conscious-skip' :
@@ -57,6 +88,9 @@ export function HabitMatrix() {
     if (state === 'not-done') {
       return `${baseClasses} bg-secondary border-2 border-border/50`;
     }
+    if (state === 'planned') {
+      return `${baseClasses} bg-blue-500/20 border-2 border-blue-400/50`;
+    }
     
     // Empty state
     if (isCurrentDay) {
@@ -69,6 +103,7 @@ export function HabitMatrix() {
     if (state === 'done') return '✓';
     if (state === 'conscious-skip') return '🌱';
     if (state === 'not-done') return '○';
+    if (state === 'planned') return '📌';
     return '';
   };
 
@@ -90,6 +125,27 @@ export function HabitMatrix() {
 
   return (
     <div className="space-y-4">
+      {/* Week navigation */}
+      <div className="flex items-center justify-center gap-3">
+        <button
+          onClick={() => setWeekOffset(Math.max(0, weekOffset - 1))}
+          disabled={weekOffset === 0}
+          className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+        >
+          <ChevronLeft className="w-4 h-4" />
+        </button>
+        <span className="text-sm font-medium text-foreground min-w-[140px] text-center">
+          {getWeekLabel()}
+        </span>
+        <button
+          onClick={() => setWeekOffset(Math.min(2, weekOffset + 1))}
+          disabled={weekOffset === 2}
+          className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+        >
+          <ChevronRight className="w-4 h-4" />
+        </button>
+      </div>
+
       {/* Day headers */}
       <div className="flex gap-1 sm:gap-2 justify-end pr-1">
         {weekDates.map((date, idx) => {
@@ -120,11 +176,10 @@ export function HabitMatrix() {
           className="space-y-2"
         >
           <div className="flex items-center gap-1.5 sm:gap-3">
-            {/* Habit name and controls - fixed width for consistent alignment */}
+            {/* Habit name and controls */}
             <div className="flex items-center gap-1 sm:gap-2 min-w-0" style={{ width: 'calc(100% - 220px)', maxWidth: '120px' }}>
               <span className="text-sm sm:text-xl flex-shrink-0">{habit.emoji || '🌱'}</span>
               
-              {/* Mobile: Tooltip on touch, Desktop: normal display */}
               {isMobile ? (
                 <TooltipProvider delayDuration={0}>
                   <Tooltip open={touchedHabitId === habit.id}>
@@ -149,7 +204,7 @@ export function HabitMatrix() {
               )}
             </div>
 
-            {/* Options menu - fixed position */}
+            {/* Options menu */}
             <button
               onClick={() => setActiveOptionsId(activeOptionsId === habit.id ? null : habit.id)}
               className="p-1.5 rounded-lg text-muted-foreground/60 hover:text-muted-foreground hover:bg-secondary transition-all flex-shrink-0"
@@ -157,7 +212,7 @@ export function HabitMatrix() {
               <MoreHorizontal className="w-4 h-4" />
             </button>
 
-            {/* Day cells - always aligned to the right */}
+            {/* Day cells */}
             <div className="flex gap-1 sm:gap-2 flex-shrink-0 ml-auto">
               {weekDates.map((date, dateIdx) => {
                 const state = getStateForCell(habit.id, date);
@@ -210,6 +265,10 @@ export function HabitMatrix() {
         <div className="flex items-center gap-1">
           <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded bg-secondary border border-border/50 flex items-center justify-center text-[8px] sm:text-[10px]">○</div>
           <span>{t.habits.notDone}</span>
+        </div>
+        <div className="flex items-center gap-1">
+          <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded bg-blue-500/20 border border-blue-400/50 flex items-center justify-center text-[8px] sm:text-[10px]">📌</div>
+          <span>{t.habits.planned}</span>
         </div>
       </div>
     </div>

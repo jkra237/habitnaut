@@ -162,6 +162,8 @@ export interface Translations {
     energy: string;
     noJudgment: string;
     thisWeek: string;
+    nextWeek: string;
+    weekAfterNext: string;
     insights: string;
     addHabit: string;
     greetingMorning: string;
@@ -204,6 +206,7 @@ export interface Translations {
     done: string;
     skipped: string;
     notDone: string;
+    planned: string;
     emptyTitle: string;
     emptySubtitle: string;
   };
@@ -566,6 +569,8 @@ export const translations: Record<SupportedLanguage, Translations> = {
       energy: 'Energy',
       noJudgment: 'No judgment – just noticing',
       thisWeek: 'This week',
+      nextWeek: 'Next week',
+      weekAfterNext: 'In two weeks',
       insights: 'Insights',
       addHabit: 'Add habit',
       greetingMorning: 'Good morning',
@@ -592,6 +597,7 @@ export const translations: Record<SupportedLanguage, Translations> = {
       done: 'Done',
       skipped: 'Skipped',
       notDone: 'Not done',
+      planned: 'Planned',
       emptyTitle: 'Your observation space is empty',
       emptySubtitle: 'Add something you\'d like to observe – not to perfect, just to notice.',
     },
@@ -945,6 +951,8 @@ export const translations: Record<SupportedLanguage, Translations> = {
       energy: 'Energía',
       noJudgment: 'Sin juicios – solo observando',
       thisWeek: 'Esta semana',
+      nextWeek: 'Próxima semana',
+      weekAfterNext: 'En dos semanas',
       insights: 'Reflexiones',
       addHabit: 'Añadir hábito',
       greetingMorning: 'Buenos días',
@@ -971,6 +979,7 @@ export const translations: Record<SupportedLanguage, Translations> = {
       done: 'Hecho',
       skipped: 'Saltado',
       notDone: 'Sin hacer',
+      planned: 'Planificado',
       emptyTitle: 'Tu espacio de observación está vacío',
       emptySubtitle: 'Añade algo que te gustaría observar – no para perfeccionar, solo para notar.',
     },
@@ -1324,6 +1333,8 @@ export const translations: Record<SupportedLanguage, Translations> = {
       energy: 'Energie',
       noJudgment: 'Ohne Wertung – einfach wahrnehmen',
       thisWeek: 'Diese Woche',
+      nextWeek: 'Nächste Woche',
+      weekAfterNext: 'Übernächste Woche',
       insights: 'Einsichten',
       addHabit: 'Gewohnheit hinzufügen',
       greetingMorning: 'Guten Morgen',
@@ -1350,6 +1361,7 @@ export const translations: Record<SupportedLanguage, Translations> = {
       done: 'Erledigt',
       skipped: 'Übersprungen',
       notDone: 'Nicht erledigt',
+      planned: 'Geplant',
       emptyTitle: 'Dein Beobachtungsraum ist leer',
       emptySubtitle: 'Füge etwas hinzu, das du beobachten möchtest – nicht um es zu perfektionieren, nur um es wahrzunehmen.',
     },

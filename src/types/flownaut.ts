@@ -34,7 +34,7 @@ export interface Habit {
   restingNote?: string;
 }
 
-export type HabitState = 'done' | 'not-done' | 'conscious-skip';
+export type HabitState = 'done' | 'not-done' | 'conscious-skip' | 'planned';
 
 export interface DayEntry {
   date: string; // YYYY-MM-DD
