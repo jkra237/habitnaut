@@ -208,7 +208,7 @@ export function HabitStatistics({ className = '' }: HabitStatisticsProps) {
       habitPair: habitPair?.count && habitPair.count >= 3 ? habitPair : null,
       trend,
     };
-  }, [entries, habits]);
+  }, [entries, habits, updateKey]);
 
   if (!stats || habits.length === 0) {
     return null;
