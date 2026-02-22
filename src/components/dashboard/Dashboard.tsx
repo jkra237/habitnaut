@@ -123,8 +123,7 @@ export function Dashboard() {
           transition={{ delay: 0.2 }}
           className="bg-card rounded-2xl border border-border/50 shadow-card p-5"
         >
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-serif font-medium text-foreground">{t.dashboard.thisWeek}</h2>
+          <div className="flex items-center justify-end mb-4">
             <Button
               variant="gentle"
               size="sm"
