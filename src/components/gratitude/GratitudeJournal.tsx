@@ -73,12 +73,12 @@ export function GratitudeJournal() {
   // Today's entries
   const todayEntries = gratitudeEntries
     .filter((e) => e.date === todayStr)
-    .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+    .sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
 
   // Past entries (not from today)
   const pastEntries = gratitudeEntries
     .filter((e) => e.date !== todayStr)
-    .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+    .sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
 
   return (
     <div className="bg-card rounded-2xl border border-border/50 shadow-card p-5">
