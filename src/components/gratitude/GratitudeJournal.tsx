@@ -11,6 +11,7 @@ import { de, es, enUS } from 'date-fns/locale';
 export function GratitudeJournal() {
   const [showHistory, setShowHistory] = useState(false);
   const [text, setText] = useState('');
+  const [visibleCount, setVisibleCount] = useState(10);
   const t = useTranslations();
   const language = useLanguage();
   
@@ -91,7 +92,7 @@ export function GratitudeJournal() {
           variant="ghost"
           size="icon"
           className="rounded-xl"
-          onClick={() => setShowHistory(!showHistory)}
+          onClick={() => { setShowHistory(!showHistory); setVisibleCount(10); }}
         >
           <Calendar className="w-4 h-4" />
         </Button>
@@ -182,7 +183,7 @@ export function GratitudeJournal() {
               </p>
             ) : (
               <div className="space-y-3 max-h-64 overflow-y-auto">
-                {pastEntries.map((entry) => (
+                {pastEntries.slice(0, visibleCount).map((entry) => (
                   <motion.div
                     key={entry.id}
                     initial={{ opacity: 0, y: -10 }}
@@ -208,6 +209,21 @@ export function GratitudeJournal() {
                     </div>
                   </motion.div>
                 ))}
+                {pastEntries.length > visibleCount && (
+                  <div className="pt-2 space-y-1">
+                    <p className="text-xs text-muted-foreground text-center">
+                      {Math.min(visibleCount, pastEntries.length)} von {pastEntries.length} Einträgen
+                    </p>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="w-full text-xs"
+                      onClick={() => setVisibleCount((c) => c + 10)}
+                    >
+                      Ältere Einträge laden
+                    </Button>
+                  </div>
+                )}
               </div>
             )}
           </motion.div>
