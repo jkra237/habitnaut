@@ -19,6 +19,23 @@ import {
   getDay,
 } from 'date-fns';
 
+const MOOD_EMOJIS: Record<number, string> = {
+  1: '😔', 2: '😐', 3: '🙂', 4: '😊', 5: '✨',
+};
+
+function getMoodBgStyle(mood: number, isDark: boolean): React.CSSProperties {
+  const colors: Record<number, { light: string; dark: string }> = {
+    1: { light: '#fee2e2', dark: 'rgba(239,68,68,0.2)' },
+    2: { light: '#ffedd5', dark: 'rgba(249,115,22,0.2)' },
+    3: { light: '#fef9c3', dark: 'rgba(234,179,8,0.2)' },
+    4: { light: '#dcfce7', dark: 'rgba(34,197,94,0.2)' },
+    5: { light: '#bbf7d0', dark: 'rgba(22,163,74,0.25)' },
+  };
+  const c = colors[mood];
+  if (!c) return {};
+  return { backgroundColor: isDark ? c.dark : c.light };
+}
+
 interface ActivityCalendarProps {
   className?: string;
 }
@@ -45,9 +62,12 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
     return { days, paddingDays };
   }, [currentMonth]);
 
+  // Detect dark mode
+  const isDark = typeof window !== 'undefined' && document.documentElement.classList.contains('dark');
+
   // Create a map of date -> activity data
   const activityMap = useMemo(() => {
-    const map: Record<string, { doneCount: number; totalHabits: number; habits: { name: string; emoji?: string; state: string }[] }> = {};
+    const map: Record<string, { doneCount: number; totalHabits: number; mood?: number; habits: { name: string; emoji?: string; state: string }[] }> = {};
     
     entries.forEach(entry => {
       const habitsData = habits.map(h => ({
@@ -61,6 +81,7 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
       map[entry.date] = {
         doneCount,
         totalHabits: habits.length,
+        mood: entry.mood,
         habits: habitsData,
       };
     });
@@ -185,8 +206,9 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
                       aspect-square rounded-lg flex flex-col items-center justify-center relative transition-all
                       ${isToday ? 'ring-2 ring-primary ring-offset-1 ring-offset-background' : ''}
                       ${isFuture ? 'opacity-30 cursor-default' : 'cursor-pointer hover:bg-primary/5'}
-                      ${isSelected ? 'bg-primary/20 ring-2 ring-primary/50' : fillLevel > 0 ? 'bg-primary/10' : 'bg-muted/30'}
+                      ${isSelected ? 'bg-primary/20 ring-2 ring-primary/50' : !activity?.mood ? (fillLevel > 0 ? 'bg-primary/10' : 'bg-muted/30') : ''}
                     `}
+                    style={!isSelected && activity?.mood ? getMoodBgStyle(activity.mood, isDark) : undefined}
                   >
                     <span className={`text-xs font-medium ${isToday ? 'text-primary' : 'text-foreground/70'}`}>
                       {format(day, 'd')}
@@ -227,9 +249,14 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
                   exit={{ opacity: 0, height: 0 }}
                   className="mt-4 pt-4 border-t border-border/30"
                 >
-                  <p className="text-xs text-muted-foreground mb-2">
-                    {format(new Date(selectedDate), 'd MMMM yyyy')}
-                  </p>
+                  <div className="flex items-center gap-2 mb-2">
+                    <p className="text-xs text-muted-foreground">
+                      {format(new Date(selectedDate), 'd MMMM yyyy')}
+                    </p>
+                    {selectedDayActivities?.mood && (
+                      <span className="text-sm">{MOOD_EMOJIS[selectedDayActivities.mood]}</span>
+                    )}
+                  </div>
                   
                   {selectedDayActivities && selectedDayActivities.habits.length > 0 ? (
                     <div className="space-y-1.5">
@@ -269,25 +296,37 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
             </AnimatePresence>
 
             {/* Legend */}
-            <div className="mt-4 pt-3 border-t border-border/30 flex items-center justify-center gap-4 text-[10px] text-muted-foreground">
-              <div className="flex items-center gap-1.5">
-                <div className="w-1.5 h-1.5 rounded-full bg-primary/60" />
-                <span>1 {language === 'de' ? 'Gewohnheit' : language === 'es' ? 'hábito' : 'habit'}</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <div className="flex gap-0.5">
-                  <div className="w-1.5 h-1.5 rounded-full bg-primary/80" />
-                  <div className="w-1.5 h-1.5 rounded-full bg-primary/80" />
+            <div className="mt-4 pt-3 border-t border-border/30 space-y-2">
+              <div className="flex items-center justify-center gap-4 text-[10px] text-muted-foreground">
+                <div className="flex items-center gap-1.5">
+                  <div className="w-1.5 h-1.5 rounded-full bg-primary/60" />
+                  <span>1 {language === 'de' ? 'Gewohnheit' : language === 'es' ? 'hábito' : 'habit'}</span>
                 </div>
-                <span>2 {language === 'de' ? 'Gewohnheiten' : language === 'es' ? 'hábitos' : 'habits'}</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <div className="flex gap-0.5">
-                  <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-                  <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-                  <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                <div className="flex items-center gap-1.5">
+                  <div className="flex gap-0.5">
+                    <div className="w-1.5 h-1.5 rounded-full bg-primary/80" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-primary/80" />
+                  </div>
+                  <span>2 {language === 'de' ? 'Gewohnheiten' : language === 'es' ? 'hábitos' : 'habits'}</span>
                 </div>
-                <span>3+ {language === 'de' ? 'Gewohnheiten' : language === 'es' ? 'hábitos' : 'habits'}</span>
+                <div className="flex items-center gap-1.5">
+                  <div className="flex gap-0.5">
+                    <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                  </div>
+                  <span>3+ {language === 'de' ? 'Gewohnheiten' : language === 'es' ? 'hábitos' : 'habits'}</span>
+                </div>
+              </div>
+              {/* Mood color legend */}
+              <div className="flex items-center justify-center gap-2 text-[10px] text-muted-foreground">
+                <span>{language === 'de' ? 'Stimmung:' : language === 'es' ? 'Ánimo:' : 'Mood:'}</span>
+                {[1, 2, 3, 4, 5].map(mood => (
+                  <div key={mood} className="flex items-center gap-0.5">
+                    <div className="w-3 h-3 rounded" style={getMoodBgStyle(mood, isDark)} />
+                    <span>{MOOD_EMOJIS[mood]}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </motion.div>
