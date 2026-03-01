@@ -82,6 +82,7 @@ export interface UserState {
   insights: Insight[];
   reflections: WeekReflection[];
   gratitudeEntries: GratitudeEntry[];
+  unlockedAchievements: string[];
   preferredTone: 'gentle' | 'clear';
   preferences: AppPreferences;
 }
