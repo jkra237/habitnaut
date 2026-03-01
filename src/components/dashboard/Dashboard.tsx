@@ -82,14 +82,6 @@ export function Dashboard() {
             >
               <SettingsIcon className="w-5 h-5" />
             </Button>
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className="rounded-xl"
-              onClick={() => setIsSettingsOpen(true)}
-            >
-              <SettingsIcon className="w-5 h-5" />
-            </Button>
           </div>
         </div>
 
