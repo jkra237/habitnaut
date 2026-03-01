@@ -10,7 +10,7 @@ export type AchievementKey =
   // C) Single habits
   | 'old_friend' | 'long_companion' | 'steady_presence' | 'letting_it_rest' | 'picking_it_up_again'
   // D) Multiple habits
-  | 'small_circle' | 'balanced_set' | 'focused_practice' | 'changing_needs' | 'trying_things_out'
+  | 'small_circle' | 'balanced_set' | 'changing_needs' | 'trying_things_out'
   // E) Patterns
   | 'gentle_pair' | 'supportive_set' | 'recurring_pattern' | 'natural_flow' | 'own_pace'
   // F) Long-term

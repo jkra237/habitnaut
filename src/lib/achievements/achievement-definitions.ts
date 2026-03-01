@@ -165,22 +165,6 @@ export const achievementDefinitions: AchievementDefinition[] = [
     return active.length >= 3 && active.length <= 4 && 
       active.every(h => habitAgeDays(h) >= 21);
   }},
-  { key: 'focused_practice', category: 'D', emoji: '🎯', check: (s) => {
-    const active = s.habits.filter(h => !h.isResting);
-    if (active.length === 0) return false;
-    // Check if there's a week where all active habits were done
-    const weekHabits: Record<string, Set<string>> = {};
-    for (const e of s.entries) {
-      const wk = getWeekKey(e.date);
-      if (!weekHabits[wk]) weekHabits[wk] = new Set();
-      for (const [id, state] of Object.entries(e.habits)) {
-        if (state === 'done') weekHabits[wk].add(id);
-      }
-    }
-    const activeIds = new Set(active.map(h => h.id));
-    return Object.values(weekHabits).some(doneIds => 
-      [...activeIds].every(id => doneIds.has(id)));
-  }},
   { key: 'changing_needs', category: 'D', emoji: '🔀', check: (s) => {
     const hasResting = s.habits.some(h => h.isResting);
     const hasNew = s.habits.some(h => !h.isResting && habitAgeDays(h) < 14);
