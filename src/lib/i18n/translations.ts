@@ -415,6 +415,20 @@ export interface Translations {
     slowMorning: { name: string; reason: string };
     quickWins: { name: string; reason: string };
   };
+  
+  // Achievements
+  achievements: {
+    title: string;
+    subtitle: string;
+    unlocked: string;
+    categoryA: string;
+    categoryB: string;
+    categoryC: string;
+    categoryD: string;
+    categoryE: string;
+    categoryF: string;
+    items: Record<string, { name: string; description: string }>;
+  };
 }
 
 export const translations: Record<SupportedLanguage, Translations> = {
@@ -798,6 +812,49 @@ export const translations: Record<SupportedLanguage, Translations> = {
       partial: 'Partial',
       notEngaged: 'Not engaged',
     },
+    achievements: {
+      title: 'Achievements',
+      subtitle: 'Gentle milestones on your journey. Once unlocked, they stay forever.',
+      unlocked: '{count} of {total} discovered',
+      categoryA: 'Getting Started',
+      categoryB: 'Weekly Presence',
+      categoryC: 'Single Habits',
+      categoryD: 'Multiple Habits',
+      categoryE: 'Patterns',
+      categoryF: 'Long-term',
+      items: {
+        first_step: { name: 'First Step', description: 'You created your first habit' },
+        first_mark: { name: 'First Mark', description: 'You completed a habit for the first time' },
+        getting_started: { name: 'Getting Started', description: 'Three check-ins completed' },
+        showing_up: { name: 'Showing Up', description: 'A week with at least one habit done' },
+        back_again: { name: 'Back Again', description: 'You returned after a pause' },
+        quiet_week: { name: 'Quiet Week', description: 'A week with gentle, regular presence' },
+        gentle_continuity: { name: 'Gentle Continuity', description: 'Two weeks with presence' },
+        still_going: { name: 'Still Going', description: 'Three weeks with presence' },
+        soft_rhythm: { name: 'Soft Rhythm', description: 'Four weeks of quiet, recurring use' },
+        reliable_return: { name: 'Reliable Return', description: 'You came back after multiple pauses' },
+        old_friend: { name: 'Old Friend', description: 'A habit has been with you for over a month' },
+        long_companion: { name: 'Long Companion', description: 'A habit has been with you for over two months' },
+        steady_presence: { name: 'Steady Presence', description: 'A habit accompanies you for several months' },
+        letting_it_rest: { name: 'Letting It Rest', description: 'You consciously paused a habit' },
+        picking_it_up_again: { name: 'Picking It Up Again', description: 'You resumed a resting habit' },
+        small_circle: { name: 'Small Circle', description: 'One or two habits over a longer time' },
+        balanced_set: { name: 'Balanced Set', description: 'Three to four habits over a longer time' },
+        focused_practice: { name: 'Focused Practice', description: 'All active habits completed in one week' },
+        changing_needs: { name: 'Changing Needs', description: 'You consciously exchanged habits' },
+        trying_things_out: { name: 'Trying Things Out', description: 'You explored multiple new habits' },
+        gentle_pair: { name: 'Gentle Pair', description: 'Two habits often appear together' },
+        supportive_set: { name: 'Supportive Set', description: 'Three habits accompany each other over time' },
+        recurring_pattern: { name: 'Recurring Pattern', description: 'A recurring usage pattern is forming' },
+        natural_flow: { name: 'Natural Flow', description: 'Habits appear regularly without reminders' },
+        own_pace: { name: 'Own Pace', description: 'Irregular but stable long-term presence' },
+        staying_with_it: { name: 'Staying With It', description: 'The app has been part of your weeks' },
+        quiet_consistency: { name: 'Quiet Consistency', description: 'Regular weekly presence without pressure' },
+        gentle_commitment: { name: 'Gentle Commitment', description: 'Habits remain part of your everyday life' },
+        living_with_habits: { name: 'Living With Habits', description: 'A long-term relationship with multiple habits' },
+        aware_practice: { name: 'Aware Practice', description: 'Sustained use over time without compulsion' },
+      },
+    },
   },
   
   es: {
@@ -1180,6 +1237,49 @@ export const translations: Record<SupportedLanguage, Translations> = {
       partial: 'Parcial',
       notEngaged: 'No activo',
     },
+    achievements: {
+      title: 'Logros',
+      subtitle: 'Hitos suaves en tu camino. Una vez desbloqueados, se quedan para siempre.',
+      unlocked: '{count} de {total} descubiertos',
+      categoryA: 'Primeros pasos',
+      categoryB: 'Presencia semanal',
+      categoryC: 'Hábitos individuales',
+      categoryD: 'Múltiples hábitos',
+      categoryE: 'Patrones',
+      categoryF: 'A largo plazo',
+      items: {
+        first_step: { name: 'Primer paso', description: 'Creaste tu primer hábito' },
+        first_mark: { name: 'Primera marca', description: 'Completaste un hábito por primera vez' },
+        getting_started: { name: 'Empezando', description: 'Tres registros completados' },
+        showing_up: { name: 'Apareciendo', description: 'Una semana con al menos un hábito hecho' },
+        back_again: { name: 'De vuelta', description: 'Regresaste después de una pausa' },
+        quiet_week: { name: 'Semana tranquila', description: 'Una semana con presencia regular y suave' },
+        gentle_continuity: { name: 'Continuidad suave', description: 'Dos semanas con presencia' },
+        still_going: { name: 'Siguiendo adelante', description: 'Tres semanas con presencia' },
+        soft_rhythm: { name: 'Ritmo suave', description: 'Cuatro semanas de uso tranquilo y recurrente' },
+        reliable_return: { name: 'Retorno confiable', description: 'Regresaste después de varias pausas' },
+        old_friend: { name: 'Viejo amigo', description: 'Un hábito te acompaña desde hace más de un mes' },
+        long_companion: { name: 'Compañero fiel', description: 'Un hábito te acompaña desde hace más de dos meses' },
+        steady_presence: { name: 'Presencia constante', description: 'Un hábito te acompaña durante varios meses' },
+        letting_it_rest: { name: 'Dejándolo descansar', description: 'Pausaste un hábito conscientemente' },
+        picking_it_up_again: { name: 'Retomándolo', description: 'Retomaste un hábito en pausa' },
+        small_circle: { name: 'Círculo pequeño', description: 'Uno o dos hábitos durante un tiempo prolongado' },
+        balanced_set: { name: 'Conjunto equilibrado', description: 'Tres o cuatro hábitos durante un tiempo prolongado' },
+        focused_practice: { name: 'Práctica enfocada', description: 'Todos los hábitos activos completados en una semana' },
+        changing_needs: { name: 'Necesidades cambiantes', description: 'Intercambiaste hábitos conscientemente' },
+        trying_things_out: { name: 'Probando cosas', description: 'Exploraste varios hábitos nuevos' },
+        gentle_pair: { name: 'Par suave', description: 'Dos hábitos aparecen juntos frecuentemente' },
+        supportive_set: { name: 'Conjunto de apoyo', description: 'Tres hábitos se acompañan mutuamente' },
+        recurring_pattern: { name: 'Patrón recurrente', description: 'Se forma un patrón de uso recurrente' },
+        natural_flow: { name: 'Flujo natural', description: 'Los hábitos aparecen regularmente sin recordatorios' },
+        own_pace: { name: 'A tu ritmo', description: 'Presencia irregular pero estable a largo plazo' },
+        staying_with_it: { name: 'Persistiendo', description: 'La app ha sido parte de tus semanas' },
+        quiet_consistency: { name: 'Consistencia tranquila', description: 'Presencia semanal regular sin presión' },
+        gentle_commitment: { name: 'Compromiso suave', description: 'Los hábitos siguen siendo parte de tu día a día' },
+        living_with_habits: { name: 'Viviendo con hábitos', description: 'Una relación a largo plazo con varios hábitos' },
+        aware_practice: { name: 'Práctica consciente', description: 'Uso sostenido en el tiempo sin compulsión' },
+      },
+    },
   },
   
   de: {
@@ -1561,6 +1661,49 @@ export const translations: Record<SupportedLanguage, Translations> = {
       engaged: 'Aktiv',
       partial: 'Teilweise',
       notEngaged: 'Nicht aktiv',
+    },
+    achievements: {
+      title: 'Errungenschaften',
+      subtitle: 'Sanfte Meilensteine auf deinem Weg. Einmal freigeschaltet, bleiben sie für immer.',
+      unlocked: '{count} von {total} entdeckt',
+      categoryA: 'Einstieg',
+      categoryB: 'Wochen-Präsenz',
+      categoryC: 'Einzelne Gewohnheiten',
+      categoryD: 'Mehrere Gewohnheiten',
+      categoryE: 'Muster',
+      categoryF: 'Langfristig',
+      items: {
+        first_step: { name: 'Erster Schritt', description: 'Du hast deine erste Gewohnheit angelegt' },
+        first_mark: { name: 'Erste Markierung', description: 'Du hast zum ersten Mal eine Gewohnheit erledigt' },
+        getting_started: { name: 'Loslegen', description: 'Drei Check-ins abgeschlossen' },
+        showing_up: { name: 'Da sein', description: 'Eine Woche mit mindestens einer erledigten Gewohnheit' },
+        back_again: { name: 'Wieder da', description: 'Du bist nach einer Pause zurückgekehrt' },
+        quiet_week: { name: 'Ruhige Woche', description: 'Eine Woche mit sanfter, regelmäßiger Präsenz' },
+        gentle_continuity: { name: 'Sanfte Kontinuität', description: 'Zwei Wochen mit Präsenz' },
+        still_going: { name: 'Immer noch dabei', description: 'Drei Wochen mit Präsenz' },
+        soft_rhythm: { name: 'Sanfter Rhythmus', description: 'Vier Wochen ruhiger, wiederkehrender Nutzung' },
+        reliable_return: { name: 'Zuverlässige Rückkehr', description: 'Du bist nach mehreren Pausen zurückgekehrt' },
+        old_friend: { name: 'Alter Freund', description: 'Eine Gewohnheit begleitet dich seit über einem Monat' },
+        long_companion: { name: 'Langzeitbegleiter', description: 'Eine Gewohnheit begleitet dich seit über zwei Monaten' },
+        steady_presence: { name: 'Beständige Präsenz', description: 'Eine Gewohnheit begleitet dich über mehrere Monate' },
+        letting_it_rest: { name: 'Ruhen lassen', description: 'Du hast bewusst eine Gewohnheit pausiert' },
+        picking_it_up_again: { name: 'Wieder aufnehmen', description: 'Du hast eine ruhende Gewohnheit wieder aufgenommen' },
+        small_circle: { name: 'Kleiner Kreis', description: 'Ein bis zwei Gewohnheiten über längere Zeit' },
+        balanced_set: { name: 'Ausgewogenes Set', description: 'Drei bis vier Gewohnheiten über längere Zeit' },
+        focused_practice: { name: 'Fokussierte Praxis', description: 'Alle aktiven Gewohnheiten in einer Woche erledigt' },
+        changing_needs: { name: 'Wandelnde Bedürfnisse', description: 'Du hast bewusst Gewohnheiten ausgetauscht' },
+        trying_things_out: { name: 'Ausprobieren', description: 'Du hast mehrere neue Gewohnheiten getestet' },
+        gentle_pair: { name: 'Sanftes Paar', description: 'Zwei Gewohnheiten tauchen oft gemeinsam auf' },
+        supportive_set: { name: 'Unterstützendes Set', description: 'Drei Gewohnheiten begleiten sich über Zeit' },
+        recurring_pattern: { name: 'Wiederkehrendes Muster', description: 'Ein wiederkehrendes Nutzungsmuster bildet sich' },
+        natural_flow: { name: 'Natürlicher Fluss', description: 'Gewohnheiten erscheinen regelmäßig ohne Erinnerungen' },
+        own_pace: { name: 'Eigenes Tempo', description: 'Unregelmäßige, aber stabile Langzeitpräsenz' },
+        staying_with_it: { name: 'Dranbleiben', description: 'Die App war Teil deiner Wochen' },
+        quiet_consistency: { name: 'Stille Beständigkeit', description: 'Regelmäßige Wochen-Präsenz ohne Druck' },
+        gentle_commitment: { name: 'Sanftes Engagement', description: 'Gewohnheiten bleiben Teil deines Alltags' },
+        living_with_habits: { name: 'Leben mit Gewohnheiten', description: 'Eine langfristige Beziehung zu mehreren Gewohnheiten' },
+        aware_practice: { name: 'Bewusste Praxis', description: 'Nutzung über Zeit ohne Zwangslogik' },
+      },
     },
   },
 };

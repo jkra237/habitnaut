@@ -13,6 +13,7 @@ import type {
   GratitudeEntry,
 } from '@/types/flownaut';
 import { validateImportData } from '@/lib/import-validation';
+import { checkAchievements } from '@/lib/achievements/achievement-checker';
 
 interface AddHabitOptions {
   name: string;
@@ -70,6 +71,9 @@ interface FlowNautStore extends UserState {
   getActiveHabits: () => Habit[];
   getRestingHabits: () => Habit[];
   
+  // Achievements
+  checkAndUnlockAchievements: () => void;
+  
   // Reset for demo
   resetStore: () => void;
 }
@@ -82,6 +86,7 @@ const initialState: UserState = {
   insights: [],
   reflections: [],
   gratitudeEntries: [],
+  unlockedAchievements: [],
   preferredTone: 'gentle',
   preferences: defaultPreferences,
 };
@@ -310,6 +315,18 @@ export const useFlowNautStore = create<FlowNautStore>()(
       getActiveHabits: () => get().habits.filter((h) => !h.isResting),
 
       getRestingHabits: () => get().habits.filter((h) => h.isResting),
+
+      // Achievements
+      checkAndUnlockAchievements: () => {
+        const state = get();
+        const newUnlocked = checkAchievements(state);
+        // Only update if there are new achievements
+        const current = new Set(state.unlockedAchievements);
+        const merged = [...new Set([...state.unlockedAchievements, ...newUnlocked])];
+        if (merged.length > current.size) {
+          set({ unlockedAchievements: merged });
+        }
+      },
 
       resetStore: () => set(initialState),
     }),
