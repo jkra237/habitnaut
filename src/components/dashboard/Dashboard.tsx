@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Settings as SettingsIcon, Leaf, Moon, TrendingUp, Trophy } from 'lucide-react';
+import { Plus, Settings as SettingsIcon, Leaf, Moon, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { HabitMatrix } from '@/components/habits/HabitMatrix';
 import { AddHabitDialog } from '@/components/habits/AddHabitDialog';
@@ -12,14 +12,14 @@ import { Settings } from '@/components/settings/Settings';
 import { GratitudeJournal } from '@/components/gratitude/GratitudeJournal';
 import { ActivityCalendar } from '@/components/calendar/ActivityCalendar';
 import { HabitStatistics } from '@/components/statistics/HabitStatistics';
-import { AchievementsView } from '@/components/achievements/AchievementsView';
+
 import { useFlowNautStore } from '@/store/flownaut-store';
 import { useTranslations } from '@/hooks/use-translations';
 
 export function Dashboard() {
   const [isAddHabitOpen, setIsAddHabitOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [isAchievementsOpen, setIsAchievementsOpen] = useState(false);
+  
   const [showTimeline, setShowTimeline] = useState(false);
   const habits = useFlowNautStore((s) => s.getActiveHabits());
   const restingHabits = useFlowNautStore((s) => s.getRestingHabits());
@@ -78,9 +78,9 @@ export function Dashboard() {
               variant="ghost" 
               size="icon" 
               className="rounded-xl"
-              onClick={() => setIsAchievementsOpen(true)}
+              onClick={() => setIsSettingsOpen(true)}
             >
-              <Trophy className="w-5 h-5" />
+              <SettingsIcon className="w-5 h-5" />
             </Button>
             <Button 
               variant="ghost" 
@@ -274,12 +274,6 @@ export function Dashboard() {
         onClose={() => setIsAddHabitOpen(false)}
       />
 
-      {/* Achievements */}
-      <AnimatePresence>
-        {isAchievementsOpen && (
-          <AchievementsView onClose={() => setIsAchievementsOpen(false)} />
-        )}
-      </AnimatePresence>
 
       {/* Settings */}
       <AnimatePresence>
