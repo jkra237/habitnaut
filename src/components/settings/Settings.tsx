@@ -25,7 +25,8 @@ import {
   ExternalLink,
   Edit3,
   Sparkles,
-  Globe
+  Globe,
+  Trophy
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -35,13 +36,14 @@ import { useFlowNautStore } from '@/store/flownaut-store';
 import { useTranslations, useSetLanguage, useLanguage } from '@/hooks/use-translations';
 import { LANGUAGE_OPTIONS, type SupportedLanguage } from '@/lib/i18n/translations';
 import type { InsightFrequency, WeekStart } from '@/types/flownaut';
+import { AchievementsView } from '@/components/achievements/AchievementsView';
 
 interface SettingsProps {
   onClose: () => void;
   onEditProfile?: () => void;
 }
 
-type SettingsSection = 'main' | 'profile' | 'cloud' | 'auth' | 'reset' | 'delete' | 'habits' | 'experience' | 'privacy' | 'about' | 'google-cloud' | 'language';
+type SettingsSection = 'main' | 'profile' | 'cloud' | 'auth' | 'reset' | 'delete' | 'habits' | 'experience' | 'privacy' | 'about' | 'google-cloud' | 'language' | 'achievements';
 
 const PERSONALITY_DESCRIPTIONS: Record<string, Record<string, Record<SupportedLanguage, string>>> = {
   rhythm: {
@@ -393,6 +395,17 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
           label={t.settings.privacy.title} 
           sublabel={t.settings.privacy.subtitle}
           onClick={() => setSection('privacy')}
+        />
+      </div>
+
+      {/* Achievements */}
+      <div className="space-y-2">
+        <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide px-1">Achievements</h3>
+        <SettingsRow 
+          icon={Trophy} 
+          label={t.achievements.title}
+          sublabel={t.achievements.subtitle}
+          onClick={() => setSection('achievements')}
         />
       </div>
 
@@ -889,6 +902,7 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
       case 'experience': return t.settings.experience.title;
       case 'privacy': return t.settings.privacy.title;
       case 'about': return t.settings.about.title;
+      case 'achievements': return t.achievements.title;
       case 'language': return t.settings.language.title;
       case 'auth': return 'Cloud Sync';
       case 'cloud': return 'Cloud Sync';
@@ -934,6 +948,9 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
             {section === 'google-cloud' && renderGoogleCloud()}
             {section === 'reset' && renderReset()}
             {section === 'delete' && renderDelete()}
+            {section === 'achievements' && (
+              <AchievementsView onClose={() => setSection('main')} />
+            )}
           </AnimatePresence>
         </div>
       </motion.div>
