@@ -86,7 +86,7 @@ const initialState: UserState = {
   insights: [],
   reflections: [],
   gratitudeEntries: [],
-  unlockedAchievements: [],
+  unlockedAchievements: {},
   preferredTone: 'gentle',
   preferences: defaultPreferences,
 };
@@ -320,10 +320,17 @@ export const useFlowNautStore = create<FlowNautStore>()(
       checkAndUnlockAchievements: () => {
         const state = get();
         const newUnlocked = checkAchievements(state);
-        // Only update if there are new achievements
-        const current = new Set(state.unlockedAchievements);
-        const merged = [...new Set([...state.unlockedAchievements, ...newUnlocked])];
-        if (merged.length > current.size) {
+        const current = state.unlockedAchievements;
+        const now = new Date().toISOString();
+        let changed = false;
+        const merged = { ...current };
+        for (const key of newUnlocked) {
+          if (!merged[key]) {
+            merged[key] = now;
+            changed = true;
+          }
+        }
+        if (changed) {
           set({ unlockedAchievements: merged });
         }
       },

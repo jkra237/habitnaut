@@ -16,6 +16,7 @@ export function AchievementsView({ onClose }: AchievementsViewProps) {
   const unlocked = useFlowNautStore((s) => s.unlockedAchievements);
   const t = useTranslations();
   const at = t.achievements;
+  const lang = useFlowNautStore((s) => s.preferences.language);
 
   const categoryNames: Record<AchievementCategory, string> = {
     A: at.categoryA,
@@ -26,9 +27,15 @@ export function AchievementsView({ onClose }: AchievementsViewProps) {
     F: at.categoryF,
   };
 
-  const unlockedSet = new Set(unlocked);
-  const unlockedCount = unlocked.length;
+  const unlockedCount = Object.keys(unlocked).length;
   const totalCount = achievementDefinitions.length;
+
+  const formatDate = (iso: string) => {
+    const d = new Date(iso);
+    return d.toLocaleDateString(lang === 'de' ? 'de-DE' : lang === 'es' ? 'es-ES' : 'en-US', {
+      day: 'numeric', month: 'short', year: 'numeric',
+    });
+  };
 
   return (
     <motion.div
@@ -73,7 +80,8 @@ export function AchievementsView({ onClose }: AchievementsViewProps) {
                 </h2>
                 <div className="grid grid-cols-1 gap-2">
                   {defs.map((def) => {
-                    const isUnlocked = unlockedSet.has(def.key);
+                    const unlockedAt = unlocked[def.key];
+                    const isUnlocked = !!unlockedAt;
                     const name = at.items[def.key]?.name || def.key;
                     const desc = at.items[def.key]?.description || '';
 
@@ -99,6 +107,11 @@ export function AchievementsView({ onClose }: AchievementsViewProps) {
                           <p className="text-xs text-muted-foreground truncate">
                             {isUnlocked ? desc : '?'}
                           </p>
+                          {isUnlocked && (
+                            <p className="text-[10px] text-muted-foreground/60 mt-0.5">
+                              {formatDate(unlockedAt)}
+                            </p>
+                          )}
                         </div>
                       </motion.div>
                     );

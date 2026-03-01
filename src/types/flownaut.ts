@@ -82,7 +82,7 @@ export interface UserState {
   insights: Insight[];
   reflections: WeekReflection[];
   gratitudeEntries: GratitudeEntry[];
-  unlockedAchievements: string[];
+  unlockedAchievements: Record<string, string>; // key -> ISO date when unlocked
   preferredTone: 'gentle' | 'clear';
   preferences: AppPreferences;
 }
