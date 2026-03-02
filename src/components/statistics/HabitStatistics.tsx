@@ -1,8 +1,8 @@
 // Habit Statistics Component
 // Displays gentle, non-judgmental statistics about habit patterns
 
-import { useMemo } from 'react';
-import { motion } from 'framer-motion';
+import { useMemo, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   TrendingUp, 
   TrendingDown, 
@@ -13,7 +13,11 @@ import {
   Pause,
   Link2,
   BarChart3,
+  Plus,
+  Minus,
 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { DetailedHabitStats } from './DetailedHabitStats';
 import { useFlowNautStore } from '@/store/flownaut-store';
 import { useTranslations, useLanguage } from '@/hooks/use-translations';
 import { subDays, parseISO, getDay, differenceInDays } from 'date-fns';
@@ -35,6 +39,7 @@ export function HabitStatistics({ className = '' }: HabitStatisticsProps) {
   const habits = useFlowNautStore(s => s.getActiveHabits());
   const language = useLanguage();
   const t = useTranslations();
+  const [showDetailed, setShowDetailed] = useState(false);
 
 
 
@@ -347,11 +352,22 @@ export function HabitStatistics({ className = '' }: HabitStatisticsProps) {
 
   return (
     <div className={`bg-card rounded-2xl border border-border/50 shadow-card p-5 ${className}`}>
-      <div className="mb-4">
+      <div className="mb-4 flex items-center justify-between">
         <h2 className="font-serif font-medium text-foreground flex items-center gap-2">
           <BarChart3 className="w-4 h-4 text-primary" />
           {language === 'de' ? 'Dein Überblick' : language === 'es' ? 'Tu Resumen' : 'Your Overview'}
         </h2>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8 rounded-xl"
+          onClick={() => setShowDetailed(!showDetailed)}
+        >
+          {showDetailed
+            ? <Minus className="w-4 h-4 text-muted-foreground" />
+            : <Plus className="w-4 h-4 text-muted-foreground" />
+          }
+        </Button>
       </div>
 
       <div className="space-y-4">
@@ -382,6 +398,11 @@ export function HabitStatistics({ className = '' }: HabitStatisticsProps) {
           </motion.div>
         ))}
       </div>
+
+      {/* Detailed Statistics Panel */}
+      <AnimatePresence>
+        {showDetailed && <DetailedHabitStats />}
+      </AnimatePresence>
     </div>
   );
 }
