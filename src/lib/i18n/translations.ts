@@ -148,8 +148,7 @@ export interface Translations {
     };
     sections: {
       profile: string;
-      habitsReminders: string;
-      appExperience: string;
+      appSettings: string;
       dataPrivacy: string;
       support: string;
     };
@@ -507,8 +506,8 @@ export const translations: Record<SupportedLanguage, Translations> = {
         deleteSubtitle: 'Removes your data from this device and the cloud',
       },
       habits: {
-        title: 'Reminders',
-        subtitle: 'Gentle reminders, if you want them.',
+        title: 'App Settings',
+        subtitle: 'Customize your experience',
         enableReminders: 'Enable reminders',
         deviceSettings: "Uses your device's notification settings",
         habitsObserving: "habits you're observing",
@@ -575,8 +574,7 @@ export const translations: Record<SupportedLanguage, Translations> = {
       },
       sections: {
         profile: 'Profile',
-        habitsReminders: 'Habits & Reminders',
-        appExperience: 'App Experience',
+        appSettings: 'App Settings',
         dataPrivacy: 'Data & Privacy',
         support: 'Support',
       },
@@ -935,8 +933,8 @@ export const translations: Record<SupportedLanguage, Translations> = {
         deleteSubtitle: 'Elimina tus datos de este dispositivo y la nube',
       },
       habits: {
-        title: 'Recordatorios',
-        subtitle: 'Recordatorios amables, si los deseas.',
+        title: 'Configuración',
+        subtitle: 'Personaliza tu experiencia',
         enableReminders: 'Activar recordatorios',
         deviceSettings: 'Usa la configuración de notificaciones de tu dispositivo',
         habitsObserving: 'hábitos que observas',
@@ -1003,8 +1001,7 @@ export const translations: Record<SupportedLanguage, Translations> = {
       },
       sections: {
         profile: 'Perfil',
-        habitsReminders: 'Hábitos y recordatorios',
-        appExperience: 'Experiencia de la app',
+        appSettings: 'Configuración',
         dataPrivacy: 'Datos y privacidad',
         support: 'Soporte',
       },
@@ -1363,8 +1360,8 @@ export const translations: Record<SupportedLanguage, Translations> = {
         deleteSubtitle: 'Entfernt deine Daten von diesem Gerät und aus der Cloud',
       },
       habits: {
-        title: 'Erinnerungen',
-        subtitle: 'Sanfte Erinnerungen, wenn du möchtest.',
+        title: 'App-Einstellungen',
+        subtitle: 'Passe dein Erlebnis an',
         enableReminders: 'Erinnerungen aktivieren',
         deviceSettings: 'Nutzt die Benachrichtigungseinstellungen deines Geräts',
         habitsObserving: 'Gewohnheiten, die du beobachtest',
@@ -1431,8 +1428,7 @@ export const translations: Record<SupportedLanguage, Translations> = {
       },
       sections: {
         profile: 'Profil',
-        habitsReminders: 'Gewohnheiten & Erinnerungen',
-        appExperience: 'App-Erlebnis',
+        appSettings: 'App-Einstellungen',
         dataPrivacy: 'Daten & Datenschutz',
         support: 'Support',
       },
