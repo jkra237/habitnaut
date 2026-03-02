@@ -35,13 +35,15 @@ export function DailyQuoteCard({ shownQuoteIds, lastQuoteDate, markQuoteShown, l
       transition={{ delay: 0.3 }}
       className="mt-4 p-4 rounded-xl bg-primary/5 border border-primary/10"
     >
-      <div className="flex gap-2.5">
-        <Quote className="w-4 h-4 text-primary/40 mt-0.5 flex-shrink-0" />
-        <div className="space-y-1.5">
-          <p className="text-sm text-foreground/80 italic leading-relaxed">
+      <div className="flex items-start gap-3">
+        <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+          <Quote className="w-5 h-5 text-primary" />
+        </div>
+        <div className="space-y-1 min-w-0 pt-0.5">
+          <p className="text-xs text-foreground/80 italic leading-relaxed">
             „{dailyQuote.text}"
           </p>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-[11px] text-muted-foreground">
             — {dailyQuote.author}
           </p>
         </div>

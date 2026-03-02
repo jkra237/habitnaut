@@ -106,7 +106,7 @@ export function AchievementsView({ onClose }: AchievementsViewProps) {
         onClick={onClose}
         className="w-full text-center text-sm text-muted-foreground hover:text-foreground transition-colors py-2"
       >
-        ← Back
+        ← {t.common.back}
       </button>
     </motion.div>
   );
