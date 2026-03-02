@@ -44,7 +44,9 @@ export function DailyQuoteCard({ shownQuoteIds, lastQuoteDate, markQuoteShown, l
             „{dailyQuote.text}"
           </p>
           <p className="text-[11px] text-muted-foreground">
-            — {dailyQuote.author}
+            — {dailyQuote.author === 'Unbekannt' 
+              ? (language === 'de' ? 'Unbekannt' : language === 'es' ? 'Desconocido' : 'Unknown')
+              : dailyQuote.author}
           </p>
         </div>
       </div>
