@@ -200,6 +200,8 @@ export interface Translations {
     letRestSubtitle: string;
     letGo: string;
     letGoSubtitle: string;
+    stats: string;
+    statsSubtitle: string;
     restingHabits: string;
     restingNote: string;
     wake: string;
@@ -605,6 +607,8 @@ export const translations: Record<SupportedLanguage, Translations> = {
       letRestSubtitle: 'Pause gently',
       letGo: 'Let go',
       letGoSubtitle: 'Release completely',
+      stats: 'Statistics',
+      statsSubtitle: 'Individual insights',
       restingHabits: 'Resting habits',
       restingNote: 'Some habits only accompany us for a while. You can wake them when you\'re ready.',
       wake: 'Wake',
@@ -1029,6 +1033,8 @@ export const translations: Record<SupportedLanguage, Translations> = {
       letRestSubtitle: 'Hacer una pausa suave',
       letGo: 'Soltar',
       letGoSubtitle: 'Liberar por completo',
+      stats: 'Estadísticas',
+      statsSubtitle: 'Información individual',
       restingHabits: 'Hábitos en pausa',
       restingNote: 'Algunos hábitos solo nos acompañan un tiempo. Puedes reactivarlos cuando estés preparado.',
       wake: 'Reactivar',
@@ -1453,6 +1459,8 @@ export const translations: Record<SupportedLanguage, Translations> = {
       letRestSubtitle: 'Sanft auf Pause setzen',
       letGo: 'Loslassen',
       letGoSubtitle: 'Vollständig entfernen',
+      stats: 'Statistiken',
+      statsSubtitle: 'Individuelle Einblicke',
       restingHabits: 'Pausierte Gewohnheiten',
       restingNote: 'Manche Gewohnheiten begleiten uns nur eine Weile. Du kannst sie wieder aktivieren, wenn du bereit bist.',
       wake: 'Reaktivieren',
