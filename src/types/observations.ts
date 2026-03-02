@@ -2,7 +2,6 @@
 
 export type ObservationCategory = 
   | 'entry-return'      // Einstieg & Rückkehr
-  | 'rhythm-time'       // Rhythmus & Zeit
   | 'weekday-cycle'     // Wochentage & Zyklen
   | 'quiet-regularity'  // Leise Regelmäßigkeit
   | 'pause-break'       // Pausen & Unterbrechungen
@@ -18,15 +17,12 @@ export type ObservationCategory =
 export type PatternType =
   | 'soft-return'           // A1 - Sanfter Wiedereinstieg
   | 'multiple-restart'      // A2 - Mehrfaches Wiederanfangen
-  | 'same-time'             // B1 - Gleiche Tageszeit
-  | 'varied-time'           // B2 - Unterschiedliche Tageszeiten
   | 'weekday-weekend-diff'  // B3 - Wochenanfang vs. Wochenende
   | 'quiet-consistency'     // C1 - Leise Konstanz
   | 'dense-phases'          // C2 - Verdichtete Phasen
   | 'conscious-skip'        // D1 - Bewusst ausgelassen
   | 'natural-break'         // D2 - Natürliche Unterbrechung
   | 'habits-together'       // E1 - Gewohnheiten erscheinen gemeinsam
-  | 'habit-sequence'        // E2 - Eine Gewohnheit bereitet andere vor
   | 'slight-increase'       // F1 - Leichte Zunahme
   | 'slight-decrease'       // F2 - Leichte Abnahme
   | 'effortless-moment'     // G1 - Müheloser Moment

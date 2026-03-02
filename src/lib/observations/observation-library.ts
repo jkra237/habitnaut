@@ -64,65 +64,6 @@ export const observations: Observation[] = [
   },
 
   // ============================================
-  // CATEGORY: Rhythm & Time (Rhythmus & Zeit)
-  // ============================================
-  {
-    id: 'rhythm-1',
-    category: 'rhythm-time',
-    conditions: { patternType: 'same-time', requiresHabit: true },
-    cooldownDays: 10,
-    text: {
-      en: 'This habit seems to show up more easily at certain times of day.',
-      de: 'Diese Gewohnheit scheint sich zu bestimmten Tageszeiten leichter zu zeigen.',
-      es: 'Este hábito parece aparecer más fácilmente a ciertas horas del día.',
-    },
-  },
-  {
-    id: 'rhythm-2',
-    category: 'rhythm-time',
-    conditions: { patternType: 'same-time', requiresHabit: true },
-    cooldownDays: 10,
-    text: {
-      en: 'There is a time of day that welcomes this habit especially.',
-      de: 'Es gibt eine Tageszeit, die dieser Gewohnheit besonders entgegenkommt.',
-      es: 'Hay un momento del día que acoge especialmente este hábito.',
-    },
-  },
-  {
-    id: 'rhythm-3',
-    category: 'rhythm-time',
-    conditions: { patternType: 'varied-time', requiresHabit: true },
-    cooldownDays: 10,
-    text: {
-      en: 'This habit spreads freely across the day.',
-      de: 'Diese Gewohnheit verteilt sich frei über den Tag.',
-      es: 'Este hábito se distribuye libremente a lo largo del día.',
-    },
-  },
-  {
-    id: 'rhythm-4',
-    category: 'rhythm-time',
-    conditions: { patternType: 'same-time', requiresHabit: true },
-    cooldownDays: 10,
-    text: {
-      en: 'Some times invite this habit more than others.',
-      de: 'Manche Zeiten laden diese Gewohnheit mehr ein als andere.',
-      es: 'Algunos momentos invitan más a este hábito que otros.',
-    },
-  },
-  {
-    id: 'rhythm-5',
-    category: 'rhythm-time',
-    conditions: { patternType: 'varied-time', requiresHabit: true },
-    cooldownDays: 10,
-    text: {
-      en: "This habit doesn't follow a fixed time—it comes when it fits.",
-      de: 'Diese Gewohnheit folgt keinem festen Zeitpunkt – sie kommt, wenn es passt.',
-      es: 'Este hábito no sigue un horario fijo, llega cuando encaja.',
-    },
-  },
-
-  // ============================================
   // CATEGORY: Weekday & Cycles (Wochentage & Zyklen)
   // ============================================
   {
@@ -473,65 +414,6 @@ export const observations: Observation[] = [
       en: '{habitA} and {habitB} seem to accompany each other.',
       de: '{habitA} und {habitB} scheinen sich gegenseitig zu begleiten.',
       es: '{habitA} y {habitB} parecen acompañarse mutuamente.',
-    },
-  },
-
-  // ============================================
-  // CATEGORY: Sequence (Reihenfolge & Vorbereitung)
-  // ============================================
-  {
-    id: 'seq-1',
-    category: 'sequence',
-    conditions: { patternType: 'habit-sequence', requiresHabit: true },
-    cooldownDays: 14,
-    text: {
-      en: 'This habit often appears after another.',
-      de: 'Diese Gewohnheit taucht oft nach einer anderen auf.',
-      es: 'Este hábito suele aparecer después de otro.',
-    },
-  },
-  {
-    id: 'seq-2',
-    category: 'sequence',
-    conditions: { patternType: 'habit-sequence', requiresHabit: true },
-    cooldownDays: 14,
-    text: {
-      en: 'Something seems to precede this habit.',
-      de: 'Etwas scheint dieser Gewohnheit vorauszugehen.',
-      es: 'Algo parece preceder a este hábito.',
-    },
-  },
-  {
-    id: 'seq-3',
-    category: 'sequence',
-    conditions: { patternType: 'habit-sequence', requiresHabit: true },
-    cooldownDays: 14,
-    text: {
-      en: 'This habit follows a certain moment.',
-      de: 'Diese Gewohnheit folgt auf einen bestimmten Moment.',
-      es: 'Este hábito sigue a un momento determinado.',
-    },
-  },
-  {
-    id: 'seq-4',
-    category: 'sequence',
-    conditions: { patternType: 'habit-sequence', requiresHabit: true },
-    cooldownDays: 14,
-    text: {
-      en: 'Some things create space for this habit.',
-      de: 'Manche Dinge bereiten Raum für diese Gewohnheit.',
-      es: 'Algunas cosas crean espacio para este hábito.',
-    },
-  },
-  {
-    id: 'seq-5',
-    category: 'sequence',
-    conditions: { patternType: 'habit-sequence', requiresHabit: true },
-    cooldownDays: 14,
-    text: {
-      en: "This habit doesn't arise in isolation.",
-      de: 'Diese Gewohnheit entsteht nicht isoliert.',
-      es: 'Este hábito no surge de forma aislada.',
     },
   },
 
