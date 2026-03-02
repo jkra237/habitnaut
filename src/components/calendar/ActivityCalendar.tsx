@@ -163,7 +163,7 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
             </div>
 
             {/* Weekday headers */}
-            <div className="grid grid-cols-7 gap-1 mb-2">
+            <div className="grid grid-cols-7 gap-1 mb-1">
               {weekdayKeys.map(day => (
                 <div 
                   key={day} 
@@ -204,9 +204,9 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
                     disabled={isFuture}
                     className={`
                       aspect-square rounded-lg flex flex-col items-center justify-center relative transition-all
-                      ${isToday ? 'ring-2 ring-primary ring-offset-1 ring-offset-background' : ''}
+                      ${isToday ? 'ring-2 ring-primary ring-inset' : ''}
                       ${isFuture ? 'opacity-30 cursor-default' : 'cursor-pointer hover:bg-primary/5'}
-                      ${isSelected ? 'bg-primary/20 ring-2 ring-primary/50' : !activity?.mood ? (fillLevel > 0 ? 'bg-primary/10' : 'bg-muted/30') : ''}
+                      ${isSelected ? 'bg-primary/20 ring-2 ring-primary/50 ring-inset' : !activity?.mood ? (fillLevel > 0 ? 'bg-primary/10' : 'bg-muted/30') : ''}
                     `}
                     style={!isSelected && activity?.mood ? getMoodBgStyle(activity.mood, isDark) : undefined}
                   >
