@@ -1,54 +1,41 @@
 
-## Taegliches Zitat-Feature
 
-### Was sich aendert
+## Settings aufräumen: "Habits & Reminders" ersetzen
 
-Das Personality-Hint-Feld im Dashboard (das aktuell Saetze wie "You come alive as the day winds down" anzeigt) wird durch ein taegliches Zitat mit Urheber ersetzt.
+### Problem
+- Die Sektion "Habits & Reminders" enthält keine Reminder-Funktion
+- Die "Experience"-Einstellungen (Insight-Frequenz, Wochenstart) sind nicht über das Hauptmenü erreichbar
+- Die Habits-Unterseite hat nur wenige Einträge
 
-### Rotation-Logik
+### Lösung
+Die Habits-Unterseite wird zur zentralen Einstellungsseite für alle App-Einstellungen (ausser Profil, Sprache, Datenschutz):
 
-- Jeden Tag wird **ein** Zitat angezeigt (deterministisch basierend auf dem Datum, nicht zufaellig bei jedem Refresh)
-- Jedes Zitat wird nur **einmal** angezeigt, bis alle 300 durchgelaufen sind
-- Danach wird der Pool zurueckgesetzt und beginnt von vorn
-- Der Zustand (welche Zitate schon gezeigt wurden) wird im persistierten Zustand gespeichert
+1. **Sektionsname ändern**: "Habits & Reminders" wird zu **"App Settings"** (bzw. "App-Einstellungen" / "Configuración")
+2. **Experience-Einstellungen integrieren**: Insight-Frequenz und Wochenstart werden in die Habits-Unterseite verschoben
+3. **Tägliches Zitat** bleibt dort
+4. **Experience-Sektion entfernen** (da alles zusammengeführt wird)
 
-### Technische Umsetzung
+### Aufbau der neuen Unterseite
 
-#### 1. Zitat-Datenbank erstellen (`src/lib/quotes/daily-quotes.ts`)
+```text
+App-Einstellungen
+├── Gewohnheiten: X beobachtet (Y aktiv, Z pausiert)
+├── Wochenstart: [Montag] [Sonntag]
+├── Tägliches Zitat: [Toggle]
+├── Insight-Häufigkeit: [Selten / Gelegentlich / Wöchentlich]
+└── Info-Box: Beschreibung der Insight-Typen
+```
 
-- Alle 300 Zitate als Array mit dreisprachigen Texten (DE, EN, ES) und Urheber
-- Typ-Definition: `{ id: number; de: string; en: string; es: string; author: string }`
+### Technische Änderungen
 
-#### 2. Zitat-Auswahl-Logik (`src/lib/quotes/quote-selector.ts`)
+**`src/components/settings/Settings.tsx`**:
+- Zeile 380: Sektionsüberschrift von `habitsReminders` auf neuen Key ändern
+- `renderHabits()`: Experience-Inhalte (Insight-Frequenz, Wochenstart) aus `renderExperience()` hierhin verschieben
+- `renderExperience()` kann entfernt werden (wird nirgends aufgerufen)
 
-- Funktion `getDailyQuote(shownQuoteIds: number[], language: string)` 
-- Nutzt das aktuelle Datum als Seed fuer deterministische Auswahl
-- Filtert bereits gezeigte Zitate heraus
-- Wenn alle 300 gezeigt: Reset (leere Liste zurueck)
-- Gibt Zitat-Text + Urheber in der richtigen Sprache zurueck
-
-#### 3. Store erweitern (`src/store/flownaut-store.ts`)
-
-- Neues Feld `shownQuoteIds: number[]` im State
-- Neues Feld `lastQuoteDate: string` (YYYY-MM-DD)
-- Aktion `markQuoteShown(quoteId: number, date: string)` 
-- Wird automatisch persistiert (Zustand im localStorage)
-
-#### 4. Dashboard anpassen (`src/components/dashboard/Dashboard.tsx`)
-
-- Das Personality-Hint-Feld (Zeilen 88-116) ersetzen
-- Neues Design: Zitat-Text in Anfuehrungszeichen + Urheber darunter
-- Wird **immer** angezeigt (nicht nur wenn `personality` vorhanden)
-- Sprachauswahl basiert auf `preferences.language`
-
-#### 5. Uebersetzungen (`src/lib/i18n/translations.ts`)
-
-- Neue Keys: `dashboard.dailyQuote` (Label/Titel falls gewuenscht)
-- Die Zitate selbst sind direkt dreisprachig in der Datenbank
-
-### Design
-
-Das Zitat-Feld behält das bestehende Layout (abgerundete Box mit dezenter Hintergrundfarbe) und zeigt:
-- Ein kleines Zitat-Icon (z.B. `Quote` von Lucide)
-- Den Zitat-Text in Kursivschrift
-- Den Urheber in kleinerer Schrift darunter
+**`src/lib/i18n/translations.ts`**:
+- Sektionsname `habitsReminders` ersetzen durch z.B. `appSettings` mit Übersetzungen:
+  - EN: "App Settings"
+  - DE: "App-Einstellungen" 
+  - ES: "Configuración"
+- Habits-Untertitel anpassen (z.B. "Customize your experience" / "Passe dein Erlebnis an" / "Personaliza tu experiencia")
