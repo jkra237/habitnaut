@@ -377,11 +377,11 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
 
       {/* Habits Overview */}
       <div className="space-y-2">
-        <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide px-1">{t.settings.sections.habitsReminders}</h3>
+        <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide px-1">{t.settings.sections.appSettings}</h3>
         <SettingsRow 
           icon={Leaf} 
           label={t.settings.habits.title} 
-          sublabel={`${habits.length} ${t.settings.habits.habitsObserving}`}
+          sublabel={t.settings.habits.subtitle}
           onClick={() => setSection('habits')}
         />
       </div>
@@ -513,61 +513,6 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
         </p>
       </div>
 
-      {/* Daily Quote Toggle */}
-      <SettingsRow
-        icon={MessageCircle}
-        label={t.settings.habits.dailyQuote}
-        sublabel={t.settings.habits.dailyQuoteSubtitle}
-        rightContent={
-          <Switch
-            checked={preferences.dailyQuoteEnabled !== false}
-            onCheckedChange={(checked) => updatePreferences({ dailyQuoteEnabled: checked })}
-          />
-        }
-      />
-
-      <BackButton />
-    </motion.div>
-  );
-
-  const renderExperience = () => (
-    <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-5">
-      <div className="text-center mb-4">
-        <h3 className="font-medium text-foreground">{t.settings.experience.title}</h3>
-        <p className="text-sm text-muted-foreground">{t.settings.experience.subtitle}</p>
-      </div>
-
-      {/* Insight Frequency */}
-      <div className="space-y-3">
-        {(['rare', 'occasional', 'weekly'] as InsightFrequency[]).map((freq) => (
-          <button
-            key={freq}
-            onClick={() => updatePreferences({ insightFrequency: freq })}
-            className={`w-full p-4 rounded-xl text-left transition-all ${
-              preferences.insightFrequency === freq
-                ? 'bg-primary/10 border-2 border-primary/30'
-                : 'bg-secondary/50 border-2 border-transparent hover:bg-secondary/80'
-            }`}
-          >
-            <p className="font-medium text-sm text-foreground">{t.settings.experience.insightFrequency[freq]}</p>
-            <p className="text-xs text-muted-foreground mt-1">{t.settings.experience.insightFrequency[`${freq}Desc` as keyof typeof t.settings.experience.insightFrequency]}</p>
-          </button>
-        ))}
-      </div>
-
-      {/* Info about insight types */}
-      <div className="p-4 rounded-xl bg-secondary/30 space-y-2">
-        <p className="text-xs font-medium text-foreground">{t.settings.experience.reflectionTypes}</p>
-        <ul className="text-xs text-muted-foreground space-y-1">
-          <li>• <span className="font-medium">{t.settings.experience.patterns}</span> — {t.settings.experience.patternsDesc}</li>
-          <li>• <span className="font-medium">{t.settings.experience.connections}</span> — {t.settings.experience.connectionsDesc}</li>
-          <li>• <span className="font-medium">{t.settings.experience.prompts}</span> — {t.settings.experience.promptsDesc}</li>
-        </ul>
-        <p className="text-xs text-muted-foreground mt-2 italic">
-          {t.settings.experience.neverPrescriptive}
-        </p>
-      </div>
-
       {/* Week Start */}
       <div className="space-y-2">
         <label className="text-sm font-medium text-foreground">{t.settings.experience.weekStartsOn}</label>
@@ -587,6 +532,53 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
             </button>
           ))}
         </div>
+      </div>
+
+      {/* Daily Quote Toggle */}
+      <SettingsRow
+        icon={MessageCircle}
+        label={t.settings.habits.dailyQuote}
+        sublabel={t.settings.habits.dailyQuoteSubtitle}
+        rightContent={
+          <Switch
+            checked={preferences.dailyQuoteEnabled !== false}
+            onCheckedChange={(checked) => updatePreferences({ dailyQuoteEnabled: checked })}
+          />
+        }
+      />
+
+      {/* Insight Frequency */}
+      <div className="space-y-2">
+        <label className="text-sm font-medium text-foreground">{t.settings.experience.subtitle}</label>
+        <div className="space-y-3">
+          {(['rare', 'occasional', 'weekly'] as InsightFrequency[]).map((freq) => (
+            <button
+              key={freq}
+              onClick={() => updatePreferences({ insightFrequency: freq })}
+              className={`w-full p-4 rounded-xl text-left transition-all ${
+                preferences.insightFrequency === freq
+                  ? 'bg-primary/10 border-2 border-primary/30'
+                  : 'bg-secondary/50 border-2 border-transparent hover:bg-secondary/80'
+              }`}
+            >
+              <p className="font-medium text-sm text-foreground">{t.settings.experience.insightFrequency[freq]}</p>
+              <p className="text-xs text-muted-foreground mt-1">{t.settings.experience.insightFrequency[`${freq}Desc` as keyof typeof t.settings.experience.insightFrequency]}</p>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Info about insight types */}
+      <div className="p-4 rounded-xl bg-secondary/30 space-y-2">
+        <p className="text-xs font-medium text-foreground">{t.settings.experience.reflectionTypes}</p>
+        <ul className="text-xs text-muted-foreground space-y-1">
+          <li>• <span className="font-medium">{t.settings.experience.patterns}</span> — {t.settings.experience.patternsDesc}</li>
+          <li>• <span className="font-medium">{t.settings.experience.connections}</span> — {t.settings.experience.connectionsDesc}</li>
+          <li>• <span className="font-medium">{t.settings.experience.prompts}</span> — {t.settings.experience.promptsDesc}</li>
+        </ul>
+        <p className="text-xs text-muted-foreground mt-2 italic">
+          {t.settings.experience.neverPrescriptive}
+        </p>
       </div>
 
       <BackButton />
@@ -953,7 +945,7 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
             {section === 'language' && renderLanguage()}
             {section === 'profile' && renderProfile()}
             {section === 'habits' && renderHabits()}
-            {section === 'experience' && renderExperience()}
+            
             {section === 'privacy' && renderPrivacy()}
             {section === 'about' && renderAbout()}
             {section === 'auth' && renderAuth()}
