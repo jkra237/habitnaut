@@ -925,7 +925,7 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
         animate={{ scale: 1, y: 0 }}
         className="w-full max-w-sm max-h-[85vh] overflow-y-auto bg-card border border-border rounded-3xl shadow-elevated"
       >
-        <div className="sticky top-0 bg-card border-b border-border/50 p-4 flex items-center justify-between rounded-t-3xl">
+        <div className="sticky top-0 z-10 bg-card border-b border-border/50 p-4 flex items-center justify-between rounded-t-3xl">
           <h2 className="text-lg font-serif font-medium text-foreground">
             {getSectionTitle()}
           </h2>
