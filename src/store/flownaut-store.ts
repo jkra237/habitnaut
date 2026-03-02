@@ -74,6 +74,9 @@ interface FlowNautStore extends UserState {
   // Achievements
   checkAndUnlockAchievements: () => void;
   
+  // Quotes
+  markQuoteShown: (quoteId: number, date: string) => void;
+  
   // Reset for demo
   resetStore: () => void;
 }
@@ -89,6 +92,8 @@ const initialState: UserState = {
   unlockedAchievements: {},
   preferredTone: 'gentle',
   preferences: defaultPreferences,
+  shownQuoteIds: [],
+  lastQuoteDate: '',
 };
 
 export const useFlowNautStore = create<FlowNautStore>()(
@@ -334,6 +339,11 @@ export const useFlowNautStore = create<FlowNautStore>()(
           set({ unlockedAchievements: merged });
         }
       },
+
+      markQuoteShown: (quoteId, date) => set((state) => ({
+        shownQuoteIds: [...state.shownQuoteIds, quoteId],
+        lastQuoteDate: date,
+      })),
 
       resetStore: () => set(initialState),
     }),
