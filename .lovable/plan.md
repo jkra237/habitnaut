@@ -1,30 +1,54 @@
 
+## Taegliches Zitat-Feature
 
-## Problem
+### Was sich aendert
 
-Die App zeigt Beobachtungen wie "Habits often show up in the Evening" an. Das ist irrefuehrend, weil die App **keine Uhrzeiten trackt**. Der Pattern-Detektor nutzt nur den statischen "Time Anchor" (die Einstellung, die der Nutzer beim Erstellen waehlt) und gibt das als "erkanntes Muster" aus. Der Code hat sogar einen Kommentar, der das Problem beschreibt: `return true; // Simplified - the habit has a time anchor`.
+Das Personality-Hint-Feld im Dashboard (das aktuell Saetze wie "You come alive as the day winds down" anzeigt) wird durch ein taegliches Zitat mit Urheber ersetzt.
 
-## Loesung
+### Rotation-Logik
 
-Alle zeit-basierten Beobachtungen und Patterns entfernen, da sie ohne echtes Uhrzeit-Tracking keinen Mehrwert bieten und Nutzer irrefuehren.
+- Jeden Tag wird **ein** Zitat angezeigt (deterministisch basierend auf dem Datum, nicht zufaellig bei jedem Refresh)
+- Jedes Zitat wird nur **einmal** angezeigt, bis alle 300 durchgelaufen sind
+- Danach wird der Pool zurueckgesetzt und beginnt von vorn
+- Der Zustand (welche Zitate schon gezeigt wurden) wird im persistierten Zustand gespeichert
 
-## Technische Aenderungen
+### Technische Umsetzung
 
-### 1. Pattern-Detektor bereinigen (`src/lib/observations/pattern-detector.ts`)
+#### 1. Zitat-Datenbank erstellen (`src/lib/quotes/daily-quotes.ts`)
 
-Folgende Pattern-Erkennungen entfernen:
-- **B1: Same Time Pattern** (Zeilen 118-134) — gibt immer `return true` zurueck, komplett sinnlos
-- **B2: Varied Time** (Zeilen 136-142) — basiert nur darauf, ob Time Anchor auf "none" steht
-- **E2: Habit Sequence** (Zeilen 293-320) — nutzt Time Anchors statt echte Zeitdaten
+- Alle 300 Zitate als Array mit dreisprachigen Texten (DE, EN, ES) und Urheber
+- Typ-Definition: `{ id: number; de: string; en: string; es: string; author: string }`
 
-### 2. Observation-Bibliothek bereinigen (`src/lib/observations/observation-library.ts`)
+#### 2. Zitat-Auswahl-Logik (`src/lib/quotes/quote-selector.ts`)
 
-Alle Eintraege der Kategorie `rhythm-time` entfernen (IDs: rhythm-1 bis rhythm-5), da sie auf den entfernten Patterns basieren.
+- Funktion `getDailyQuote(shownQuoteIds: number[], language: string)` 
+- Nutzt das aktuelle Datum als Seed fuer deterministische Auswahl
+- Filtert bereits gezeigte Zitate heraus
+- Wenn alle 300 gezeigt: Reset (leere Liste zurueck)
+- Gibt Zitat-Text + Urheber in der richtigen Sprache zurueck
 
-### 3. Types pruefen (`src/types/observations.ts`)
+#### 3. Store erweitern (`src/store/flownaut-store.ts`)
 
-Die PatternTypes `same-time`, `varied-time` und `habit-sequence` aus dem Type entfernen, falls sie dort definiert sind.
+- Neues Feld `shownQuoteIds: number[]` im State
+- Neues Feld `lastQuoteDate: string` (YYYY-MM-DD)
+- Aktion `markQuoteShown(quoteId: number, date: string)` 
+- Wird automatisch persistiert (Zustand im localStorage)
 
-## Ergebnis
+#### 4. Dashboard anpassen (`src/components/dashboard/Dashboard.tsx`)
 
-Keine irrefuehrenden Beobachtungen mehr. Alle verbleibenden Observations basieren auf echtem Nutzerverhalten (Tage, Frequenz, Pausen, Korrelationen).
+- Das Personality-Hint-Feld (Zeilen 88-116) ersetzen
+- Neues Design: Zitat-Text in Anfuehrungszeichen + Urheber darunter
+- Wird **immer** angezeigt (nicht nur wenn `personality` vorhanden)
+- Sprachauswahl basiert auf `preferences.language`
+
+#### 5. Uebersetzungen (`src/lib/i18n/translations.ts`)
+
+- Neue Keys: `dashboard.dailyQuote` (Label/Titel falls gewuenscht)
+- Die Zitate selbst sind direkt dreisprachig in der Datenbank
+
+### Design
+
+Das Zitat-Feld behält das bestehende Layout (abgerundete Box mit dezenter Hintergrundfarbe) und zeigt:
+- Ein kleines Zitat-Icon (z.B. `Quote` von Lucide)
+- Den Zitat-Text in Kursivschrift
+- Den Urheber in kleinerer Schrift darunter
