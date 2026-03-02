@@ -85,4 +85,6 @@ export interface UserState {
   unlockedAchievements: Record<string, string>; // key -> ISO date when unlocked
   preferredTone: 'gentle' | 'clear';
   preferences: AppPreferences;
+  shownQuoteIds: number[];
+  lastQuoteDate: string;
 }

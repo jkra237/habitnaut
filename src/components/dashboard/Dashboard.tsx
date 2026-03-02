@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Settings as SettingsIcon, Leaf, Moon, TrendingUp } from 'lucide-react';
+import { Plus, Settings as SettingsIcon, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { HabitMatrix } from '@/components/habits/HabitMatrix';
 import { AddHabitDialog } from '@/components/habits/AddHabitDialog';
@@ -12,6 +12,7 @@ import { Settings } from '@/components/settings/Settings';
 import { GratitudeJournal } from '@/components/gratitude/GratitudeJournal';
 import { ActivityCalendar } from '@/components/calendar/ActivityCalendar';
 import { HabitStatistics } from '@/components/statistics/HabitStatistics';
+import { DailyQuoteCard } from '@/components/dashboard/DailyQuoteCard';
 
 import { useFlowNautStore } from '@/store/flownaut-store';
 import { useTranslations } from '@/hooks/use-translations';
@@ -26,7 +27,10 @@ export function Dashboard() {
   const entries = useFlowNautStore((s) => s.entries);
   const allHabits = useFlowNautStore((s) => s.habits);
   const checkAndUnlockAchievements = useFlowNautStore((s) => s.checkAndUnlockAchievements);
-  const personality = useFlowNautStore((s) => s.personality);
+  const shownQuoteIds = useFlowNautStore((s) => s.shownQuoteIds);
+  const lastQuoteDate = useFlowNautStore((s) => s.lastQuoteDate);
+  const markQuoteShown = useFlowNautStore((s) => s.markQuoteShown);
+  const language = useFlowNautStore((s) => s.preferences.language);
   const t = useTranslations();
 
   // Check achievements whenever habits or entries change
@@ -85,34 +89,13 @@ export function Dashboard() {
           </div>
         </div>
 
-        {/* Personality hint */}
-        {personality && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            className="mt-4 p-3 rounded-xl bg-primary/5 border border-primary/10"
-          >
-            <p className="text-xs text-muted-foreground flex items-center gap-2">
-              {personality.rhythm === 'morning' ? (
-                <>
-                  <Leaf className="w-3.5 h-3.5 text-primary" />
-                  <span>{t.dashboard.morningHint}</span>
-                </>
-              ) : personality.rhythm === 'evening' ? (
-                <>
-                  <Moon className="w-3.5 h-3.5 text-primary" />
-                  <span>{t.dashboard.eveningHint}</span>
-                </>
-              ) : (
-                <>
-                  <Leaf className="w-3.5 h-3.5 text-primary" />
-                  <span>{t.dashboard.flexibleHint}</span>
-                </>
-              )}
-            </p>
-          </motion.div>
-        )}
+        {/* Daily Quote */}
+        <DailyQuoteCard
+          shownQuoteIds={shownQuoteIds}
+          lastQuoteDate={lastQuoteDate}
+          markQuoteShown={markQuoteShown}
+          language={language}
+        />
       </motion.header>
 
       {/* Main content */}
