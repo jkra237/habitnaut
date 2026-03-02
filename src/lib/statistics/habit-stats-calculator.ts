@@ -315,14 +315,160 @@ function calculatePairs(habits: Habit[], entries: DayEntry[]): HabitPairInfo[] {
 }
 
 function calculateHeatmap(entries: DayEntry[], habits: Habit[], today: Date): YearHeatmapDay[] {
-  const startDate = subDays(today, 364);
+  // Find the earliest entry date to start from
+  const sortedDates = entries.map(e => e.date).sort();
+  const earliestDate = sortedDates.length > 0 ? parseISO(sortedDates[0]) : today;
+  const totalDays = Math.min(365, differenceInDays(today, earliestDate));
   const days: YearHeatmapDay[] = [];
 
-  for (let i = 0; i <= 364; i++) {
-    const d = subDays(today, 364 - i);
+  for (let i = 0; i <= totalDays; i++) {
+    const d = subDays(today, totalDays - i);
     const dateStr = format(d, 'yyyy-MM-dd');
     const entry = entries.find(e => e.date === dateStr);
     const count = entry ? Object.values(entry.habits).filter(s => s === 'done').length : 0;
+    days.push({ date: dateStr, count });
+  }
+
+  return days;
+}
+
+// ============================================
+// Per-Habit Statistics
+// ============================================
+
+export interface SingleHabitStats {
+  streaks: StreakInfo;
+  rhythm: {
+    weeklyRate: number;
+    monthlyRate: number;
+    yearlyCheckins: number;
+    bestWeekday: number;
+    bestWeekdayRate: number;
+    weekdayRate: number;
+    weekendRate: number;
+  };
+  consistency: ConsistencyInfo;
+  progress: {
+    nextMilestone: number;
+    daysToMilestone: number;
+    avgRecoveryDays: number;
+    perfectWeeks: number;
+    thisMonthVsLast: number;
+    bestMonth: { month: number; year: number; count: number } | null;
+  };
+  heatmap: YearHeatmapDay[];
+}
+
+export function calculateSingleHabitStats(
+  habit: Habit,
+  entries: DayEntry[],
+): SingleHabitStats | null {
+  if (entries.length === 0) return null;
+
+  const today = new Date();
+  const todayStr = format(today, 'yyyy-MM-dd');
+
+  // Dates where this specific habit was done
+  const activeDates = entries
+    .filter(e => e.habits[habit.id] === 'done')
+    .map(e => e.date)
+    .sort();
+
+  const streaks = calculateStreaks(activeDates, todayStr);
+
+  // Rhythm for single habit
+  const rhythm = calculateSingleHabitRhythm(habit.id, entries, today);
+
+  const consistency = calculateConsistency(activeDates);
+
+  const progress = calculateProgress(activeDates, entries, [habit], today);
+
+  // Heatmap for single habit
+  const heatmap = calculateSingleHabitHeatmap(habit.id, entries, today);
+
+  return { streaks, rhythm, consistency, progress, heatmap };
+}
+
+function calculateSingleHabitRhythm(
+  habitId: string,
+  entries: DayEntry[],
+  today: Date,
+) {
+  const last7 = Array.from({ length: 7 }, (_, i) => format(subDays(today, i), 'yyyy-MM-dd'));
+  const activeLast7 = last7.filter(d => {
+    const entry = entries.find(e => e.date === d);
+    return entry && entry.habits[habitId] === 'done';
+  }).length;
+  const weeklyRate = Math.round((activeLast7 / 7) * 100);
+
+  const monthStart = startOfMonth(today);
+  const daysInMonthSoFar = differenceInDays(today, monthStart) + 1;
+  const monthDates = Array.from({ length: daysInMonthSoFar }, (_, i) => format(subDays(today, daysInMonthSoFar - 1 - i), 'yyyy-MM-dd'));
+  const activeThisMonth = monthDates.filter(d => {
+    const entry = entries.find(e => e.date === d);
+    return entry && entry.habits[habitId] === 'done';
+  }).length;
+  const monthlyRate = Math.round((activeThisMonth / daysInMonthSoFar) * 100);
+
+  const yearDates = new Set(entries.filter(e => {
+    try {
+      const d = parseISO(e.date);
+      return d.getFullYear() === today.getFullYear() && e.habits[habitId] === 'done';
+    } catch { return false; }
+  }).map(e => e.date));
+  const yearlyCheckins = yearDates.size;
+
+  const weekdayCounts: Record<number, { done: number; total: number }> = {};
+  for (let i = 0; i < 7; i++) weekdayCounts[i] = { done: 0, total: 0 };
+  for (let i = 0; i < 90; i++) {
+    const d = subDays(today, i);
+    const dateStr = format(d, 'yyyy-MM-dd');
+    const dayOfWeek = getDay(d);
+    weekdayCounts[dayOfWeek].total++;
+    const entry = entries.find(e => e.date === dateStr);
+    if (entry && entry.habits[habitId] === 'done') {
+      weekdayCounts[dayOfWeek].done++;
+    }
+  }
+
+  let bestWeekday = 0, bestWeekdayRate = 0;
+  for (let i = 0; i < 7; i++) {
+    const rate = weekdayCounts[i].total > 0 ? weekdayCounts[i].done / weekdayCounts[i].total : 0;
+    if (rate > bestWeekdayRate) { bestWeekdayRate = rate; bestWeekday = i; }
+  }
+
+  let weekdayDone = 0, weekdayTotal = 0, weekendDone = 0, weekendTotal = 0;
+  for (let i = 1; i <= 5; i++) { weekdayDone += weekdayCounts[i].done; weekdayTotal += weekdayCounts[i].total; }
+  weekendDone += weekdayCounts[0].done + weekdayCounts[6].done;
+  weekendTotal += weekdayCounts[0].total + weekdayCounts[6].total;
+
+  return {
+    weeklyRate,
+    monthlyRate,
+    yearlyCheckins,
+    bestWeekday,
+    bestWeekdayRate: Math.round(bestWeekdayRate * 100),
+    weekdayRate: weekdayTotal > 0 ? Math.round((weekdayDone / weekdayTotal) * 100) : 0,
+    weekendRate: weekendTotal > 0 ? Math.round((weekendDone / weekendTotal) * 100) : 0,
+  };
+}
+
+function calculateSingleHabitHeatmap(
+  habitId: string,
+  entries: DayEntry[],
+  today: Date,
+): YearHeatmapDay[] {
+  const habitEntries = entries.filter(e => e.habits[habitId] === 'done');
+  const sortedDates = habitEntries.map(e => e.date).sort();
+  const earliestDate = sortedDates.length > 0 ? parseISO(sortedDates[0]) : today;
+  const totalDays = Math.min(365, differenceInDays(today, earliestDate));
+  const days: YearHeatmapDay[] = [];
+
+  for (let i = 0; i <= totalDays; i++) {
+    const d = subDays(today, totalDays - i);
+    const dateStr = format(d, 'yyyy-MM-dd');
+    const entry = entries.find(e => e.date === dateStr);
+    const count = entry && entry.habits[habitId] === 'done' ? 1 : 0;
     days.push({ date: dateStr, count });
   }
 
