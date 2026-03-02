@@ -31,6 +31,7 @@ export function Dashboard() {
   const lastQuoteDate = useFlowNautStore((s) => s.lastQuoteDate);
   const markQuoteShown = useFlowNautStore((s) => s.markQuoteShown);
   const language = useFlowNautStore((s) => s.preferences.language);
+  const dailyQuoteEnabled = useFlowNautStore((s) => s.preferences.dailyQuoteEnabled);
   const t = useTranslations();
 
   // Check achievements whenever habits or entries change
@@ -90,12 +91,14 @@ export function Dashboard() {
         </div>
 
         {/* Daily Quote */}
-        <DailyQuoteCard
-          shownQuoteIds={shownQuoteIds}
-          lastQuoteDate={lastQuoteDate}
-          markQuoteShown={markQuoteShown}
-          language={language}
-        />
+        {dailyQuoteEnabled !== false && (
+          <DailyQuoteCard
+            shownQuoteIds={shownQuoteIds}
+            lastQuoteDate={lastQuoteDate}
+            markQuoteShown={markQuoteShown}
+            language={language}
+          />
+        )}
       </motion.header>
 
       {/* Main content */}
