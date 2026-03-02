@@ -87,6 +87,8 @@ export interface Translations {
       habitsObserving: string;
       active: string;
       resting: string;
+      dailyQuote: string;
+      dailyQuoteSubtitle: string;
     };
     experience: {
       title: string;
@@ -512,6 +514,8 @@ export const translations: Record<SupportedLanguage, Translations> = {
         habitsObserving: "habits you're observing",
         active: 'active',
         resting: 'resting',
+        dailyQuote: 'Daily quote',
+        dailyQuoteSubtitle: 'Show an inspiring quote each day',
       },
       experience: {
         title: 'Insights & Reflections',
@@ -938,6 +942,8 @@ export const translations: Record<SupportedLanguage, Translations> = {
         habitsObserving: 'hábitos que observas',
         active: 'activos',
         resting: 'en pausa',
+        dailyQuote: 'Cita diaria',
+        dailyQuoteSubtitle: 'Mostrar una cita inspiradora cada día',
       },
       experience: {
         title: 'Reflexiones',
@@ -1364,6 +1370,8 @@ export const translations: Record<SupportedLanguage, Translations> = {
         habitsObserving: 'Gewohnheiten, die du beobachtest',
         active: 'aktiv',
         resting: 'pausiert',
+        dailyQuote: 'Tägliches Zitat',
+        dailyQuoteSubtitle: 'Zeige jeden Tag ein inspirierendes Zitat',
       },
       experience: {
         title: 'Reflexionen',

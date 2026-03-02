@@ -513,6 +513,19 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
         </p>
       </div>
 
+      {/* Daily Quote Toggle */}
+      <SettingsRow
+        icon={MessageCircle}
+        label={t.settings.habits.dailyQuote}
+        sublabel={t.settings.habits.dailyQuoteSubtitle}
+        rightContent={
+          <Switch
+            checked={preferences.dailyQuoteEnabled !== false}
+            onCheckedChange={(checked) => updatePreferences({ dailyQuoteEnabled: checked })}
+          />
+        }
+      />
+
       <BackButton />
     </motion.div>
   );

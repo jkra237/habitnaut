@@ -27,6 +27,7 @@ const defaultPreferences: AppPreferences = {
   language: 'en',
   insightFrequency: 'occasional',
   weekStart: 'monday',
+  dailyQuoteEnabled: true,
 };
 
 interface FlowNautStore extends UserState {

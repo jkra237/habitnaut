@@ -65,6 +65,7 @@ export interface AppPreferences {
   language: string;
   insightFrequency: InsightFrequency;
   weekStart: WeekStart;
+  dailyQuoteEnabled: boolean;
 }
 
 export interface GratitudeEntry {
