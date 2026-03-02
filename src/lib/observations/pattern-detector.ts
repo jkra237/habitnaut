@@ -115,33 +115,6 @@ function detectHabitPatterns(
     });
   }
 
-  // B1: Same Time Pattern - ≥60% check-ins at same time anchor
-  if (habit.timeAnchor !== 'none' && recentCheckins.length >= 3) {
-    const sameTimeCount = recentCheckins.filter(e => {
-      // Since we don't have actual time, use the habit's time anchor preference
-      return true; // Simplified - the habit has a time anchor
-    }).length;
-    
-    const rate = sameTimeCount / recentCheckins.length;
-    if (rate >= 0.6) {
-      patterns.push({
-        patternType: 'same-time',
-        habitId,
-        confidence: rate,
-        data: { timeAnchor: habit.timeAnchor },
-      });
-    }
-  }
-
-  // B2: Varied Time - habit spreads across the day (no fixed time anchor)
-  if (habit.timeAnchor === 'none' && recentCheckins.length >= 3) {
-    patterns.push({
-      patternType: 'varied-time',
-      habitId,
-      confidence: 0.7,
-    });
-  }
-
   // B3: Weekday vs Weekend difference
   const weekdayCheckins = recentCheckins.filter(e => {
     const day = getDay(parseISO(e.date));
@@ -284,44 +257,6 @@ function detectMultiHabitPatterns(
               habitAName: habitA.name, 
               habitBName: habitB.name,
               togetherCount,
-            },
-          });
-        }
-      }
-    }
-  }
-
-  // E2: Habit sequence (one habit prepares another)
-  // This is harder to detect without actual timestamps, so we use time anchors
-  for (let i = 0; i < habits.length; i++) {
-    for (let j = 0; j < habits.length; j++) {
-      if (i === j) continue;
-      
-      const habitA = habits[i];
-      const habitB = habits[j];
-      
-      // Check if habitA's time anchor precedes habitB's
-      const timeOrder = ['morning', 'midday', 'evening'];
-      const aIndex = timeOrder.indexOf(habitA.timeAnchor);
-      const bIndex = timeOrder.indexOf(habitB.timeAnchor);
-      
-      if (aIndex >= 0 && bIndex > aIndex) {
-        // Check if they often appear together
-        let sequenceCount = 0;
-        recentEntries.forEach(entry => {
-          if (entry.habits[habitA.id] === 'done' && entry.habits[habitB.id] === 'done') {
-            sequenceCount++;
-          }
-        });
-        
-        if (sequenceCount >= 3) {
-          patterns.push({
-            patternType: 'habit-sequence',
-            habitIds: [habitA.id, habitB.id],
-            confidence: Math.min(sequenceCount / 5, 1),
-            data: {
-              precedingHabit: habitA.name,
-              followingHabit: habitB.name,
             },
           });
         }

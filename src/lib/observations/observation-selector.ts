@@ -254,14 +254,14 @@ function weightByPersonality(
 
     // Action-oriented users (external motivation, fast pace) → pattern-based observations
     if (personality.motivation === 'external' || personality.pace === 'fast') {
-      if (category === 'rhythm-time' || category === 'weekday-cycle' || category === 'change-over-time') {
+      if (category === 'weekday-cycle' || category === 'change-over-time') {
         personalityBoost += 0.2;
       }
     }
 
     // Users who prefer structure → consistency and rhythm observations
     if (personality.approach === 'structured') {
-      if (category === 'quiet-regularity' || category === 'rhythm-time') {
+      if (category === 'quiet-regularity') {
         personalityBoost += 0.15;
       }
     }
