@@ -94,6 +94,8 @@ export interface Translations {
       title: string;
       subtitle: string;
       insightFrequency: {
+        never: string;
+        neverDesc: string;
         rare: string;
         rareDesc: string;
         occasional: string;
@@ -531,6 +533,8 @@ export const translations: Record<SupportedLanguage, Translations> = {
         title: 'Insights & Reflections',
         subtitle: "How often you'd like reflections to appear.",
         insightFrequency: {
+          never: 'Never',
+          neverDesc: 'No reflections — just track in silence',
           rare: 'Rare',
           rareDesc: 'About once a month — quiet observation',
           occasional: 'Occasional',
@@ -969,6 +973,8 @@ export const translations: Record<SupportedLanguage, Translations> = {
         title: 'Reflexiones',
         subtitle: 'Con qué frecuencia te gustaría recibir reflexiones.',
         insightFrequency: {
+          never: 'Nunca',
+          neverDesc: 'Sin reflexiones — solo registra en silencio',
           rare: 'Pocas veces',
           rareDesc: 'Aproximadamente una vez al mes — observación tranquila',
           occasional: 'De vez en cuando',
@@ -1407,6 +1413,8 @@ export const translations: Record<SupportedLanguage, Translations> = {
         title: 'Reflexionen',
         subtitle: 'Wie oft möchtest du Reflexionen sehen?',
         insightFrequency: {
+          never: 'Nie',
+          neverDesc: 'Keine Reflexionen – einfach still beobachten',
           rare: 'Selten',
           rareDesc: 'Etwa einmal im Monat – ruhige Beobachtung',
           occasional: 'Gelegentlich',

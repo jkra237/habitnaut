@@ -82,7 +82,7 @@ const GratitudeEntrySchema = z.object({
 // App preferences schema
 const AppPreferencesSchema = z.object({
   language: z.string().max(10).optional(),
-  insightFrequency: z.enum(['rare', 'occasional', 'weekly']).optional(),
+  insightFrequency: z.enum(['never', 'rare', 'occasional', 'weekly']).optional(),
   weekStart: z.enum(['monday', 'sunday']).optional(),
 }).passthrough();
 

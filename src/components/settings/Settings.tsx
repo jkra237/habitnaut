@@ -551,7 +551,7 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
       <div className="space-y-2">
         <label className="text-sm font-medium text-foreground">{t.settings.experience.subtitle}</label>
         <div className="space-y-3">
-          {(['rare', 'occasional', 'weekly'] as InsightFrequency[]).map((freq) => (
+          {(['never', 'rare', 'occasional', 'weekly'] as InsightFrequency[]).map((freq) => (
             <button
               key={freq}
               onClick={() => updatePreferences({ insightFrequency: freq })}
