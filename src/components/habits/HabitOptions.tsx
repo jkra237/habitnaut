@@ -22,6 +22,7 @@ export function HabitOptions({ habit, onClose }: HabitOptionsProps) {
   const [showRoutineEdit, setShowRoutineEdit] = useState(false);
   const [routineDays, setRoutineDays] = useState<number[]>(habit.routineDays || []);
   const [routineFrequency, setRoutineFrequency] = useState<RoutineFrequency>(habit.routineFrequency || 'weekly');
+  const [routineMonthWeek, setRoutineMonthWeek] = useState(habit.routineMonthWeek || 1);
 
   const hasRoutine = habit.routineDays && habit.routineDays.length > 0;
 
@@ -39,13 +40,14 @@ export function HabitOptions({ habit, onClose }: HabitOptionsProps) {
     updateHabitRoutine(
       habit.id,
       routineDays.length > 0 ? routineDays : undefined,
-      routineDays.length > 0 ? routineFrequency : undefined
+      routineDays.length > 0 ? routineFrequency : undefined,
+      routineDays.length > 0 && routineFrequency === 'monthly' ? routineMonthWeek : undefined
     );
     setShowRoutineEdit(false);
   };
 
   const handleRemoveRoutine = () => {
-    updateHabitRoutine(habit.id, undefined, undefined);
+    updateHabitRoutine(habit.id, undefined, undefined, undefined);
     setRoutineDays([]);
     setShowRoutineEdit(false);
   };
@@ -79,7 +81,12 @@ export function HabitOptions({ habit, onClose }: HabitOptionsProps) {
         {hasRoutine && !showRoutineEdit && (
           <div className="flex items-center gap-1.5 text-xs text-primary">
             <CalendarClock className="w-3.5 h-3.5" />
-            <span>{t.addHabitDialog.routineActive}: {habit.routineDays!.map(d => t.addHabitDialog.weekdays[d]).join(', ')} ({habit.routineFrequency === 'monthly' ? t.addHabitDialog.routineMonthly : t.addHabitDialog.routineWeekly})</span>
+            <span>
+              {t.addHabitDialog.routineActive}: {habit.routineDays!.map(d => t.addHabitDialog.weekdays[d]).join(', ')} 
+              ({habit.routineFrequency === 'monthly' 
+                ? `${t.addHabitDialog.routineMonthly}, ${t.addHabitDialog.routineMonthWeeks[(habit.routineMonthWeek || 1) - 1]}` 
+                : t.addHabitDialog.routineWeekly})
+            </span>
           </div>
         )}
 
@@ -111,14 +118,17 @@ export function HabitOptions({ habit, onClose }: HabitOptionsProps) {
             </span>
           </Button>
 
-          {/* Routine edit/add button */}
+          {/* Routine edit/add button - with "Optional" subtitle like other buttons */}
           <Button
             variant="ghost"
             className="w-full justify-start"
             onClick={() => setShowRoutineEdit(!showRoutineEdit)}
           >
             <CalendarClock className="w-4 h-4 mr-2" />
-            {hasRoutine ? t.addHabitDialog.editRoutine : t.addHabitDialog.routine}
+            {hasRoutine ? t.addHabitDialog.editRoutine : 'Routine'}
+            <span className="text-xs text-muted-foreground ml-auto">
+              {t.addHabitDialog.routineOptional}
+            </span>
           </Button>
 
           {/* Routine editor */}
@@ -136,6 +146,8 @@ export function HabitOptions({ habit, onClose }: HabitOptionsProps) {
                     onDaysChange={setRoutineDays}
                     frequency={routineFrequency}
                     onFrequencyChange={setRoutineFrequency}
+                    monthWeek={routineMonthWeek}
+                    onMonthWeekChange={setRoutineMonthWeek}
                   />
                   <div className="flex gap-2">
                     <Button size="sm" variant="default" onClick={handleSaveRoutine} className="flex-1">

@@ -35,6 +35,7 @@ export interface Habit {
   restingNote?: string;
   routineDays?: number[]; // 0=Mon, 1=Tue, ..., 6=Sun (ISO weekday - 1)
   routineFrequency?: RoutineFrequency;
+  routineMonthWeek?: number; // 1-4, which week of the month (only for monthly)
 }
 
 export type HabitState = 'done' | 'not-done' | 'conscious-skip' | 'planned';

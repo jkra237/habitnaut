@@ -46,11 +46,16 @@ export function HabitMatrix() {
     
     // Check if this day matches a routine pattern
     if (habit.routineDays && habit.routineDays.length > 0) {
-      // getDay returns 0=Sun,1=Mon,...,6=Sat → convert to 0=Mon,...,6=Sun
       const jsDay = getDay(date);
       const isoDay = jsDay === 0 ? 6 : jsDay - 1;
       
       if (habit.routineDays.includes(isoDay)) {
+        if (habit.routineFrequency === 'monthly' && habit.routineMonthWeek) {
+          // Check if date falls in the correct week of the month
+          const dayOfMonth = date.getDate();
+          const weekOfMonth = Math.ceil(dayOfMonth / 7);
+          if (weekOfMonth !== habit.routineMonthWeek) return undefined;
+        }
         return 'planned';
       }
     }
