@@ -1,41 +1,22 @@
 
 
-## Settings aufräumen: "Habits & Reminders" ersetzen
+## Habit-Namen zweizeilig anzeigen
 
-### Problem
-- Die Sektion "Habits & Reminders" enthält keine Reminder-Funktion
-- Die "Experience"-Einstellungen (Insight-Frequenz, Wochenstart) sind nicht über das Hauptmenü erreichbar
-- Die Habits-Unterseite hat nur wenige Einträge
+Aktuell wird der Habit-Name mit `truncate` abgeschnitten, wenn er zu lang ist. Die Änderung erlaubt bis zu zwei Zeilen.
 
-### Lösung
-Die Habits-Unterseite wird zur zentralen Einstellungsseite für alle App-Einstellungen (ausser Profil, Sprache, Datenschutz):
+### Änderung in `src/components/habits/HabitMatrix.tsx`
 
-1. **Sektionsname ändern**: "Habits & Reminders" wird zu **"App Settings"** (bzw. "App-Einstellungen" / "Configuración")
-2. **Experience-Einstellungen integrieren**: Insight-Frequenz und Wochenstart werden in die Habits-Unterseite verschoben
-3. **Tägliches Zitat** bleibt dort
-4. **Experience-Sektion entfernen** (da alles zusammengeführt wird)
+- Klasse `truncate` entfernen (verhindert Mehrzeiligkeit)
+- Stattdessen `line-clamp-2` hinzufügen (begrenzt auf max. 2 Zeilen mit Ellipsis)
+- `leading-tight` beibehalten für kompakte Zeilenhöhe
 
-### Aufbau der neuen Unterseite
+```
+// Vorher:
+"text-[9px] sm:text-[13px] font-medium text-foreground truncate flex-1 leading-tight text-left"
 
-```text
-App-Einstellungen
-├── Gewohnheiten: X beobachtet (Y aktiv, Z pausiert)
-├── Wochenstart: [Montag] [Sonntag]
-├── Tägliches Zitat: [Toggle]
-├── Insight-Häufigkeit: [Selten / Gelegentlich / Wöchentlich]
-└── Info-Box: Beschreibung der Insight-Typen
+// Nachher:
+"text-[9px] sm:text-[13px] font-medium text-foreground line-clamp-2 flex-1 leading-tight text-left"
 ```
 
-### Technische Änderungen
+Eine einzelne Zeile Änderung in einer Datei.
 
-**`src/components/settings/Settings.tsx`**:
-- Zeile 380: Sektionsüberschrift von `habitsReminders` auf neuen Key ändern
-- `renderHabits()`: Experience-Inhalte (Insight-Frequenz, Wochenstart) aus `renderExperience()` hierhin verschieben
-- `renderExperience()` kann entfernt werden (wird nirgends aufgerufen)
-
-**`src/lib/i18n/translations.ts`**:
-- Sektionsname `habitsReminders` ersetzen durch z.B. `appSettings` mit Übersetzungen:
-  - EN: "App Settings"
-  - DE: "App-Einstellungen" 
-  - ES: "Configuración"
-- Habits-Untertitel anpassen (z.B. "Customize your experience" / "Passe dein Erlebnis an" / "Personaliza tu experiencia")
