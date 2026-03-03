@@ -59,6 +59,74 @@ const STATE_ICONS: Record<string, string> = {
   'planned': '📌',
 };
 
+function LegendToggle({ legendLabel, hideLegendLabel, language, isDark, t }: {
+  legendLabel: string;
+  hideLegendLabel: string;
+  language: string;
+  isDark: boolean;
+  t: any;
+}) {
+  const [showLegend, setShowLegend] = useState(false);
+  return (
+    <div className="mt-4 pt-3 border-t border-border/30">
+      <button
+        onClick={() => setShowLegend(!showLegend)}
+        className="w-full flex items-center justify-center gap-1.5 text-[10px] text-muted-foreground hover:text-foreground transition-colors py-1"
+      >
+        <span>{showLegend ? hideLegendLabel : legendLabel}</span>
+        {showLegend ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+      </button>
+      <AnimatePresence>
+        {showLegend && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="overflow-hidden space-y-2 mt-2"
+          >
+            <div className="flex items-center justify-center gap-4 text-[10px] text-muted-foreground">
+              <div className="flex items-center gap-1.5">
+                <div className="w-1.5 h-1.5 rounded-full bg-primary/60" />
+                <span>1 {language === 'de' ? 'Gewohnheit' : language === 'es' ? 'hábito' : 'habit'}</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <div className="flex gap-0.5">
+                  <div className="w-1.5 h-1.5 rounded-full bg-primary/80" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-primary/80" />
+                </div>
+                <span>2 {language === 'de' ? 'Gewohnheiten' : language === 'es' ? 'hábitos' : 'habits'}</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <div className="flex gap-0.5">
+                  <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                </div>
+                <span>3+ {language === 'de' ? 'Gewohnheiten' : language === 'es' ? 'hábitos' : 'habits'}</span>
+              </div>
+            </div>
+            <div className="flex items-center justify-center gap-3 text-[10px] text-muted-foreground">
+              <div className="flex items-center gap-1">
+                <span>📌</span>
+                <span>{t.habits.planned}</span>
+              </div>
+            </div>
+            <div className="flex items-center justify-center gap-2 text-[10px] text-muted-foreground">
+              <span>{language === 'de' ? 'Stimmung:' : language === 'es' ? 'Ánimo:' : 'Mood:'}</span>
+              {[1, 2, 3, 4, 5].map(mood => (
+                <div key={mood} className="flex items-center gap-0.5">
+                  <div className="w-3 h-3 rounded" style={getMoodBgStyle(mood, isDark)} />
+                  <span>{MOOD_EMOJIS[mood]}</span>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 interface ActivityCalendarProps {
   className?: string;
 }
@@ -298,46 +366,20 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
               })}
             </div>
 
-            {/* Legend */}
-            <div className="mt-4 pt-3 border-t border-border/30 space-y-2">
-              <div className="flex items-center justify-center gap-4 text-[10px] text-muted-foreground">
-                <div className="flex items-center gap-1.5">
-                  <div className="w-1.5 h-1.5 rounded-full bg-primary/60" />
-                  <span>1 {language === 'de' ? 'Gewohnheit' : language === 'es' ? 'hábito' : 'habit'}</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <div className="flex gap-0.5">
-                    <div className="w-1.5 h-1.5 rounded-full bg-primary/80" />
-                    <div className="w-1.5 h-1.5 rounded-full bg-primary/80" />
-                  </div>
-                  <span>2 {language === 'de' ? 'Gewohnheiten' : language === 'es' ? 'hábitos' : 'habits'}</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <div className="flex gap-0.5">
-                    <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-                    <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-                    <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-                  </div>
-                  <span>3+ {language === 'de' ? 'Gewohnheiten' : language === 'es' ? 'hábitos' : 'habits'}</span>
-                </div>
-              </div>
-              <div className="flex items-center justify-center gap-3 text-[10px] text-muted-foreground">
-                <div className="flex items-center gap-1">
-                  <span>📌</span>
-                  <span>{t.habits.planned}</span>
-                </div>
-              </div>
-              {/* Mood color legend */}
-              <div className="flex items-center justify-center gap-2 text-[10px] text-muted-foreground">
-                <span>{language === 'de' ? 'Stimmung:' : language === 'es' ? 'Ánimo:' : 'Mood:'}</span>
-                {[1, 2, 3, 4, 5].map(mood => (
-                  <div key={mood} className="flex items-center gap-0.5">
-                    <div className="w-3 h-3 rounded" style={getMoodBgStyle(mood, isDark)} />
-                    <span>{MOOD_EMOJIS[mood]}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+            {/* Collapsible Legend */}
+            {(() => {
+              const legendLabel = language === 'de' ? 'Legende anzeigen' : language === 'es' ? 'Mostrar leyenda' : 'Show legend';
+              const hideLegendLabel = language === 'de' ? 'Legende ausblenden' : language === 'es' ? 'Ocultar leyenda' : 'Hide legend';
+              return (
+                <LegendToggle
+                  legendLabel={legendLabel}
+                  hideLegendLabel={hideLegendLabel}
+                  language={language}
+                  isDark={isDark}
+                  t={t}
+                />
+              );
+            })()}
           </motion.div>
         )}
       </AnimatePresence>

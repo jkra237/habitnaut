@@ -401,7 +401,17 @@ export function HabitStatistics({ className = '' }: HabitStatisticsProps) {
 
       {/* Detailed Statistics Panel */}
       <AnimatePresence>
-        {showDetailed && <DetailedHabitStats />}
+        {showDetailed && (
+          <>
+            <DetailedHabitStats />
+            <button
+              onClick={() => setShowDetailed(false)}
+              className="w-full mt-3 py-2 rounded-xl bg-muted/40 hover:bg-muted/60 transition-colors text-xs text-muted-foreground"
+            >
+              {language === 'de' ? 'Statistiken zuklappen' : language === 'es' ? 'Ocultar estadísticas' : 'Collapse statistics'}
+            </button>
+          </>
+        )}
       </AnimatePresence>
     </div>
   );
