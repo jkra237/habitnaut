@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Smile } from 'lucide-react';
+import { Lightbulb } from 'lucide-react';
 import { getDailyQuote } from '@/lib/quotes/quote-selector';
 
 interface DailyQuoteCardProps {
@@ -33,11 +33,11 @@ export function DailyQuoteCard({ shownQuoteIds, lastQuoteDate, markQuoteShown, l
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ delay: 0.3 }}
-      className="mt-4 p-4 rounded-xl bg-amber-400/10 border border-amber-400/20"
+      className="mt-4 p-4 rounded-xl bg-primary/5 border border-primary/10"
     >
       <div className="flex items-start gap-3">
         <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-          <Smile className="w-5 h-5 text-primary" />
+          <Lightbulb className="w-5 h-5 text-primary" />
         </div>
         <div className="space-y-1 min-w-0 pt-0.5">
           <p className="text-xs text-foreground/80 italic leading-relaxed">
