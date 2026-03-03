@@ -1,72 +1,32 @@
 
 
-## Plan: Remove Vague Observations and Insights
+## Problem
 
-### Analysis
+With only one active habit, the "Your Overview" section shows multiple stats that all say essentially the same thing:
 
-I reviewed all 65 observations and all insight messages. Many are philosophical platitudes that don't tell the user anything about their actual behavior. The rule: **keep only items that reflect specific, data-driven patterns back to the user**.
+1. **"Most practiced"** → shows the single habit
+2. **"Steadiest rhythm"** → shows the same single habit
+3. **"Trend: more present lately"** → generic statement about the same habit
 
-### Observations to REMOVE (25 items)
+These are three ways of saying "you've been doing this habit regularly." The user rightly sees this as redundant.
 
-**Entire "Relationship" category (rel-1 to rel-5)** — generic philosophy, no data connection:
-- "Your relationship with this habit is not linear"
-- "This habit is part of your everyday—in your own way"
-- "What's showing here is not a goal, but a process"
-- "This habit is part of your personal rhythm"
-- "You engage with this habit without fixed expectations"
+## Root Cause
 
-**Entire "Meta" category (meta-1 to meta-5)** — self-referential platitudes:
-- "Not every observation needs a consequence"
-- "Some things are allowed to simply be seen"
-- "This habit isn't telling a story of performance"
-- "This is about perception, not progress"
-- "This habit is allowed to be just as it is"
+The statistics are designed for multiple habits but don't deduplicate when there's only one. Additionally, "steadiest rhythm" and "most practiced" overlap conceptually even with multiple habits — the most-done habit is often the steadiest.
 
-**Entire "Open End" category (open-1 to open-5)** — vague, no behavioral mirror:
-- "This habit remains open"
-- "There is no fixed endpoint for this habit"
-- "This habit is a companion, not a project"
-- "You don't have to hold on to this habit"
-- "This habit is allowed to come and go"
+## Fix
 
-**Individual vague items from other categories:**
-- entry-5: "Sometimes things simply begin again"
-- change-4: "This habit is in motion"
-- change-5: "Something about this habit is changing"
-- effort-5: "This habit finds its way"
-- quiet-5: "This habit doesn't need to be loud to be there"
-- pause-3: "Space is emerging between the moments"
+In `src/components/statistics/HabitStatistics.tsx`:
 
-### Observations to KEEP (40 items)
-All remaining items in: entry-return (4), weekday-cycle (5), quiet-regularity (4), pause-break (4), conscious-skip (5), change-over-time (3), multi-habit (5), effortless (4) — these all reflect specific detected patterns.
+1. **Skip "steadiest rhythm" if it's the same habit as "most practiced"** — the information is already conveyed.
+2. **Skip "least practiced" if there's only one active habit** — it's the same as "most practiced."
+3. **Skip "trend" if there are fewer than 2 active habits and the trend just restates what "most practiced" already shows** — collapse redundant signals.
+4. **General dedup rule**: before pushing any stat that references a specific habit, check if that habit is already shown by a previous stat. If so, only add it if the new stat provides genuinely different information (e.g., habit pair shows a *relationship*, not just a single habit again).
 
-### Insights to REMOVE (7 message keys)
+### Concretely
 
-**Generic prompt fallbacks** — platitudes triggered when nothing specific is found:
-- `prompts.smallMomentsCount` ("Even small moments of practice count as awareness")
-- `prompts.patternsNoticing` ("What patterns are you noticing?")
-- `prompts.gentleReminder` ("This is a space for observation, not optimization")
-- `prompts.celebrateConsistency` ("Notice how some habits have become part of your rhythm")
-- `prompts.restIsProgress` ("Rest and pauses are part of the journey too")
-- `prompts.energyWavesPeaks` ("Notice the natural rhythm of your energy" — no specific data)
-
-**Overly easy trigger:**
-- `patterns.consistentDays` — fires at just 5 days with a generic "Your rhythm has been steady" message. Too low a bar, not insightful.
-
-### Insights to KEEP
-- Time anchor patterns (morningAnchor, middayAnchor, eveningAnchor) — specific
-- moreCheckinsThisWeek — week-over-week comparison
-- consciousSkips — reflects specific user choices
-- All correlations (highEnergy, lowEnergy, goodMoodHabit, habitsTogether) — data-driven
-- prompts.whatDidHabitBring — tied to a specific habit
-- prompts.easiestMoment — tied to a specific habit
-- prompts.morningRhythmAligned — personality-aware
-- prompts.mostNaturalHabit — kept as single fallback (specific enough)
-- prompts.weekReflection — kept as single fallback
-
-### Files to Change
-- `src/lib/observations/observation-library.ts` — remove 25 observations, remove unused category helper
-- `src/lib/insight-generator.ts` — remove `consistentDays` pattern, remove 6 generic prompt fallbacks, simplify fallback to 2 kept prompts
-- `src/lib/i18n/translations.ts` — remove translation keys for deleted items
-- `src/types/observations.ts` — remove `relationship`, `meta`, `open-end` from `ObservationCategory` type
+- Line ~261: Add condition `stats.steadiestHabit.id !== stats.mostPracticed?.habit.id`
+- Line ~221: Add condition `habits.length >= 2` (already partially there but `leastPracticed` can still equal `mostPracticed` when count differs by 0)
+- Line ~289: Add condition `habits.length >= 2` for trend — with one habit it just restates what's above
+- Add a final cap: show **max 5 stat items** to prevent visual clutter
 
