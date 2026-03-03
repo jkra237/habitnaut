@@ -121,7 +121,7 @@ export function HabitMatrix() {
   };
 
   const getCellContent = (state: HabitState | undefined) => {
-    if (state === 'done') return '✓';
+    if (state === 'done') return '⭐';
     if (state === 'conscious-skip') return '🌱';
     if (state === 'not-done') return '○';
     if (state === 'planned') return '📌';
@@ -259,7 +259,7 @@ export function HabitMatrix() {
       {/* Legend */}
       <div className="flex flex-wrap justify-center gap-3 sm:gap-6 pt-4 text-[10px] sm:text-xs text-muted-foreground">
         <div className="flex items-center gap-1">
-          <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded bg-primary/30 border border-primary/50 flex items-center justify-center text-[8px] sm:text-[10px]">✓</div>
+          <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded bg-primary/30 border border-primary/50 flex items-center justify-center text-[8px] sm:text-[10px]">⭐</div>
           <span>{t.habits.done}</span>
         </div>
         <div className="flex items-center gap-1">

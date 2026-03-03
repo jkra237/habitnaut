@@ -52,7 +52,7 @@ function isRoutinePlanned(habit: Habit, date: Date): boolean {
 }
 
 const STATE_ICONS: Record<string, string> = {
-  'done': '✓',
+  'done': '⭐',
   'conscious-skip': '🌱',
   'not-done': '○',
   'planned': '📌',
