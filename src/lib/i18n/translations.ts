@@ -530,8 +530,8 @@ export const translations: Record<SupportedLanguage, Translations> = {
         dailyQuoteSubtitle: 'Show an inspiring quote each day',
       },
       experience: {
-        title: 'Insights & Reflections',
-        subtitle: "How often you'd like reflections to appear.",
+        title: 'Reflections & Observations',
+        subtitle: "How often you'd like reflections and observations to appear.",
         insightFrequency: {
           never: 'Never',
           neverDesc: 'No reflections — just track in silence',
@@ -970,8 +970,8 @@ export const translations: Record<SupportedLanguage, Translations> = {
         dailyQuoteSubtitle: 'Mostrar una cita inspiradora cada día',
       },
       experience: {
-        title: 'Reflexiones',
-        subtitle: 'Con qué frecuencia te gustaría recibir reflexiones.',
+        title: 'Reflexiones y Observaciones',
+        subtitle: 'Con qué frecuencia te gustaría recibir reflexiones y observaciones.',
         insightFrequency: {
           never: 'Nunca',
           neverDesc: 'Sin reflexiones — solo registra en silencio',
@@ -1410,8 +1410,8 @@ export const translations: Record<SupportedLanguage, Translations> = {
         dailyQuoteSubtitle: 'Zeige jeden Tag ein inspirierendes Zitat',
       },
       experience: {
-        title: 'Reflexionen',
-        subtitle: 'Wie oft möchtest du Reflexionen sehen?',
+        title: 'Reflexionen & Beobachtungen',
+        subtitle: 'Wie oft möchtest du Reflexionen und Beobachtungen sehen?',
         insightFrequency: {
           never: 'Nie',
           neverDesc: 'Keine Reflexionen – einfach still beobachten',

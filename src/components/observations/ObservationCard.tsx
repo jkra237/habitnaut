@@ -1,10 +1,10 @@
 // Observation Card Component
-// Displays a single gentle observation in a dismissible card
+// Displays a single gentle observation or insight in a dismissible card
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Eye } from 'lucide-react';
-import { useObservations } from '@/hooks/use-observations';
+import { useObservations, type UnifiedObservation } from '@/hooks/use-observations';
 import { useTranslations } from '@/hooks/use-translations';
 
 interface ObservationCardProps {
@@ -14,23 +14,36 @@ interface ObservationCardProps {
 export function ObservationCard({ className = '' }: ObservationCardProps) {
   const { getCurrentObservation, dismissObservation } = useObservations();
   const t = useTranslations();
-  const [observation, setObservation] = useState<ReturnType<typeof getCurrentObservation>>(null);
+  const [observation, setObservation] = useState<UnifiedObservation | null>(null);
   const [isDismissed, setIsDismissed] = useState(false);
 
   useEffect(() => {
-    // Check for observation on mount
     const obs = getCurrentObservation();
     setObservation(obs);
   }, [getCurrentObservation]);
 
   const handleDismiss = () => {
     if (observation) {
-      dismissObservation(observation.observation.id, observation.habitId);
+      dismissObservation(observation.id, observation.habitId);
       setIsDismissed(true);
     }
   };
 
-  // Don't render if no observation or dismissed
+  // Get the bottom label based on source
+  const getLabel = () => {
+    if (observation?.source === 'insight' && observation.insightType) {
+      switch (observation.insightType) {
+        case 'correlation':
+          return t.insights.noticedConnection;
+        case 'pattern':
+          return t.insights.patternEmerged;
+        case 'prompt':
+          return t.insights.somethingToConsider;
+      }
+    }
+    return t.dashboard.gentleObservations;
+  };
+
   if (!observation || isDismissed) {
     return null;
   }
@@ -62,7 +75,6 @@ export function ObservationCard({ className = '' }: ObservationCardProps) {
             <p className="text-sm font-medium text-foreground leading-relaxed">
               {observation.text}
             </p>
-            {/* Show habit names for multi-habit observations or single habit */}
             {observation.habitNames && observation.habitNames.length >= 2 ? (
               <p className="mt-1.5 text-xs text-muted-foreground opacity-70">
                 {observation.habitNames.join(' • ')}
@@ -88,7 +100,7 @@ export function ObservationCard({ className = '' }: ObservationCardProps) {
         <div className="mt-3 flex items-center gap-2">
           <div className="h-px flex-1 bg-gradient-to-r from-awareness/20 to-transparent" />
           <span className="text-[10px] uppercase tracking-wider text-muted-foreground/50">
-            {t.dashboard.gentleObservations}
+            {getLabel()}
           </span>
           <div className="h-px flex-1 bg-gradient-to-l from-awareness/20 to-transparent" />
         </div>
