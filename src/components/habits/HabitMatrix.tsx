@@ -145,24 +145,31 @@ export function HabitMatrix() {
         </button>
       </div>
 
-      {/* Day headers */}
-      <div className="flex gap-1 sm:gap-2 justify-end pr-1">
-        {weekDates.map((date, idx) => {
-          const isCurrent = isToday(date);
-          return (
-            <div
-              key={idx}
-              className={`w-6 sm:w-10 text-center text-[9px] sm:text-xs font-medium ${
-                isCurrent ? 'text-primary' : 'text-muted-foreground'
-              }`}
-            >
-              <div>{DAYS[idx]}</div>
-              <div className={`text-[8px] sm:text-[10px] ${isCurrent ? 'text-primary' : 'text-muted-foreground/60'}`}>
-                {format(date, 'd')}
+      {/* Day headers - use invisible habit button to align with rows */}
+      <div className="flex items-center gap-2 sm:gap-4">
+        <div className="flex items-center gap-1 sm:gap-2 min-w-0 flex-1 px-2 py-1.5 invisible">
+          <span className="text-sm sm:text-lg flex-shrink-0">🌱</span>
+          <span className="text-[9px] sm:text-[13px] font-medium flex-1 leading-tight">placeholder</span>
+          <Search className="w-3.5 h-3.5 flex-shrink-0" />
+        </div>
+        <div className="flex gap-1 sm:gap-2 flex-shrink-0 ml-auto">
+          {weekDates.map((date, idx) => {
+            const isCurrent = isToday(date);
+            return (
+              <div
+                key={idx}
+                className={`w-6 h-6 sm:w-10 sm:h-auto text-center text-[9px] sm:text-xs font-medium flex flex-col items-center justify-center ${
+                  isCurrent ? 'text-primary' : 'text-muted-foreground'
+                }`}
+              >
+                <div>{DAYS[idx]}</div>
+                <div className={`text-[8px] sm:text-[10px] ${isCurrent ? 'text-primary' : 'text-muted-foreground/60'}`}>
+                  {format(date, 'd')}
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
 
       {/* Habit rows */}
