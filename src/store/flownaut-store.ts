@@ -9,6 +9,7 @@ import type {
   Insight,
   TimeAnchor,
   SoftFrequency,
+  RoutineFrequency,
   AppPreferences,
   GratitudeEntry,
 } from '@/types/flownaut';
@@ -21,6 +22,8 @@ interface AddHabitOptions {
   description?: string;
   timeAnchor?: TimeAnchor;
   softFrequency?: SoftFrequency;
+  routineDays?: number[];
+  routineFrequency?: RoutineFrequency;
 }
 
 const defaultPreferences: AppPreferences = {
@@ -41,6 +44,7 @@ interface FlowNautStore extends UserState {
   letHabitRest: (habitId: string, note?: string) => void;
   wakeHabit: (habitId: string) => void;
   deleteHabit: (habitId: string) => void;
+  updateHabitRoutine: (habitId: string, routineDays?: number[], routineFrequency?: RoutineFrequency) => void;
   
   // Daily tracking
   setHabitState: (date: string, habitId: string, state: HabitState) => void;
@@ -121,6 +125,8 @@ export const useFlowNautStore = create<FlowNautStore>()(
           emoji: options.emoji,
           timeAnchor: options.timeAnchor || 'none',
           softFrequency: options.softFrequency || 'free',
+          routineDays: options.routineDays,
+          routineFrequency: options.routineFrequency,
           createdAt: new Date(),
           isResting: false,
         };
@@ -144,6 +150,12 @@ export const useFlowNautStore = create<FlowNautStore>()(
 
       deleteHabit: (habitId) => set((state) => ({
         habits: state.habits.filter((h) => h.id !== habitId),
+      })),
+
+      updateHabitRoutine: (habitId, routineDays, routineFrequency) => set((state) => ({
+        habits: state.habits.map((h) =>
+          h.id === habitId ? { ...h, routineDays, routineFrequency } : h
+        ),
       })),
 
       setHabitState: (date, habitId, state) => set((store) => {

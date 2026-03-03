@@ -2,21 +2,21 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { useFlowNautStore } from '@/store/flownaut-store';
-import { Plus, Leaf, Droplets, Moon, Heart, BookOpen, Dumbbell, Music, Coffee } from 'lucide-react';
+import { Plus, CalendarClock } from 'lucide-react';
 import { useTranslations } from '@/hooks/use-translations';
-
+import { RoutineSelector } from './RoutineSelector';
+import type { RoutineFrequency } from '@/types/flownaut';
 
 const EMOJI_OPTIONS = [
-  { emoji: '🌱', icon: <Leaf className="w-4 h-4" /> },
-  { emoji: '💧', icon: <Droplets className="w-4 h-4" /> },
-  { emoji: '🌙', icon: <Moon className="w-4 h-4" /> },
-  { emoji: '❤️', icon: <Heart className="w-4 h-4" /> },
-  { emoji: '📖', icon: <BookOpen className="w-4 h-4" /> },
-  { emoji: '💪', icon: <Dumbbell className="w-4 h-4" /> },
-  { emoji: '🎵', icon: <Music className="w-4 h-4" /> },
-  { emoji: '☕', icon: <Coffee className="w-4 h-4" /> },
+  { emoji: '🌱' },
+  { emoji: '💧' },
+  { emoji: '🌙' },
+  { emoji: '❤️' },
+  { emoji: '📖' },
+  { emoji: '💪' },
+  { emoji: '🎵' },
+  { emoji: '☕' },
 ];
 
 interface AddHabitDialogProps {
@@ -28,8 +28,10 @@ export function AddHabitDialog({ isOpen, onClose }: AddHabitDialogProps) {
   const t = useTranslations();
   const [name, setName] = useState('');
   const [selectedEmoji, setSelectedEmoji] = useState('🌱');
+  const [showRoutine, setShowRoutine] = useState(false);
+  const [routineDays, setRoutineDays] = useState<number[]>([]);
+  const [routineFrequency, setRoutineFrequency] = useState<RoutineFrequency>('weekly');
   const addHabit = useFlowNautStore((s) => s.addHabit);
-
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,11 +40,15 @@ export function AddHabitDialog({ isOpen, onClose }: AddHabitDialogProps) {
     addHabit({
       name: name.trim(),
       emoji: selectedEmoji,
+      routineDays: routineDays.length > 0 ? routineDays : undefined,
+      routineFrequency: routineDays.length > 0 ? routineFrequency : undefined,
     });
     
-    // Reset form
     setName('');
     setSelectedEmoji('🌱');
+    setShowRoutine(false);
+    setRoutineDays([]);
+    setRoutineFrequency('weekly');
     onClose();
   };
 
@@ -50,7 +56,6 @@ export function AddHabitDialog({ isOpen, onClose }: AddHabitDialogProps) {
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -59,7 +64,6 @@ export function AddHabitDialog({ isOpen, onClose }: AddHabitDialogProps) {
             className="fixed inset-0 bg-foreground/20 backdrop-blur-sm z-40"
           />
           
-          {/* Dialog */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -67,7 +71,7 @@ export function AddHabitDialog({ isOpen, onClose }: AddHabitDialogProps) {
             transition={{ type: "spring", duration: 0.4 }}
             className="fixed inset-x-4 top-1/3 -translate-y-1/2 z-50 mx-auto max-w-md"
           >
-            <div className="bg-card rounded-3xl shadow-elevated p-6 space-y-6">
+            <div className="bg-card rounded-3xl shadow-elevated p-6 space-y-6 max-h-[80vh] overflow-y-auto">
               <div className="text-center space-y-2">
                 <h3 className="text-xl font-serif font-medium text-foreground">
                   {t.addHabitDialog.title}
@@ -105,6 +109,39 @@ export function AddHabitDialog({ isOpen, onClose }: AddHabitDialogProps) {
                   autoFocus
                 />
 
+                {/* Routine toggle */}
+                <div>
+                  <button
+                    type="button"
+                    onClick={() => setShowRoutine(!showRoutine)}
+                    className={`flex items-center gap-2 text-sm transition-colors ${
+                      showRoutine ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
+                    }`}
+                  >
+                    <CalendarClock className="w-4 h-4" />
+                    {t.addHabitDialog.routine}
+                  </button>
+                  
+                  <AnimatePresence>
+                    {showRoutine && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="overflow-hidden"
+                      >
+                        <div className="pt-3">
+                          <RoutineSelector
+                            selectedDays={routineDays}
+                            onDaysChange={setRoutineDays}
+                            frequency={routineFrequency}
+                            onFrequencyChange={setRoutineFrequency}
+                          />
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
 
                 {/* Actions */}
                 <div className="flex gap-3">

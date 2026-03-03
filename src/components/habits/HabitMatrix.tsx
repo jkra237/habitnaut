@@ -1,8 +1,8 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useFlowNautStore } from '@/store/flownaut-store';
-import type { HabitState } from '@/types/flownaut';
-import { format, startOfWeek, addDays, addWeeks, isToday, isBefore, startOfDay } from 'date-fns';
+import type { HabitState, Habit } from '@/types/flownaut';
+import { format, startOfWeek, addDays, addWeeks, isToday, isBefore, startOfDay, getDay } from 'date-fns';
 import { Search, ChevronLeft, ChevronRight } from 'lucide-react';
 import { HabitOptions } from './HabitOptions';
 import { useTranslations } from '@/hooks/use-translations';
@@ -36,15 +36,32 @@ export function HabitMatrix() {
     return t.dashboard.thisWeek;
   };
 
-  const getStateForCell = (habitId: string, date: Date): HabitState | undefined => {
+  const getStateForCell = (habit: Habit, date: Date): HabitState | undefined => {
     const dateStr = format(date, 'yyyy-MM-dd');
     const entry = entries.find((e) => e.date === dateStr);
-    return entry?.habits[habitId];
+    const explicitState = entry?.habits[habit.id];
+    
+    // If there's an explicit state, use it
+    if (explicitState) return explicitState;
+    
+    // Check if this day matches a routine pattern
+    if (habit.routineDays && habit.routineDays.length > 0) {
+      // getDay returns 0=Sun,1=Mon,...,6=Sat → convert to 0=Mon,...,6=Sun
+      const jsDay = getDay(date);
+      const isoDay = jsDay === 0 ? 6 : jsDay - 1;
+      
+      if (habit.routineDays.includes(isoDay)) {
+        return 'planned';
+      }
+    }
+    
+    return undefined;
   };
 
-  const cycleState = (habitId: string, date: Date) => {
+  const cycleState = (habit: Habit, date: Date) => {
+    const habitId = habit.id;
     const dateStr = format(date, 'yyyy-MM-dd');
-    const currentState = getStateForCell(habitId, date);
+    const currentState = getStateForCell(habit, date);
     const today = startOfDay(new Date());
     const isFutureDate = isBefore(today, startOfDay(date));
 
@@ -197,7 +214,7 @@ export function HabitMatrix() {
             {/* Day cells */}
             <div className="flex gap-1 sm:gap-2 flex-shrink-0 ml-auto">
               {weekDates.map((date, dateIdx) => {
-                const state = getStateForCell(habit.id, date);
+                const state = getStateForCell(habit, date);
                 const isCurrent = isToday(date);
                 
                 return (
@@ -205,7 +222,7 @@ export function HabitMatrix() {
                     key={dateIdx}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}
-                    onClick={() => cycleState(habit.id, date)}
+                    onClick={() => cycleState(habit, date)}
                     className={getCellStyle(state, isCurrent)}
                   >
                     {getCellContent(state)}

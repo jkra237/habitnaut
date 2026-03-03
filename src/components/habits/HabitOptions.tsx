@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { useFlowNautStore } from '@/store/flownaut-store';
-import type { Habit } from '@/types/flownaut';
-import { Moon, Trash2, X, Info } from 'lucide-react';
+import type { Habit, RoutineFrequency } from '@/types/flownaut';
+import { Moon, Trash2, X, Info, CalendarClock, CalendarX } from 'lucide-react';
 import { useTranslations } from '@/hooks/use-translations';
 import { SingleHabitStatsDialog } from './SingleHabitStatsDialog';
+import { RoutineSelector } from './RoutineSelector';
 
 interface HabitOptionsProps {
   habit: Habit;
@@ -15,8 +16,14 @@ interface HabitOptionsProps {
 export function HabitOptions({ habit, onClose }: HabitOptionsProps) {
   const letHabitRest = useFlowNautStore((s) => s.letHabitRest);
   const deleteHabit = useFlowNautStore((s) => s.deleteHabit);
+  const updateHabitRoutine = useFlowNautStore((s) => s.updateHabitRoutine);
   const t = useTranslations();
   const [showStats, setShowStats] = useState(false);
+  const [showRoutineEdit, setShowRoutineEdit] = useState(false);
+  const [routineDays, setRoutineDays] = useState<number[]>(habit.routineDays || []);
+  const [routineFrequency, setRoutineFrequency] = useState<RoutineFrequency>(habit.routineFrequency || 'weekly');
+
+  const hasRoutine = habit.routineDays && habit.routineDays.length > 0;
 
   const handleLetRest = () => {
     letHabitRest(habit.id, 'Taking a break for now');
@@ -26,6 +33,21 @@ export function HabitOptions({ habit, onClose }: HabitOptionsProps) {
   const handleLetGo = () => {
     deleteHabit(habit.id);
     onClose();
+  };
+
+  const handleSaveRoutine = () => {
+    updateHabitRoutine(
+      habit.id,
+      routineDays.length > 0 ? routineDays : undefined,
+      routineDays.length > 0 ? routineFrequency : undefined
+    );
+    setShowRoutineEdit(false);
+  };
+
+  const handleRemoveRoutine = () => {
+    updateHabitRoutine(habit.id, undefined, undefined);
+    setRoutineDays([]);
+    setShowRoutineEdit(false);
   };
 
   return (
@@ -51,6 +73,14 @@ export function HabitOptions({ habit, onClose }: HabitOptionsProps) {
         
         {habit.description && (
           <p className="text-sm text-muted-foreground">{habit.description}</p>
+        )}
+
+        {/* Routine badge */}
+        {hasRoutine && !showRoutineEdit && (
+          <div className="flex items-center gap-1.5 text-xs text-primary">
+            <CalendarClock className="w-3.5 h-3.5" />
+            <span>{t.addHabitDialog.routineActive}: {habit.routineDays!.map(d => t.addHabitDialog.weekdays[d]).join(', ')} ({habit.routineFrequency === 'monthly' ? t.addHabitDialog.routineMonthly : t.addHabitDialog.routineWeekly})</span>
+          </div>
         )}
 
         <div className="flex gap-2 text-xs text-muted-foreground">
@@ -80,6 +110,48 @@ export function HabitOptions({ habit, onClose }: HabitOptionsProps) {
               {t.habits?.statsSubtitle || 'Individual insights'}
             </span>
           </Button>
+
+          {/* Routine edit/add button */}
+          <Button
+            variant="ghost"
+            className="w-full justify-start"
+            onClick={() => setShowRoutineEdit(!showRoutineEdit)}
+          >
+            <CalendarClock className="w-4 h-4 mr-2" />
+            {hasRoutine ? t.addHabitDialog.editRoutine : t.addHabitDialog.routine}
+          </Button>
+
+          {/* Routine editor */}
+          <AnimatePresence>
+            {showRoutineEdit && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="overflow-hidden"
+              >
+                <div className="p-3 bg-secondary/50 rounded-lg space-y-3">
+                  <RoutineSelector
+                    selectedDays={routineDays}
+                    onDaysChange={setRoutineDays}
+                    frequency={routineFrequency}
+                    onFrequencyChange={setRoutineFrequency}
+                  />
+                  <div className="flex gap-2">
+                    <Button size="sm" variant="default" onClick={handleSaveRoutine} className="flex-1">
+                      {t.common.save}
+                    </Button>
+                    {hasRoutine && (
+                      <Button size="sm" variant="ghost" onClick={handleRemoveRoutine} className="text-muted-foreground">
+                        <CalendarX className="w-4 h-4 mr-1" />
+                        {t.addHabitDialog.removeRoutine}
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           <Button
             variant="ghost"
