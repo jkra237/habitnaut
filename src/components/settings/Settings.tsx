@@ -675,7 +675,9 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
       </div>
 
       <a 
-        href="#" 
+        href="https://beachtenswert.info/habitnaut-datenschutz/"
+        target="_blank"
+        rel="noopener noreferrer"
         className="flex items-center gap-2 p-4 rounded-xl bg-secondary/50 hover:bg-secondary/80 transition-colors"
       >
         <Eye className="w-5 h-5 text-muted-foreground" />
