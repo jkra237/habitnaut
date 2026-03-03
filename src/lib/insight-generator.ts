@@ -100,46 +100,6 @@ function generatePatternInsights(
 ): InsightCandidate[] {
   const insights: InsightCandidate[] = [];
 
-  // Analyze habit completion by time anchor
-  const timeAnchorCounts: Record<string, { total: number; done: number }> = {
-    morning: { total: 0, done: 0 },
-    midday: { total: 0, done: 0 },
-    evening: { total: 0, done: 0 },
-  };
-
-  habits.forEach(habit => {
-    if (habit.timeAnchor && habit.timeAnchor !== 'none') {
-      last7Days.forEach(entry => {
-        const state = entry.habits[habit.id];
-        if (state) {
-          timeAnchorCounts[habit.timeAnchor].total++;
-          if (state === 'done') {
-            timeAnchorCounts[habit.timeAnchor].done++;
-          }
-        }
-      });
-    }
-  });
-
-  // Find the time anchor with highest completion rate
-  const anchors = Object.entries(timeAnchorCounts)
-    .filter(([_, counts]) => counts.total >= 3)
-    .map(([anchor, counts]) => ({
-      anchor,
-      rate: counts.done / counts.total,
-    }))
-    .sort((a, b) => b.rate - a.rate);
-
-  if (anchors.length > 0 && anchors[0].rate > 0.6) {
-    const anchorKey = anchors[0].anchor === 'morning' ? 'morningAnchor' :
-                      anchors[0].anchor === 'midday' ? 'middayAnchor' : 'eveningAnchor';
-    insights.push({
-      type: 'pattern',
-      messageKey: `patterns.${anchorKey}`,
-      weight: anchors[0].rate * 10,
-    });
-  }
-
   // Compare this week to last week (if we have data)
   if (last14Days.length >= 10) {
     const thisWeekEntries = last7Days.length;
@@ -319,20 +279,6 @@ function generatePromptInsights(
     }
   }
 
-  // Personality-aware prompts
-  if (personality) {
-    if (personality.rhythm === 'morning' && topHabitEntry) {
-      const habit = habits.find(h => h.id === topHabitEntry[0]);
-      if (habit && habit.timeAnchor === 'morning') {
-        insights.push({
-          type: 'prompt',
-          messageKey: 'prompts.morningRhythmAligned',
-          weight: 6,
-        });
-      }
-    }
-
-  }
 
   // Fallback prompts if nothing specific applies (only kept specific ones)
   if (insights.length === 0 && last7Days.length >= 3) {

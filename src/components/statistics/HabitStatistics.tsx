@@ -6,9 +6,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   TrendingUp, 
   TrendingDown, 
-  Sun, 
-  Moon, 
-  Sunrise,
   Calendar,
   Pause,
   Link2,
@@ -92,19 +89,7 @@ export function HabitStatistics({ className = '' }: HabitStatisticsProps) {
     ).length;
     const activityPercentage = Math.round((daysWithActivityLast7 / 7) * 100);
 
-    // 3. Most common time of day
-    const timeAnchorCounts: Record<string, number> = { morning: 0, midday: 0, evening: 0 };
-    recentEntries.forEach(entry => {
-      habits.forEach(h => {
-        if (entry.habits[h.id] === 'done' && h.timeAnchor !== 'none') {
-          timeAnchorCounts[h.timeAnchor]++;
-        }
-      });
-    });
-    const mostCommonTime = Object.entries(timeAnchorCounts)
-      .sort((a, b) => b[1] - a[1])[0];
-
-    // 4. Most active weekday
+    // 3. Most active weekday
     const weekdayCounts: Record<number, number> = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
     recentEntries.forEach(entry => {
       const day = getDay(parseISO(entry.date));
@@ -197,7 +182,7 @@ export function HabitStatistics({ className = '' }: HabitStatisticsProps) {
       mostPracticed,
       leastPracticed,
       activityPercentage,
-      mostCommonTime,
+      
       mostActiveDay: Number(mostActiveDay[0]),
       weekdayVsWeekend,
       steadiestHabit: steadiestHabit?.habit,
@@ -257,32 +242,6 @@ export function HabitStatistics({ className = '' }: HabitStatisticsProps) {
       : 'Activity in the last 7 days.',
     value: `${stats.activityPercentage}%`,
   });
-
-  // Most common time of day
-  if (stats.mostCommonTime && stats.mostCommonTime[1] > 0) {
-    const timeIcon = stats.mostCommonTime[0] === 'morning' 
-      ? <Sunrise className="w-4 h-4 text-primary" />
-      : stats.mostCommonTime[0] === 'evening'
-      ? <Moon className="w-4 h-4 text-primary" />
-      : <Sun className="w-4 h-4 text-primary" />;
-    
-    const timeName = stats.mostCommonTime[0] === 'morning'
-      ? t.addHabitDialog.morning
-      : stats.mostCommonTime[0] === 'evening'
-      ? t.addHabitDialog.evening
-      : t.addHabitDialog.midday;
-    
-    statItems.push({
-      id: 'common-time',
-      icon: timeIcon,
-      label: language === 'de'
-        ? 'Gewohnheiten zeigen sich bei dir oft am…'
-        : language === 'es'
-        ? 'Los hábitos suelen aparecer en…'
-        : 'Habits often show up in the…',
-      value: timeName,
-    });
-  }
 
   // Most active weekday
   if (stats.mostActiveDay !== undefined) {
