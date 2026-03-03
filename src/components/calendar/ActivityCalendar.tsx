@@ -135,6 +135,7 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState<{ habitId: string; habitName: string; emoji: string } | null>(null);
   const setHabitState = useFlowNautStore(s => s.setHabitState);
   const removeHabitState = useFlowNautStore(s => s.removeHabitState);
   const entries = useFlowNautStore(s => s.entries);
@@ -446,13 +447,56 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
                           {/* Delete/clear button */}
                           <button
                             onClick={() => {
-                              removeHabitState(selectedDate, habitEntry.habit.id);
+                              setConfirmDelete({
+                                habitId: habitEntry.habit.id,
+                                habitName: habitEntry.habit.name,
+                                emoji: habitEntry.habit.emoji || '○',
+                              });
                             }}
                             className="px-2 py-1 rounded-md text-[10px] bg-secondary/50 text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-all"
                           >
                             <X className="w-3 h-3" />
                           </button>
                         </div>
+
+                        {/* Delete confirmation inline */}
+                        <AnimatePresence>
+                          {confirmDelete?.habitId === habitEntry.habit.id && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: 'auto' }}
+                              exit={{ opacity: 0, height: 0 }}
+                              className="overflow-hidden ml-2"
+                            >
+                              <div className="bg-destructive/5 border border-destructive/20 rounded-lg p-3 space-y-2">
+                                <p className="text-xs text-foreground">
+                                  {language === 'de' 
+                                    ? `Willst du „${confirmDelete.emoji} ${confirmDelete.habitName}" an diesem Datum wirklich löschen?`
+                                    : language === 'es'
+                                    ? `¿Realmente quieres eliminar „${confirmDelete.emoji} ${confirmDelete.habitName}" en esta fecha?`
+                                    : `Do you really want to delete "${confirmDelete.emoji} ${confirmDelete.habitName}" on this date?`}
+                                </p>
+                                <div className="flex gap-2">
+                                  <button
+                                    onClick={() => {
+                                      removeHabitState(selectedDate, confirmDelete.habitId);
+                                      setConfirmDelete(null);
+                                    }}
+                                    className="flex-1 py-1.5 rounded-lg text-xs font-medium bg-destructive/10 text-destructive hover:bg-destructive/20 transition-colors"
+                                  >
+                                    {language === 'de' ? 'Ja' : language === 'es' ? 'Sí' : 'Yes'}
+                                  </button>
+                                  <button
+                                    onClick={() => setConfirmDelete(null)}
+                                    className="flex-1 py-1.5 rounded-lg text-xs font-medium bg-secondary text-muted-foreground hover:bg-secondary/80 transition-colors"
+                                  >
+                                    {language === 'de' ? 'Nein' : language === 'es' ? 'No' : 'No'}
+                                  </button>
+                                </div>
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
                       </div>
                     ))}
                 </div>
