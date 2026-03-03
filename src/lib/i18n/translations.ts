@@ -235,6 +235,14 @@ export interface Translations {
     canChangeAnytime: string;
     maybeLater: string;
     add: string;
+    routine: string;
+    routineHint: string;
+    routineWeekly: string;
+    routineMonthly: string;
+    weekdays: string[];
+    removeRoutine: string;
+    editRoutine: string;
+    routineActive: string;
   };
   
   // Mood options
@@ -641,6 +649,14 @@ export const translations: Record<SupportedLanguage, Translations> = {
       canChangeAnytime: 'You can change or pause habits anytime.',
       maybeLater: 'Maybe later',
       add: 'Add',
+      routine: 'Routine (optional)',
+      routineHint: 'Automatically plan this habit on selected days',
+      routineWeekly: 'Weekly',
+      routineMonthly: 'Monthly',
+      weekdays: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      removeRoutine: 'Remove routine',
+      editRoutine: 'Edit routine',
+      routineActive: 'Routine active',
     },
     mood: {
       heavy: 'Heavy',
@@ -1068,6 +1084,14 @@ export const translations: Record<SupportedLanguage, Translations> = {
       canChangeAnytime: 'Puedes cambiar o pausar hábitos en cualquier momento.',
       maybeLater: 'Quizás luego',
       add: 'Añadir',
+      routine: 'Rutina (opcional)',
+      routineHint: 'Planifica automáticamente este hábito en los días seleccionados',
+      routineWeekly: 'Semanal',
+      routineMonthly: 'Mensual',
+      weekdays: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
+      removeRoutine: 'Eliminar rutina',
+      editRoutine: 'Editar rutina',
+      routineActive: 'Rutina activa',
     },
     mood: {
       heavy: 'Pesado',
@@ -1495,6 +1519,14 @@ export const translations: Record<SupportedLanguage, Translations> = {
       canChangeAnytime: 'Du kannst Gewohnheiten jederzeit ändern oder pausieren.',
       maybeLater: 'Vielleicht später',
       add: 'Hinzufügen',
+      routine: 'Routine (optional)',
+      routineHint: 'Plane dieses Habit automatisch an ausgewählten Tagen',
+      routineWeekly: 'Wöchentlich',
+      routineMonthly: 'Monatlich',
+      weekdays: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'],
+      removeRoutine: 'Routine entfernen',
+      editRoutine: 'Routine bearbeiten',
+      routineActive: 'Routine aktiv',
     },
     mood: {
       heavy: 'Schwer',

@@ -19,6 +19,7 @@ export interface OnboardingAnswer {
 
 export type TimeAnchor = 'morning' | 'midday' | 'evening' | 'none';
 export type SoftFrequency = 'daily' | 'few-times-week' | 'free';
+export type RoutineFrequency = 'weekly' | 'monthly';
 export type InsightFrequency = 'rare' | 'occasional' | 'weekly';
 export type WeekStart = 'monday' | 'sunday';
 
@@ -32,6 +33,8 @@ export interface Habit {
   createdAt: Date;
   isResting: boolean; // "let rest" instead of deleted
   restingNote?: string;
+  routineDays?: number[]; // 0=Mon, 1=Tue, ..., 6=Sun (ISO weekday - 1)
+  routineFrequency?: RoutineFrequency;
 }
 
 export type HabitState = 'done' | 'not-done' | 'conscious-skip' | 'planned';
