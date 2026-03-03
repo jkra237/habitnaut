@@ -22,7 +22,11 @@ export function HabitOptions({ habit, onClose }: HabitOptionsProps) {
   const [showRoutineEdit, setShowRoutineEdit] = useState(false);
   const [routineDays, setRoutineDays] = useState<number[]>(habit.routineDays || []);
   const [routineFrequency, setRoutineFrequency] = useState<RoutineFrequency>(habit.routineFrequency || 'weekly');
-  const [routineMonthWeek, setRoutineMonthWeek] = useState(habit.routineMonthWeek || 1);
+  const [routineMonthWeeks, setRoutineMonthWeeks] = useState<number[]>(
+    habit.routineMonthWeek 
+      ? (Array.isArray(habit.routineMonthWeek) ? habit.routineMonthWeek : [habit.routineMonthWeek])
+      : [1]
+  );
 
   const hasRoutine = habit.routineDays && habit.routineDays.length > 0;
 
@@ -41,7 +45,7 @@ export function HabitOptions({ habit, onClose }: HabitOptionsProps) {
       habit.id,
       routineDays.length > 0 ? routineDays : undefined,
       routineDays.length > 0 ? routineFrequency : undefined,
-      routineDays.length > 0 && routineFrequency === 'monthly' ? routineMonthWeek : undefined
+      routineDays.length > 0 && routineFrequency === 'monthly' ? routineMonthWeeks : undefined
     );
     setShowRoutineEdit(false);
   };
@@ -84,7 +88,10 @@ export function HabitOptions({ habit, onClose }: HabitOptionsProps) {
             <span>
               {t.addHabitDialog.routineActive}: {habit.routineDays!.map(d => t.addHabitDialog.weekdays[d]).join(', ')} 
               ({habit.routineFrequency === 'monthly' 
-                ? `${t.addHabitDialog.routineMonthly}, ${t.addHabitDialog.routineMonthWeeks[(habit.routineMonthWeek || 1) - 1]}` 
+                ? `${t.addHabitDialog.routineMonthly}, ${
+                    (Array.isArray(habit.routineMonthWeek) ? habit.routineMonthWeek : [habit.routineMonthWeek || 1])
+                      .map(w => t.addHabitDialog.routineMonthWeeks[w - 1]).join(', ')
+                  }` 
                 : t.addHabitDialog.routineWeekly})
             </span>
           </div>
@@ -146,8 +153,8 @@ export function HabitOptions({ habit, onClose }: HabitOptionsProps) {
                     onDaysChange={setRoutineDays}
                     frequency={routineFrequency}
                     onFrequencyChange={setRoutineFrequency}
-                    monthWeek={routineMonthWeek}
-                    onMonthWeekChange={setRoutineMonthWeek}
+                    monthWeeks={routineMonthWeeks}
+                    onMonthWeeksChange={setRoutineMonthWeeks}
                   />
                   <div className="flex gap-2">
                     <Button size="sm" variant="default" onClick={handleSaveRoutine} className="flex-1">

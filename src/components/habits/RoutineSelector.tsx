@@ -6,11 +6,11 @@ interface RoutineSelectorProps {
   onDaysChange: (days: number[]) => void;
   frequency: RoutineFrequency;
   onFrequencyChange: (freq: RoutineFrequency) => void;
-  monthWeek?: number;
-  onMonthWeekChange?: (week: number) => void;
+  monthWeeks?: number[];
+  onMonthWeeksChange?: (weeks: number[]) => void;
 }
 
-export function RoutineSelector({ selectedDays, onDaysChange, frequency, onFrequencyChange, monthWeek = 1, onMonthWeekChange }: RoutineSelectorProps) {
+export function RoutineSelector({ selectedDays, onDaysChange, frequency, onFrequencyChange, monthWeeks = [1], onMonthWeeksChange }: RoutineSelectorProps) {
   const t = useTranslations();
 
   const toggleDay = (dayIndex: number) => {
@@ -71,25 +71,37 @@ export function RoutineSelector({ selectedDays, onDaysChange, frequency, onFrequ
         </div>
       )}
 
-      {/* Month week selector (only for monthly) */}
+      {/* Month week selector (only for monthly) — multi-select */}
       {selectedDays.length > 0 && frequency === 'monthly' && (
         <div className="space-y-1.5">
           <p className="text-xs text-muted-foreground">{t.addHabitDialog.routineMonthWeekLabel}</p>
           <div className="flex gap-1.5">
-            {t.addHabitDialog.routineMonthWeeks.map((label, idx) => (
-              <button
-                key={idx}
-                type="button"
-                onClick={() => onMonthWeekChange?.(idx + 1)}
-                className={`flex-1 py-2 rounded-lg text-[11px] font-medium transition-all ${
-                  monthWeek === idx + 1
-                    ? 'bg-primary/15 border border-primary/40 text-primary'
-                    : 'bg-secondary border border-transparent text-muted-foreground hover:bg-secondary/80'
-                }`}
-              >
-                {label}
-              </button>
-            ))}
+            {t.addHabitDialog.routineMonthWeeks.map((label, idx) => {
+              const weekNum = idx + 1;
+              const isSelected = monthWeeks.includes(weekNum);
+              return (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => {
+                    if (isSelected) {
+                      const next = monthWeeks.filter(w => w !== weekNum);
+                      // Keep at least one selected
+                      if (next.length > 0) onMonthWeeksChange?.(next);
+                    } else {
+                      onMonthWeeksChange?.([...monthWeeks, weekNum].sort());
+                    }
+                  }}
+                  className={`flex-1 py-2 rounded-lg text-[11px] font-medium transition-all ${
+                    isSelected
+                      ? 'bg-primary/15 border border-primary/40 text-primary'
+                      : 'bg-secondary border border-transparent text-muted-foreground hover:bg-secondary/80'
+                  }`}
+                >
+                  {label}
+                </button>
+              );
+            })}
           </div>
         </div>
       )}

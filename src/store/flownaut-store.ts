@@ -24,7 +24,7 @@ interface AddHabitOptions {
   softFrequency?: SoftFrequency;
   routineDays?: number[];
   routineFrequency?: RoutineFrequency;
-  routineMonthWeek?: number;
+  routineMonthWeek?: number | number[];
 }
 
 const defaultPreferences: AppPreferences = {
@@ -45,10 +45,11 @@ interface FlowNautStore extends UserState {
   letHabitRest: (habitId: string, note?: string) => void;
   wakeHabit: (habitId: string) => void;
   deleteHabit: (habitId: string) => void;
-  updateHabitRoutine: (habitId: string, routineDays?: number[], routineFrequency?: RoutineFrequency, routineMonthWeek?: number) => void;
+  updateHabitRoutine: (habitId: string, routineDays?: number[], routineFrequency?: RoutineFrequency, routineMonthWeek?: number | number[]) => void;
   
   // Daily tracking
   setHabitState: (date: string, habitId: string, state: HabitState) => void;
+  removeHabitState: (date: string, habitId: string) => void;
   setMood: (date: string, mood: number) => void;
   setEnergy: (date: string, energy: number) => void;
   addDayNote: (date: string, note: string) => void;
@@ -176,6 +177,21 @@ export const useFlowNautStore = create<FlowNautStore>()(
             ...store.entries,
             { date, habits: { [habitId]: state } },
           ],
+        };
+      }),
+
+      removeHabitState: (date, habitId) => set((store) => {
+        const existingEntry = store.entries.find((e) => e.date === date);
+        if (!existingEntry) return {};
+        const { [habitId]: _, ...rest } = existingEntry.habits;
+        // If no habits left and no other data, remove entire entry
+        if (Object.keys(rest).length === 0 && !existingEntry.mood && !existingEntry.energy && !existingEntry.note) {
+          return { entries: store.entries.filter((e) => e.date !== date) };
+        }
+        return {
+          entries: store.entries.map((e) =>
+            e.date === date ? { ...e, habits: rest } : e
+          ),
         };
       }),
 

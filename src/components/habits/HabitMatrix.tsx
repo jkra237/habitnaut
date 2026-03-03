@@ -19,6 +19,7 @@ export function HabitMatrix() {
   const habits = useFlowNautStore((s) => s.getActiveHabits());
   const entries = useFlowNautStore((s) => s.entries);
   const setHabitState = useFlowNautStore((s) => s.setHabitState);
+  const removeHabitState = useFlowNautStore((s) => s.removeHabitState);
   
 
   const weekDates = useMemo(() => {
@@ -51,10 +52,10 @@ export function HabitMatrix() {
       
       if (habit.routineDays.includes(isoDay)) {
         if (habit.routineFrequency === 'monthly' && habit.routineMonthWeek) {
-          // Check if date falls in the correct week of the month
           const dayOfMonth = date.getDate();
           const weekOfMonth = Math.ceil(dayOfMonth / 7);
-          if (weekOfMonth !== habit.routineMonthWeek) return undefined;
+          const weeks = Array.isArray(habit.routineMonthWeek) ? habit.routineMonthWeek : [habit.routineMonthWeek];
+          if (!weeks.includes(weekOfMonth)) return undefined;
         }
         return 'planned';
       }
@@ -66,23 +67,23 @@ export function HabitMatrix() {
   const cycleState = (habit: Habit, date: Date) => {
     const habitId = habit.id;
     const dateStr = format(date, 'yyyy-MM-dd');
+    const entry = entries.find((e) => e.date === dateStr);
+    const explicitState = entry?.habits[habitId];
     const currentState = getStateForCell(habit, date);
     const today = startOfDay(new Date());
     const isFutureDate = isBefore(today, startOfDay(date));
 
     if (isFutureDate) {
-      // Future dates: toggle between planned and undefined
-      const nextState: HabitState | undefined =
-        currentState === 'planned' ? 'done' : // cycle: planned -> done (in case they want to clear)
-        currentState === undefined ? 'planned' :
-        'planned';
+      // Future dates: cycle planned → not-done → clear (remove)
       if (currentState === 'planned') {
-        // Remove the state by setting not-done temporarily, then we handle it
-        // Actually let's just cycle: undefined -> planned -> undefined
-        // We need a way to "unset". Let's use not-done as a clear for future
+        // If it was an explicit planned, go to not-done; if routine-planned, also not-done
         setHabitState(dateStr, habitId, 'not-done');
+      } else if (currentState === 'not-done' || explicitState === 'not-done') {
+        // Clear the entry entirely
+        removeHabitState(dateStr, habitId);
       } else {
-        setHabitState(dateStr, habitId, nextState);
+        // undefined/clear → planned
+        setHabitState(dateStr, habitId, 'planned');
       }
       return;
     }
