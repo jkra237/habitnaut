@@ -24,6 +24,7 @@ interface AddHabitOptions {
   softFrequency?: SoftFrequency;
   routineDays?: number[];
   routineFrequency?: RoutineFrequency;
+  routineMonthWeek?: number;
 }
 
 const defaultPreferences: AppPreferences = {
@@ -44,7 +45,7 @@ interface FlowNautStore extends UserState {
   letHabitRest: (habitId: string, note?: string) => void;
   wakeHabit: (habitId: string) => void;
   deleteHabit: (habitId: string) => void;
-  updateHabitRoutine: (habitId: string, routineDays?: number[], routineFrequency?: RoutineFrequency) => void;
+  updateHabitRoutine: (habitId: string, routineDays?: number[], routineFrequency?: RoutineFrequency, routineMonthWeek?: number) => void;
   
   // Daily tracking
   setHabitState: (date: string, habitId: string, state: HabitState) => void;
@@ -127,6 +128,7 @@ export const useFlowNautStore = create<FlowNautStore>()(
           softFrequency: options.softFrequency || 'free',
           routineDays: options.routineDays,
           routineFrequency: options.routineFrequency,
+          routineMonthWeek: options.routineMonthWeek,
           createdAt: new Date(),
           isResting: false,
         };
@@ -152,9 +154,9 @@ export const useFlowNautStore = create<FlowNautStore>()(
         habits: state.habits.filter((h) => h.id !== habitId),
       })),
 
-      updateHabitRoutine: (habitId, routineDays, routineFrequency) => set((state) => ({
+      updateHabitRoutine: (habitId, routineDays, routineFrequency, routineMonthWeek) => set((state) => ({
         habits: state.habits.map((h) =>
-          h.id === habitId ? { ...h, routineDays, routineFrequency } : h
+          h.id === habitId ? { ...h, routineDays, routineFrequency, routineMonthWeek } : h
         ),
       })),
 

@@ -7,6 +7,8 @@ import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, ChevronDown, Chevr
 import { Button } from '@/components/ui/button';
 import { useFlowNautStore } from '@/store/flownaut-store';
 import { useTranslations } from '@/hooks/use-translations';
+import { HabitOptions } from '@/components/habits/HabitOptions';
+import type { Habit, HabitState } from '@/types/flownaut';
 import { 
   format, 
   startOfMonth, 
@@ -36,6 +38,26 @@ function getMoodBgStyle(mood: number, isDark: boolean): React.CSSProperties {
   return { backgroundColor: isDark ? c.dark : c.light };
 }
 
+/** Check if a habit's routine matches a given date */
+function isRoutinePlanned(habit: Habit, date: Date): boolean {
+  if (!habit.routineDays || habit.routineDays.length === 0) return false;
+  const jsDay = getDay(date);
+  const isoDay = jsDay === 0 ? 6 : jsDay - 1;
+  if (!habit.routineDays.includes(isoDay)) return false;
+  if (habit.routineFrequency === 'monthly' && habit.routineMonthWeek) {
+    const weekOfMonth = Math.ceil(date.getDate() / 7);
+    if (weekOfMonth !== habit.routineMonthWeek) return false;
+  }
+  return true;
+}
+
+const STATE_ICONS: Record<string, string> = {
+  'done': '✓',
+  'conscious-skip': '🌱',
+  'not-done': '○',
+  'planned': '📌',
+};
+
 interface ActivityCalendarProps {
   className?: string;
 }
@@ -44,8 +66,10 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [editingHabitId, setEditingHabitId] = useState<string | null>(null);
   const entries = useFlowNautStore(s => s.entries);
-  const habits = useFlowNautStore(s => s.getActiveHabits());
+  const habits = useFlowNautStore(s => s.habits);
+  const activeHabits = useMemo(() => habits.filter(h => !h.isResting), [habits]);
   const t = useTranslations();
   const language = useFlowNautStore(s => s.preferences.language);
 
@@ -54,40 +78,55 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
     const start = startOfMonth(currentMonth);
     const end = endOfMonth(currentMonth);
     const days = eachDayOfInterval({ start, end });
-    
-    // Add padding for week start (Monday = 1)
     const startDay = getDay(start);
     const paddingDays = startDay === 0 ? 6 : startDay - 1;
-    
     return { days, paddingDays };
   }, [currentMonth]);
 
-  // Detect dark mode
   const isDark = typeof window !== 'undefined' && document.documentElement.classList.contains('dark');
 
-  // Create a map of date -> activity data
+  // Build activity map including routine-planned habits
   const activityMap = useMemo(() => {
-    const map: Record<string, { doneCount: number; totalHabits: number; mood?: number; habits: { name: string; emoji?: string; state: string }[] }> = {};
+    const map: Record<string, { 
+      doneCount: number; 
+      plannedCount: number;
+      totalHabits: number; 
+      mood?: number; 
+      habits: { habit: Habit; state: HabitState | 'none' }[] 
+    }> = {};
     
-    entries.forEach(entry => {
-      const habitsData = habits.map(h => ({
-        name: h.name,
-        emoji: h.emoji,
-        state: entry.habits[h.id] || 'not-done',
-      }));
+    // Process all days in the current month view
+    calendarDays.days.forEach(day => {
+      const dateStr = format(day, 'yyyy-MM-dd');
+      const entry = entries.find(e => e.date === dateStr);
       
-      const doneCount = Object.values(entry.habits).filter(s => s === 'done').length;
+      const habitStates = activeHabits.map(h => {
+        const explicitState = entry?.habits[h.id];
+        if (explicitState) return { habit: h, state: explicitState as HabitState };
+        if (isRoutinePlanned(h, day)) return { habit: h, state: 'planned' as HabitState };
+        return { habit: h, state: 'none' as ('none') };
+      });
+
+      const doneCount = habitStates.filter(hs => hs.state === 'done').length;
+      const plannedCount = habitStates.filter(hs => hs.state === 'planned').length;
+      const hasAnyActivity = doneCount > 0 || plannedCount > 0 || (entry?.mood !== undefined);
       
-      map[entry.date] = {
-        doneCount,
-        totalHabits: habits.length,
-        mood: entry.mood,
-        habits: habitsData,
-      };
+      // Only relevant habits (have a state)
+      const relevantHabits = habitStates.filter(hs => hs.state !== 'none');
+      
+      if (hasAnyActivity || relevantHabits.length > 0) {
+        map[dateStr] = {
+          doneCount,
+          plannedCount,
+          totalHabits: activeHabits.length,
+          mood: entry?.mood,
+          habits: habitStates,
+        };
+      }
     });
     
     return map;
-  }, [entries, habits]);
+  }, [entries, activeHabits, calendarDays.days]);
 
   const goToPreviousMonth = () => setCurrentMonth(prev => subMonths(prev, 1));
   const goToNextMonth = () => setCurrentMonth(prev => addMonths(prev, 1));
@@ -96,7 +135,6 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
   const today = new Date();
   const isCurrentMonth = isSameMonth(currentMonth, today);
 
-  // Format month name
   const monthName = useMemo(() => {
     const monthIndex = currentMonth.getMonth();
     const monthKeys = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'] as const;
@@ -104,11 +142,10 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
     return `${t.time.months[monthKeys[monthIndex]]} ${year}`;
   }, [currentMonth, t]);
 
-  // Weekday headers
   const weekdayKeys = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] as const;
 
-  // Get selected day's activities
-  const selectedDayActivities = selectedDate ? activityMap[selectedDate] : null;
+  const selectedDayData = selectedDate ? activityMap[selectedDate] : null;
+  const editingHabit = editingHabitId ? activeHabits.find(h => h.id === editingHabitId) : null;
 
   const calendarTitle = language === 'de' ? 'Aktivitäten' : language === 'es' ? 'Actividades' : 'Activities';
   const showCalendarText = language === 'de' ? 'Kalender anzeigen' : language === 'es' ? 'Mostrar calendario' : 'Show calendar';
@@ -189,10 +226,11 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
                 const isFuture = day > today;
                 const isSelected = selectedDate === dateStr;
                 
-                // Calculate fill level (0-1)
                 const fillLevel = activity && activity.totalHabits > 0 
                   ? activity.doneCount / activity.totalHabits 
                   : 0;
+
+                const hasPlanned = activity && activity.plannedCount > 0;
                 
                 return (
                   <motion.button
@@ -200,12 +238,11 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.2 }}
-                    onClick={() => !isFuture && setSelectedDate(isSelected ? null : dateStr)}
-                    disabled={isFuture}
+                    onClick={() => setSelectedDate(isSelected ? null : dateStr)}
                     className={`
                       aspect-square rounded-lg flex flex-col items-center justify-center relative transition-all
                       ${isToday ? 'ring-2 ring-primary ring-inset' : ''}
-                      ${isFuture ? 'opacity-30 cursor-default' : 'cursor-pointer hover:bg-primary/5'}
+                      ${isFuture && !hasPlanned ? 'opacity-30 cursor-default' : 'cursor-pointer hover:bg-primary/5'}
                       ${isSelected ? 'bg-primary/20 ring-2 ring-primary/50 ring-inset' : !activity?.mood ? (fillLevel > 0 ? 'bg-primary/10' : 'bg-muted/30') : ''}
                     `}
                     style={!isSelected && activity?.mood ? getMoodBgStyle(activity.mood, isDark) : undefined}
@@ -214,27 +251,32 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
                       {format(day, 'd')}
                     </span>
                     
-                    {/* Activity indicator - based on number of done habits */}
-                    {activity && activity.doneCount > 0 && (
-                      <div className="flex gap-0.5 mt-0.5">
-                        {activity.doneCount === 1 && (
-                          <div className="w-1 h-1 rounded-full bg-primary/60" />
-                        )}
-                        {activity.doneCount === 2 && (
-                          <>
-                            <div className="w-1 h-1 rounded-full bg-primary/80" />
-                            <div className="w-1 h-1 rounded-full bg-primary/80" />
-                          </>
-                        )}
-                        {activity.doneCount >= 3 && (
-                          <>
-                            <div className="w-1 h-1 rounded-full bg-primary" />
-                            <div className="w-1 h-1 rounded-full bg-primary" />
-                            <div className="w-1 h-1 rounded-full bg-primary" />
-                          </>
-                        )}
-                      </div>
-                    )}
+                    {/* Activity indicators */}
+                    <div className="flex gap-0.5 mt-0.5">
+                      {/* Done dots */}
+                      {activity && activity.doneCount > 0 && (
+                        <>
+                          {activity.doneCount >= 3 ? (
+                            <>
+                              <div className="w-1 h-1 rounded-full bg-primary" />
+                              <div className="w-1 h-1 rounded-full bg-primary" />
+                              <div className="w-1 h-1 rounded-full bg-primary" />
+                            </>
+                          ) : activity.doneCount === 2 ? (
+                            <>
+                              <div className="w-1 h-1 rounded-full bg-primary/80" />
+                              <div className="w-1 h-1 rounded-full bg-primary/80" />
+                            </>
+                          ) : (
+                            <div className="w-1 h-1 rounded-full bg-primary/60" />
+                          )}
+                        </>
+                      )}
+                      {/* Planned indicator (only if no done habits shown) */}
+                      {activity && activity.doneCount === 0 && hasPlanned && (
+                        <span className="text-[7px] leading-none">📌</span>
+                      )}
+                    </div>
                   </motion.button>
                 );
               })}
@@ -249,40 +291,62 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
                   exit={{ opacity: 0, height: 0 }}
                   className="mt-4 pt-4 border-t border-border/30"
                 >
-                  <div className="flex items-center gap-2 mb-2">
+                  <div className="flex items-center gap-2 mb-3">
                     <p className="text-xs text-muted-foreground">
                       {format(new Date(selectedDate), 'd MMMM yyyy')}
                     </p>
-                    {selectedDayActivities?.mood && (
-                      <span className="text-sm">{MOOD_EMOJIS[selectedDayActivities.mood]}</span>
+                    {selectedDayData?.mood && (
+                      <span className="text-sm">{MOOD_EMOJIS[selectedDayData.mood]}</span>
                     )}
                   </div>
                   
-                  {selectedDayActivities && selectedDayActivities.habits.length > 0 ? (
+                  {selectedDayData && selectedDayData.habits.filter(h => h.state !== 'none').length > 0 ? (
                     <div className="space-y-1.5">
-                      {selectedDayActivities.habits.map((habit, idx) => (
-                        <div 
-                          key={idx}
-                          className={`flex items-center gap-2 text-sm py-1 px-2 rounded-lg ${
-                            habit.state === 'done' 
-                              ? 'bg-primary/10 text-foreground' 
-                              : habit.state === 'skipped'
-                              ? 'bg-muted/50 text-muted-foreground'
-                              : 'text-muted-foreground/50'
-                          }`}
-                        >
-                          <span className="text-base">{habit.emoji || '○'}</span>
-                          <span className={habit.state === 'done' ? 'font-medium' : ''}>
-                            {habit.name}
-                          </span>
-                          {habit.state === 'done' && (
-                            <span className="ml-auto text-xs text-primary">✓</span>
-                          )}
-                          {habit.state === 'skipped' && (
-                            <span className="ml-auto text-xs text-muted-foreground">—</span>
-                          )}
-                        </div>
-                      ))}
+                      {selectedDayData.habits
+                        .filter(h => h.state !== 'none')
+                        .map((habitEntry) => (
+                          <div key={habitEntry.habit.id}>
+                            <button
+                              onClick={() => setEditingHabitId(
+                                editingHabitId === habitEntry.habit.id ? null : habitEntry.habit.id
+                              )}
+                              className={`w-full flex items-center gap-2 text-sm py-1.5 px-2.5 rounded-lg transition-colors ${
+                                habitEntry.state === 'done' 
+                                  ? 'bg-primary/10 text-foreground hover:bg-primary/15' 
+                                  : habitEntry.state === 'conscious-skip'
+                                  ? 'bg-accent/10 text-foreground hover:bg-accent/15'
+                                  : habitEntry.state === 'planned'
+                                  ? 'bg-blue-500/10 text-foreground hover:bg-blue-500/15'
+                                  : 'bg-muted/30 text-muted-foreground hover:bg-muted/50'
+                              }`}
+                            >
+                              <span className="text-base">{habitEntry.habit.emoji || '○'}</span>
+                              <span className={habitEntry.state === 'done' ? 'font-medium' : ''}>
+                                {habitEntry.habit.name}
+                              </span>
+                              <span className="ml-auto text-xs">
+                                {STATE_ICONS[habitEntry.state] || ''}
+                              </span>
+                            </button>
+                            
+                            {/* Inline habit options */}
+                            <AnimatePresence>
+                              {editingHabitId === habitEntry.habit.id && (
+                                <motion.div
+                                  initial={{ opacity: 0, height: 0 }}
+                                  animate={{ opacity: 1, height: 'auto' }}
+                                  exit={{ opacity: 0, height: 0 }}
+                                  className="mt-1 ml-2"
+                                >
+                                  <HabitOptions
+                                    habit={habitEntry.habit}
+                                    onClose={() => setEditingHabitId(null)}
+                                  />
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </div>
+                        ))}
                     </div>
                   ) : (
                     <p className="text-sm text-muted-foreground">
@@ -316,6 +380,12 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
                     <div className="w-1.5 h-1.5 rounded-full bg-primary" />
                   </div>
                   <span>3+ {language === 'de' ? 'Gewohnheiten' : language === 'es' ? 'hábitos' : 'habits'}</span>
+                </div>
+              </div>
+              <div className="flex items-center justify-center gap-3 text-[10px] text-muted-foreground">
+                <div className="flex items-center gap-1">
+                  <span>📌</span>
+                  <span>{t.habits.planned}</span>
                 </div>
               </div>
               {/* Mood color legend */}

@@ -243,6 +243,9 @@ export interface Translations {
     removeRoutine: string;
     editRoutine: string;
     routineActive: string;
+    routineMonthWeekLabel: string;
+    routineMonthWeeks: string[];
+    routineOptional: string;
   };
   
   // Mood options
@@ -657,6 +660,9 @@ export const translations: Record<SupportedLanguage, Translations> = {
       removeRoutine: 'Remove routine',
       editRoutine: 'Edit routine',
       routineActive: 'Routine active',
+      routineMonthWeekLabel: 'Which week of the month?',
+      routineMonthWeeks: ['1st week', '2nd week', '3rd week', '4th week'],
+      routineOptional: 'Optional',
     },
     mood: {
       heavy: 'Heavy',
@@ -1092,6 +1098,9 @@ export const translations: Record<SupportedLanguage, Translations> = {
       removeRoutine: 'Eliminar rutina',
       editRoutine: 'Editar rutina',
       routineActive: 'Rutina activa',
+      routineMonthWeekLabel: '¿En qué semana del mes?',
+      routineMonthWeeks: ['1ª semana', '2ª semana', '3ª semana', '4ª semana'],
+      routineOptional: 'Opcional',
     },
     mood: {
       heavy: 'Pesado',
@@ -1527,6 +1536,9 @@ export const translations: Record<SupportedLanguage, Translations> = {
       removeRoutine: 'Routine entfernen',
       editRoutine: 'Routine bearbeiten',
       routineActive: 'Routine aktiv',
+      routineMonthWeekLabel: 'In welcher Monatswoche?',
+      routineMonthWeeks: ['1. Woche', '2. Woche', '3. Woche', '4. Woche'],
+      routineOptional: 'Optional',
     },
     mood: {
       heavy: 'Schwer',

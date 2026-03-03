@@ -31,6 +31,7 @@ export function AddHabitDialog({ isOpen, onClose }: AddHabitDialogProps) {
   const [showRoutine, setShowRoutine] = useState(false);
   const [routineDays, setRoutineDays] = useState<number[]>([]);
   const [routineFrequency, setRoutineFrequency] = useState<RoutineFrequency>('weekly');
+  const [routineMonthWeek, setRoutineMonthWeek] = useState(1);
   const addHabit = useFlowNautStore((s) => s.addHabit);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -42,6 +43,7 @@ export function AddHabitDialog({ isOpen, onClose }: AddHabitDialogProps) {
       emoji: selectedEmoji,
       routineDays: routineDays.length > 0 ? routineDays : undefined,
       routineFrequency: routineDays.length > 0 ? routineFrequency : undefined,
+      routineMonthWeek: routineDays.length > 0 && routineFrequency === 'monthly' ? routineMonthWeek : undefined,
     });
     
     setName('');
@@ -49,6 +51,7 @@ export function AddHabitDialog({ isOpen, onClose }: AddHabitDialogProps) {
     setShowRoutine(false);
     setRoutineDays([]);
     setRoutineFrequency('weekly');
+    setRoutineMonthWeek(1);
     onClose();
   };
 
@@ -136,6 +139,8 @@ export function AddHabitDialog({ isOpen, onClose }: AddHabitDialogProps) {
                             onDaysChange={setRoutineDays}
                             frequency={routineFrequency}
                             onFrequencyChange={setRoutineFrequency}
+                            monthWeek={routineMonthWeek}
+                            onMonthWeekChange={setRoutineMonthWeek}
                           />
                         </div>
                       </motion.div>
