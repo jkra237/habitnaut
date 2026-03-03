@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Glasses } from 'lucide-react';
+import { Flame } from 'lucide-react';
 import { getDailyQuote } from '@/lib/quotes/quote-selector';
 
 interface DailyQuoteCardProps {
@@ -37,7 +37,7 @@ export function DailyQuoteCard({ shownQuoteIds, lastQuoteDate, markQuoteShown, l
     >
       <div className="flex items-start gap-3">
         <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-          <Glasses className="w-5 h-5 text-primary" />
+          <Flame className="w-5 h-5 text-primary" />
         </div>
         <div className="space-y-1 min-w-0 pt-0.5">
           <p className="text-[11px] text-foreground/80 italic leading-relaxed">
