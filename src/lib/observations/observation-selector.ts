@@ -245,9 +245,9 @@ function weightByPersonality(
 
     const { category } = candidate.observation;
 
-    // Reflective users (solitude recovery, slow pace) → deeper meta observations
+    // Reflective users (solitude recovery, slow pace) → quieter observations
     if (personality.recovery === 'solitude' || personality.pace === 'slow') {
-      if (category === 'meta' || category === 'relationship' || category === 'open-end') {
+      if (category === 'quiet-regularity' || category === 'pause-break') {
         personalityBoost += 0.2;
       }
     }

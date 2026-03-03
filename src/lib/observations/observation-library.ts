@@ -51,17 +51,6 @@ export const observations: Observation[] = [
       es: 'Has retomado este hábito a tu manera.',
     },
   },
-  {
-    id: 'entry-5',
-    category: 'entry-return',
-    conditions: { patternType: 'multiple-restart', requiresHabit: true },
-    cooldownDays: 21,
-    text: {
-      en: 'Sometimes things simply begin again.',
-      de: 'Manchmal beginnt etwas einfach wieder.',
-      es: 'A veces las cosas simplemente vuelven a empezar.',
-    },
-  },
 
   // ============================================
   // CATEGORY: Weekday & Cycles (Wochentage & Zyklen)
@@ -169,17 +158,6 @@ export const observations: Observation[] = [
       es: 'Hay una fiabilidad silenciosa en este hábito.',
     },
   },
-  {
-    id: 'quiet-5',
-    category: 'quiet-regularity',
-    conditions: { patternType: 'quiet-consistency', requiresHabit: true },
-    cooldownDays: 14,
-    text: {
-      en: "This habit doesn't need to be loud to be there.",
-      de: 'Diese Gewohnheit muss nicht laut sein, um da zu sein.',
-      es: 'Este hábito no necesita ser ruidoso para estar ahí.',
-    },
-  },
 
   // ============================================
   // CATEGORY: Pause & Breaks (Pausen & Unterbrechungen)
@@ -204,17 +182,6 @@ export const observations: Observation[] = [
       en: 'Not every day invites this habit.',
       de: 'Nicht jeder Tag lädt diese Gewohnheit ein.',
       es: 'No todos los días invitan a este hábito.',
-    },
-  },
-  {
-    id: 'pause-3',
-    category: 'pause-break',
-    conditions: { patternType: 'natural-break', requiresHabit: true },
-    cooldownDays: 14,
-    text: {
-      en: 'Space is emerging between the moments.',
-      de: 'Hier entsteht Raum zwischen den Momenten.',
-      es: 'Aquí surge espacio entre los momentos.',
     },
   },
   {
@@ -335,28 +302,6 @@ export const observations: Observation[] = [
       es: 'La forma en que te relacionas con este hábito está cambiando.',
     },
   },
-  {
-    id: 'change-4',
-    category: 'change-over-time',
-    conditions: { patternType: 'slight-decrease', requiresHabit: true },
-    cooldownDays: 14,
-    text: {
-      en: 'This habit is in motion.',
-      de: 'Diese Gewohnheit befindet sich in Bewegung.',
-      es: 'Este hábito está en movimiento.',
-    },
-  },
-  {
-    id: 'change-5',
-    category: 'change-over-time',
-    conditions: { patternType: 'general', requiresHabit: true },
-    cooldownDays: 14,
-    text: {
-      en: 'Something about this habit is changing.',
-      de: 'Etwas an dieser Gewohnheit ist im Wandel.',
-      es: 'Algo en este hábito está cambiando.',
-    },
-  },
 
   // ============================================
   // CATEGORY: Multiple Habits (Mehrere Gewohnheiten)
@@ -462,194 +407,6 @@ export const observations: Observation[] = [
       en: 'Some days simply invite this habit.',
       de: 'Manche Tage laden diese Gewohnheit einfach ein.',
       es: 'Algunos días simplemente invitan a este hábito.',
-    },
-  },
-  {
-    id: 'effort-5',
-    category: 'effortless',
-    conditions: { patternType: 'effortless-moment', requiresHabit: true },
-    cooldownDays: 10,
-    text: {
-      en: 'This habit finds its way.',
-      de: 'Diese Gewohnheit findet ihren Weg.',
-      es: 'Este hábito encuentra su camino.',
-    },
-  },
-
-  // ============================================
-  // CATEGORY: Relationship (Gesamtbild & Beziehung)
-  // ============================================
-  {
-    id: 'rel-1',
-    category: 'relationship',
-    conditions: { patternType: 'general', requiresHabit: true },
-    cooldownDays: 21,
-    text: {
-      en: 'Your relationship with this habit is not linear.',
-      de: 'Deine Beziehung zu dieser Gewohnheit ist nicht linear.',
-      es: 'Tu relación con este hábito no es lineal.',
-    },
-  },
-  {
-    id: 'rel-2',
-    category: 'relationship',
-    conditions: { patternType: 'general', requiresHabit: true },
-    cooldownDays: 21,
-    text: {
-      en: 'This habit is part of your everyday—in your own way.',
-      de: 'Diese Gewohnheit gehört zu deinem Alltag – auf deine Weise.',
-      es: 'Este hábito forma parte de tu día a día, a tu manera.',
-    },
-  },
-  {
-    id: 'rel-3',
-    category: 'relationship',
-    conditions: { patternType: 'general', requiresHabit: true },
-    cooldownDays: 21,
-    text: {
-      en: "What's showing here is not a goal, but a process.",
-      de: 'Hier zeigt sich kein Ziel, sondern ein Prozess.',
-      es: 'Lo que se muestra aquí no es una meta, sino un proceso.',
-    },
-  },
-  {
-    id: 'rel-4',
-    category: 'relationship',
-    conditions: { patternType: 'general', requiresHabit: true },
-    cooldownDays: 21,
-    text: {
-      en: 'This habit is part of your personal rhythm.',
-      de: 'Diese Gewohnheit ist Teil deines persönlichen Rhythmus.',
-      es: 'Este hábito forma parte de tu ritmo personal.',
-    },
-  },
-  {
-    id: 'rel-5',
-    category: 'relationship',
-    conditions: { patternType: 'general', requiresHabit: true },
-    cooldownDays: 21,
-    text: {
-      en: 'You engage with this habit without fixed expectations.',
-      de: 'Du begegnest dieser Gewohnheit ohne feste Erwartungen.',
-      es: 'Te relacionas con este hábito sin expectativas fijas.',
-    },
-  },
-
-  // ============================================
-  // CATEGORY: Meta Observations (Meta-Beobachtungen)
-  // ============================================
-  {
-    id: 'meta-1',
-    category: 'meta',
-    conditions: { patternType: 'general', minDataDays: 7 },
-    cooldownDays: 21,
-    text: {
-      en: 'Not every observation needs a consequence.',
-      de: 'Nicht jede Beobachtung braucht eine Konsequenz.',
-      es: 'No toda observación necesita una consecuencia.',
-    },
-  },
-  {
-    id: 'meta-2',
-    category: 'meta',
-    conditions: { patternType: 'general', minDataDays: 7 },
-    cooldownDays: 21,
-    text: {
-      en: 'Some things are allowed to simply be seen.',
-      de: 'Manches darf einfach gesehen werden.',
-      es: 'Algunas cosas simplemente pueden ser vistas.',
-    },
-  },
-  {
-    id: 'meta-3',
-    category: 'meta',
-    conditions: { patternType: 'general', minDataDays: 7 },
-    cooldownDays: 21,
-    text: {
-      en: "This habit isn't telling a story of performance.",
-      de: 'Diese Gewohnheit erzählt keine Leistungsgeschichte.',
-      es: 'Este hábito no cuenta una historia de rendimiento.',
-    },
-  },
-  {
-    id: 'meta-4',
-    category: 'meta',
-    conditions: { patternType: 'general', minDataDays: 7 },
-    cooldownDays: 21,
-    text: {
-      en: 'This is about perception, not progress.',
-      de: 'Hier geht es um Wahrnehmung, nicht um Fortschritt.',
-      es: 'Se trata de percepción, no de progreso.',
-    },
-  },
-  {
-    id: 'meta-5',
-    category: 'meta',
-    conditions: { patternType: 'general', minDataDays: 7 },
-    cooldownDays: 21,
-    text: {
-      en: 'This habit is allowed to be just as it is.',
-      de: 'Diese Gewohnheit darf so sein, wie sie gerade ist.',
-      es: 'Este hábito puede ser tal como es ahora.',
-    },
-  },
-
-  // ============================================
-  // CATEGORY: Open End (Abschluss & Weite)
-  // ============================================
-  {
-    id: 'open-1',
-    category: 'open-end',
-    conditions: { patternType: 'general', requiresHabit: true },
-    cooldownDays: 21,
-    text: {
-      en: 'This habit remains open.',
-      de: 'Diese Gewohnheit bleibt offen.',
-      es: 'Este hábito permanece abierto.',
-    },
-  },
-  {
-    id: 'open-2',
-    category: 'open-end',
-    conditions: { patternType: 'general', requiresHabit: true },
-    cooldownDays: 21,
-    text: {
-      en: 'There is no fixed endpoint for this habit.',
-      de: 'Es gibt keinen festen Endpunkt für diese Gewohnheit.',
-      es: 'No hay un punto final fijo para este hábito.',
-    },
-  },
-  {
-    id: 'open-3',
-    category: 'open-end',
-    conditions: { patternType: 'general', requiresHabit: true },
-    cooldownDays: 21,
-    text: {
-      en: 'This habit is a companion, not a project.',
-      de: 'Diese Gewohnheit ist ein Begleiter, kein Projekt.',
-      es: 'Este hábito es un compañero, no un proyecto.',
-    },
-  },
-  {
-    id: 'open-4',
-    category: 'open-end',
-    conditions: { patternType: 'general', requiresHabit: true },
-    cooldownDays: 21,
-    text: {
-      en: "You don't have to hold on to this habit.",
-      de: 'Du musst diese Gewohnheit nicht festhalten.',
-      es: 'No tienes que aferrarte a este hábito.',
-    },
-  },
-  {
-    id: 'open-5',
-    category: 'open-end',
-    conditions: { patternType: 'general', requiresHabit: true },
-    cooldownDays: 21,
-    text: {
-      en: 'This habit is allowed to come and go.',
-      de: 'Diese Gewohnheit darf kommen und gehen.',
-      es: 'Este hábito puede ir y venir.',
     },
   },
 ];

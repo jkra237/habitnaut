@@ -167,15 +167,6 @@ function generatePatternInsights(
     });
   }
 
-  // Consistent days pattern
-  if (last7Days.length >= 5) {
-    insights.push({
-      type: 'pattern',
-      messageKey: 'patterns.consistentDays',
-      weight: 4,
-    });
-  }
-
   return insights;
 }
 
@@ -341,24 +332,12 @@ function generatePromptInsights(
       }
     }
 
-    if (personality.energy === 'waves') {
-      insights.push({
-        type: 'prompt',
-        messageKey: 'prompts.energyWavesPeaks',
-        weight: 4,
-      });
-    }
   }
 
-  // Generic prompts if nothing specific applies
+  // Fallback prompts if nothing specific applies (only kept specific ones)
   if (insights.length === 0 && last7Days.length >= 3) {
     const promptKeys = [
-      'prompts.smallMomentsCount',
-      'prompts.patternsNoticing',
       'prompts.mostNaturalHabit',
-      'prompts.gentleReminder',
-      'prompts.celebrateConsistency',
-      'prompts.restIsProgress',
       'prompts.weekReflection',
     ];
     

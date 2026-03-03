@@ -9,10 +9,7 @@ export type ObservationCategory =
   | 'change-over-time'  // Veränderung über Zeit
   | 'multi-habit'       // Mehrere Gewohnheiten
   | 'sequence'          // Reihenfolge & Vorbereitung
-  | 'effortless'        // Mühelosigkeit & Einladung
-  | 'relationship'      // Gesamtbild & Beziehung
-  | 'meta'              // Meta-Beobachtungen
-  | 'open-end';         // Abschluss & Weite
+  | 'effortless';       // Mühelosigkeit & Einladung
 
 export type PatternType =
   | 'soft-return'           // A1 - Sanfter Wiedereinstieg

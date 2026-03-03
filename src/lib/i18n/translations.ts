@@ -280,7 +280,6 @@ export interface Translations {
       eveningAnchor: string;
       moreCheckinsThisWeek: string;
       consciousSkips: string;
-      consistentDays: string;
       weekendPattern: string;
       weekdayPattern: string;
     };
@@ -298,13 +297,7 @@ export interface Translations {
       whatDidHabitBring: string;
       easiestMoment: string;
       morningRhythmAligned: string;
-      energyWavesPeaks: string;
-      smallMomentsCount: string;
-      patternsNoticing: string;
       mostNaturalHabit: string;
-      gentleReminder: string;
-      celebrateConsistency: string;
-      restIsProgress: string;
       curiousAboutSkips: string;
       connectionBetweenHabits: string;
       timeOfDayInfluence: string;
@@ -692,7 +685,6 @@ export const translations: Record<SupportedLanguage, Translations> = {
         eveningAnchor: 'You tended to start habits in the evening more often this week.',
         moreCheckinsThisWeek: 'You checked in more often this week than last — notice the difference, not the numbers.',
         consciousSkips: 'You chose to pause some habits this week. Noticing when to rest is awareness too.',
-        consistentDays: 'Your rhythm has been steady these past days.',
         weekendPattern: 'Your weekends seem to have their own natural rhythm.',
         weekdayPattern: 'Weekdays seem to bring a different energy to your practice.',
       },
@@ -708,13 +700,7 @@ export const translations: Record<SupportedLanguage, Translations> = {
         whatDidHabitBring: 'What did "{habitName}" bring you this week?',
         easiestMoment: 'Which moment felt easiest for "{habitName}"?',
         morningRhythmAligned: 'Your morning rhythm seems aligned with your habits. How does that feel?',
-        energyWavesPeaks: 'Notice the natural rhythm of your energy this week. When were the peaks?',
-        smallMomentsCount: 'Even small moments of practice count as awareness.',
-        patternsNoticing: 'What patterns are you noticing in your daily rhythm?',
         mostNaturalHabit: 'Which habit felt most natural this week?',
-        gentleReminder: 'This is a space for observation, not optimization.',
-        celebrateConsistency: 'Notice how some habits have become part of your rhythm.',
-        restIsProgress: 'Rest and pauses are part of the journey too.',
         curiousAboutSkips: 'What made you choose to skip certain habits? Just curious, no judgment.',
         connectionBetweenHabits: 'Do you notice any connection between your habits?',
         timeOfDayInfluence: 'How does the time of day influence your energy for habits?',
@@ -1132,7 +1118,6 @@ export const translations: Record<SupportedLanguage, Translations> = {
         eveningAnchor: 'Esta semana tendiste a empezar los hábitos por la tarde más a menudo.',
         moreCheckinsThisWeek: 'Registraste más esta semana que la anterior — nota la diferencia, no los números.',
         consciousSkips: 'Elegiste pausar algunos hábitos esta semana. Notar cuándo descansar también es conciencia.',
-        consistentDays: 'Tu ritmo ha sido constante estos días.',
         weekendPattern: 'Tus fines de semana parecen tener su propio ritmo natural.',
         weekdayPattern: 'Los días laborables parecen traer una energía diferente a tu práctica.',
       },
@@ -1148,13 +1133,7 @@ export const translations: Record<SupportedLanguage, Translations> = {
         whatDidHabitBring: '¿Qué te aportó "{habitName}" esta semana?',
         easiestMoment: '¿Qué momento fue más fácil para "{habitName}"?',
         morningRhythmAligned: 'Tu ritmo matutino parece alineado con tus hábitos. ¿Cómo se siente eso?',
-        energyWavesPeaks: 'Nota el ritmo natural de tu energía esta semana. ¿Cuándo fueron los picos?',
-        smallMomentsCount: 'Incluso los pequeños momentos de práctica cuentan como conciencia.',
-        patternsNoticing: '¿Qué patrones estás notando en tu ritmo diario?',
         mostNaturalHabit: '¿Qué hábito se sintió más natural esta semana?',
-        gentleReminder: 'Este es un espacio para observar, no para optimizar.',
-        celebrateConsistency: 'Nota cómo algunos hábitos se han convertido en parte de tu ritmo.',
-        restIsProgress: 'El descanso y las pausas también son parte del camino.',
         curiousAboutSkips: '¿Qué te hizo elegir saltarte ciertos hábitos? Solo curiosidad, sin juicio.',
         connectionBetweenHabits: '¿Notas alguna conexión entre tus hábitos?',
         timeOfDayInfluence: '¿Cómo influye la hora del día en tu energía para los hábitos?',
@@ -1572,7 +1551,6 @@ export const translations: Record<SupportedLanguage, Translations> = {
         eveningAnchor: 'Du hast diese Woche öfter abends mit Gewohnheiten begonnen.',
         moreCheckinsThisWeek: 'Du hast diese Woche öfter eingetragen als letzte – bemerke den Unterschied, nicht die Zahlen.',
         consciousSkips: 'Du hast diese Woche bewusst einige Gewohnheiten pausiert. Zu erkennen, wann Ruhe nötig ist, ist auch Achtsamkeit.',
-        consistentDays: 'Dein Rhythmus war in den letzten Tagen beständig.',
         weekendPattern: 'Deine Wochenenden scheinen ihren eigenen natürlichen Rhythmus zu haben.',
         weekdayPattern: 'Werktage scheinen eine andere Energie in deine Praxis zu bringen.',
       },
@@ -1588,13 +1566,7 @@ export const translations: Record<SupportedLanguage, Translations> = {
         whatDidHabitBring: 'Was hat dir "{habitName}" diese Woche gebracht?',
         easiestMoment: 'Welcher Moment fühlte sich am leichtesten für "{habitName}" an?',
         morningRhythmAligned: 'Dein Morgenrhythmus scheint mit deinen Gewohnheiten übereinzustimmen. Wie fühlt sich das an?',
-        energyWavesPeaks: 'Beobachte den natürlichen Rhythmus deiner Energie diese Woche. Wann waren die Höhepunkte?',
-        smallMomentsCount: 'Auch kleine Momente der Übung zählen als Achtsamkeit.',
-        patternsNoticing: 'Welche Muster bemerkst du in deinem Tagesrhythmus?',
         mostNaturalHabit: 'Welche Gewohnheit fühlte sich diese Woche am natürlichsten an?',
-        gentleReminder: 'Dies ist ein Raum zum Beobachten, nicht zum Optimieren.',
-        celebrateConsistency: 'Bemerke, wie manche Gewohnheiten Teil deines Rhythmus geworden sind.',
-        restIsProgress: 'Ruhe und Pausen sind auch Teil des Weges.',
         curiousAboutSkips: 'Was hat dich dazu bewogen, bestimmte Gewohnheiten zu überspringen? Nur neugierig, ohne Wertung.',
         connectionBetweenHabits: 'Bemerkst du eine Verbindung zwischen deinen Gewohnheiten?',
         timeOfDayInfluence: 'Wie beeinflusst die Tageszeit deine Energie für Gewohnheiten?',
