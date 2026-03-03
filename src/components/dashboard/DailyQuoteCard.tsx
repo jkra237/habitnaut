@@ -40,10 +40,10 @@ export function DailyQuoteCard({ shownQuoteIds, lastQuoteDate, markQuoteShown, l
           <Lightbulb className="w-5 h-5 text-primary" />
         </div>
         <div className="space-y-1 min-w-0 pt-0.5">
-          <p className="text-xs text-foreground/80 italic leading-relaxed">
+          <p className="text-[11px] text-foreground/80 italic leading-relaxed">
             „{dailyQuote.text}"
           </p>
-          <p className="text-[11px] text-muted-foreground">
+          <p className="text-[10px] text-muted-foreground">
             — {dailyQuote.author === 'Unbekannt' 
               ? (language === 'de' ? 'Unbekannt' : language === 'es' ? 'Desconocido' : 'Unknown')
               : dailyQuote.author}
