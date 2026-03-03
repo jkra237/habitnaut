@@ -1,40 +1,72 @@
 
 
-## Plan: Merge Reflections/Insights into Gentle Observations
+## Plan: Remove Vague Observations and Insights
 
-### Current State
-- **Gentle Observations** (active): Pattern-based, shown in `ObservationCard` at the bottom of the dashboard with the eye icon. Has its own detection, selection, and cooldown logic.
-- **Reflections/Insights** (dead code): `generateInsights()` is never called anywhere. `InsightCard` is never imported. The settings UI for frequency exists but controls nothing visible.
+### Analysis
 
-### What to Do
+I reviewed all 65 observations and all insight messages. Many are philosophical platitudes that don't tell the user anything about their actual behavior. The rule: **keep only items that reflect specific, data-driven patterns back to the user**.
 
-**1. Integrate insight generation into the ObservationCard system**
-- Modify `use-observations.ts` to also call `generateInsights()` and convert its output into the same format shown in the `ObservationCard`
-- Both gentle observations and reflections/insights will appear in the same card slot at the bottom of the dashboard (eye icon area)
-- They share the same daily/weekly limits (max 1/day, 3/week)
+### Observations to REMOVE (25 items)
 
-**2. Respect the "never" frequency setting**
-- When `insightFrequency` is set to `'never'`, suppress both observations AND insights in the combined system
-- Rename the settings label to cover both (e.g., "Reflections & Observations" / "Reflexionen & Beobachtungen")
+**Entire "Relationship" category (rel-1 to rel-5)** — generic philosophy, no data connection:
+- "Your relationship with this habit is not linear"
+- "This habit is part of your everyday—in your own way"
+- "What's showing here is not a goal, but a process"
+- "This habit is part of your personal rhythm"
+- "You engage with this habit without fixed expectations"
 
-**3. Unified display in ObservationCard**
-- Extend `ObservationCard` to also render insight-type content (correlations, patterns, prompts) using the same visual style — eye icon, dismissible card, same gradient
-- Add a small label distinction at the bottom: either "Gentle Observation" or the insight sub-type label (e.g., "Connection noticed" / "Pattern emerged")
+**Entire "Meta" category (meta-1 to meta-5)** — self-referential platitudes:
+- "Not every observation needs a consequence"
+- "Some things are allowed to simply be seen"
+- "This habit isn't telling a story of performance"
+- "This is about perception, not progress"
+- "This habit is allowed to be just as it is"
 
-**4. Clean up dead code**
-- Remove `InsightCard.tsx` (no longer needed as a separate component)
-- Keep `insight-generator.ts` as the logic engine but wire it into the observation hook
-- Remove `DEMO_INSIGHTS` export
+**Entire "Open End" category (open-1 to open-5)** — vague, no behavioral mirror:
+- "This habit remains open"
+- "There is no fixed endpoint for this habit"
+- "This habit is a companion, not a project"
+- "You don't have to hold on to this habit"
+- "This habit is allowed to come and go"
+
+**Individual vague items from other categories:**
+- entry-5: "Sometimes things simply begin again"
+- change-4: "This habit is in motion"
+- change-5: "Something about this habit is changing"
+- effort-5: "This habit finds its way"
+- quiet-5: "This habit doesn't need to be loud to be there"
+- pause-3: "Space is emerging between the moments"
+
+### Observations to KEEP (40 items)
+All remaining items in: entry-return (4), weekday-cycle (5), quiet-regularity (4), pause-break (4), conscious-skip (5), change-over-time (3), multi-habit (5), effortless (4) — these all reflect specific detected patterns.
+
+### Insights to REMOVE (7 message keys)
+
+**Generic prompt fallbacks** — platitudes triggered when nothing specific is found:
+- `prompts.smallMomentsCount` ("Even small moments of practice count as awareness")
+- `prompts.patternsNoticing` ("What patterns are you noticing?")
+- `prompts.gentleReminder` ("This is a space for observation, not optimization")
+- `prompts.celebrateConsistency` ("Notice how some habits have become part of your rhythm")
+- `prompts.restIsProgress` ("Rest and pauses are part of the journey too")
+- `prompts.energyWavesPeaks` ("Notice the natural rhythm of your energy" — no specific data)
+
+**Overly easy trigger:**
+- `patterns.consistentDays` — fires at just 5 days with a generic "Your rhythm has been steady" message. Too low a bar, not insightful.
+
+### Insights to KEEP
+- Time anchor patterns (morningAnchor, middayAnchor, eveningAnchor) — specific
+- moreCheckinsThisWeek — week-over-week comparison
+- consciousSkips — reflects specific user choices
+- All correlations (highEnergy, lowEnergy, goodMoodHabit, habitsTogether) — data-driven
+- prompts.whatDidHabitBring — tied to a specific habit
+- prompts.easiestMoment — tied to a specific habit
+- prompts.morningRhythmAligned — personality-aware
+- prompts.mostNaturalHabit — kept as single fallback (specific enough)
+- prompts.weekReflection — kept as single fallback
 
 ### Files to Change
-- `src/hooks/use-observations.ts` — add insight generation, respect frequency setting
-- `src/components/observations/ObservationCard.tsx` — support rendering both types
-- `src/components/settings/Settings.tsx` — update label text for the frequency setting
-- `src/lib/i18n/translations.ts` — update setting labels in EN/DE/ES
-- `src/components/insights/InsightCard.tsx` — delete (dead code)
-
-### Files Unchanged
-- `src/lib/insight-generator.ts` — keep as-is, just import from hook
-- `src/lib/observations/*` — keep as-is
-- `src/components/dashboard/Dashboard.tsx` — no changes needed, `ObservationCard` already in place
+- `src/lib/observations/observation-library.ts` — remove 25 observations, remove unused category helper
+- `src/lib/insight-generator.ts` — remove `consistentDays` pattern, remove 6 generic prompt fallbacks, simplify fallback to 2 kept prompts
+- `src/lib/i18n/translations.ts` — remove translation keys for deleted items
+- `src/types/observations.ts` — remove `relationship`, `meta`, `open-end` from `ObservationCategory` type
 
