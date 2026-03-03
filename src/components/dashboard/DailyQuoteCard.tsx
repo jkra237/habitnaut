@@ -33,7 +33,7 @@ export function DailyQuoteCard({ shownQuoteIds, lastQuoteDate, markQuoteShown, l
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ delay: 0.3 }}
-      className="mt-4 p-4 rounded-xl bg-primary/5 border border-primary/10"
+      className="mt-4 p-4 rounded-xl bg-amber-400/10 border border-amber-400/20"
     >
       <div className="flex items-start gap-3">
         <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
