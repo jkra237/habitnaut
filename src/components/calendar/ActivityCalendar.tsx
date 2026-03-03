@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { useFlowNautStore } from '@/store/flownaut-store';
 import { useTranslations } from '@/hooks/use-translations';
-import { HabitOptions } from '@/components/habits/HabitOptions';
 import type { Habit, HabitState } from '@/types/flownaut';
 import { 
   format, 
@@ -47,7 +46,8 @@ function isRoutinePlanned(habit: Habit, date: Date): boolean {
   if (!habit.routineDays.includes(isoDay)) return false;
   if (habit.routineFrequency === 'monthly' && habit.routineMonthWeek) {
     const weekOfMonth = Math.ceil(date.getDate() / 7);
-    if (weekOfMonth !== habit.routineMonthWeek) return false;
+    const weeks = Array.isArray(habit.routineMonthWeek) ? habit.routineMonthWeek : [habit.routineMonthWeek];
+    if (!weeks.includes(weekOfMonth)) return false;
   }
   return true;
 }
@@ -135,7 +135,8 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [editingHabitId, setEditingHabitId] = useState<string | null>(null);
+  const setHabitState = useFlowNautStore(s => s.setHabitState);
+  const removeHabitState = useFlowNautStore(s => s.removeHabitState);
   const entries = useFlowNautStore(s => s.entries);
   const habits = useFlowNautStore(s => s.habits);
   const activeHabits = useMemo(() => habits.filter(h => !h.isResting), [habits]);
@@ -214,7 +215,6 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
   const weekdayKeys = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] as const;
 
   const selectedDayData = selectedDate ? activityMap[selectedDate] : null;
-  const editingHabit = editingHabitId ? activeHabits.find(h => h.id === editingHabitId) : null;
 
   const calendarTitle = language === 'de' ? 'Aktivitäten' : language === 'es' ? 'Actividades' : 'Activities';
   const showCalendarText = language === 'de' ? 'Kalender anzeigen' : language === 'es' ? 'Mostrar calendario' : 'Show calendar';
@@ -385,7 +385,7 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
       </AnimatePresence>
 
       {/* Day detail dialog */}
-      <Dialog open={!!selectedDate} onOpenChange={(open) => { if (!open) { setSelectedDate(null); setEditingHabitId(null); } }}>
+      <Dialog open={!!selectedDate} onOpenChange={(open) => { if (!open) setSelectedDate(null); }}>
         <DialogContent className="max-w-sm rounded-2xl p-5">
           <DialogTitle className="sr-only">
             {selectedDate ? format(new Date(selectedDate), 'd MMMM yyyy') : ''}
@@ -402,25 +402,21 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
               </div>
               
               {selectedDayData && selectedDayData.habits.filter(h => h.state !== 'none').length > 0 ? (
-                <div className="space-y-1.5">
+                <div className="space-y-2">
                   {selectedDayData.habits
                     .filter(h => h.state !== 'none')
                     .map((habitEntry) => (
-                      <div key={habitEntry.habit.id}>
-                        <button
-                          onClick={() => setEditingHabitId(
-                            editingHabitId === habitEntry.habit.id ? null : habitEntry.habit.id
-                          )}
-                          className={`w-full flex items-center gap-2 text-sm py-1.5 px-2.5 rounded-lg transition-colors ${
-                            habitEntry.state === 'done' 
-                              ? 'bg-primary/10 text-foreground hover:bg-primary/15' 
-                              : habitEntry.state === 'conscious-skip'
-                              ? 'bg-accent/10 text-foreground hover:bg-accent/15'
-                              : habitEntry.state === 'planned'
-                              ? 'bg-blue-500/10 text-foreground hover:bg-blue-500/15'
-                              : 'bg-muted/30 text-muted-foreground hover:bg-muted/50'
-                          }`}
-                        >
+                      <div key={habitEntry.habit.id} className="space-y-1.5">
+                        {/* Habit name row */}
+                        <div className={`flex items-center gap-2 text-sm py-1.5 px-2.5 rounded-lg ${
+                          habitEntry.state === 'done' 
+                            ? 'bg-primary/10 text-foreground' 
+                            : habitEntry.state === 'conscious-skip'
+                            ? 'bg-accent/10 text-foreground'
+                            : habitEntry.state === 'planned'
+                            ? 'bg-blue-500/10 text-foreground'
+                            : 'bg-muted/30 text-muted-foreground'
+                        }`}>
                           <span className="text-base">{habitEntry.habit.emoji || '○'}</span>
                           <span className={habitEntry.state === 'done' ? 'font-medium' : ''}>
                             {habitEntry.habit.name}
@@ -428,23 +424,35 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
                           <span className="ml-auto text-xs">
                             {STATE_ICONS[habitEntry.state] || ''}
                           </span>
-                        </button>
+                        </div>
                         
-                        <AnimatePresence>
-                          {editingHabitId === habitEntry.habit.id && (
-                            <motion.div
-                              initial={{ opacity: 0, height: 0 }}
-                              animate={{ opacity: 1, height: 'auto' }}
-                              exit={{ opacity: 0, height: 0 }}
-                              className="mt-1 ml-2"
+                        {/* Status change buttons */}
+                        <div className="flex gap-1 ml-2">
+                          {(['done', 'conscious-skip', 'not-done', 'planned'] as HabitState[]).map(state => (
+                            <button
+                              key={state}
+                              onClick={() => {
+                                setHabitState(selectedDate, habitEntry.habit.id, state);
+                              }}
+                              className={`px-2 py-1 rounded-md text-[10px] transition-all ${
+                                habitEntry.state === state
+                                  ? 'bg-primary/20 border border-primary/40 text-primary font-medium'
+                                  : 'bg-secondary/50 text-muted-foreground hover:bg-secondary'
+                              }`}
                             >
-                              <HabitOptions
-                                habit={habitEntry.habit}
-                                onClose={() => setEditingHabitId(null)}
-                              />
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
+                              {STATE_ICONS[state]}
+                            </button>
+                          ))}
+                          {/* Delete/clear button */}
+                          <button
+                            onClick={() => {
+                              removeHabitState(selectedDate, habitEntry.habit.id);
+                            }}
+                            className="px-2 py-1 rounded-md text-[10px] bg-secondary/50 text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-all"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </div>
                       </div>
                     ))}
                 </div>
