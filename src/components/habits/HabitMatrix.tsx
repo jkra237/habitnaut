@@ -174,11 +174,11 @@ export function HabitMatrix() {
           transition={{ delay: habitIdx * 0.1 }}
           className="space-y-2"
         >
-          <div className="flex items-center gap-1 sm:gap-2">
+          <div className="flex items-center gap-2 sm:gap-4">
             {/* Habit name and controls */}
             <button
               onClick={() => setActiveOptionsId(activeOptionsId === habit.id ? null : habit.id)}
-              className="flex items-center gap-1 sm:gap-2 min-w-0 flex-1 rounded-lg hover:bg-secondary/50 transition-all p-1 -m-1 cursor-pointer"
+              className="flex items-center gap-1 sm:gap-2 min-w-0 flex-1 rounded-xl bg-amber-400/10 border border-amber-400/20 hover:bg-amber-400/20 transition-all px-2 py-1.5 cursor-pointer"
             >
               <span className="text-sm sm:text-xl flex-shrink-0">{habit.emoji || '🌱'}</span>
               <span className="text-[10px] sm:text-sm font-medium text-foreground truncate flex-1 leading-tight text-left">
