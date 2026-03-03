@@ -217,8 +217,8 @@ export function HabitStatistics({ className = '' }: HabitStatisticsProps) {
     });
   }
 
-  // Least practiced habit (only if different from most)
-  if (stats.leastPracticed && stats.leastPracticed.habit.id !== stats.mostPracticed?.habit.id) {
+  // Least practiced habit (only if multiple habits and different from most)
+  if (habits.length >= 2 && stats.leastPracticed && stats.leastPracticed.habit.id !== stats.mostPracticed?.habit.id) {
     statItems.push({
       id: 'least-practiced',
       icon: <Pause className="w-4 h-4 text-muted-foreground" />,
@@ -257,8 +257,8 @@ export function HabitStatistics({ className = '' }: HabitStatisticsProps) {
     });
   }
 
-  // Steadiest rhythm
-  if (stats.steadiestHabit) {
+  // Steadiest rhythm (skip if same as most practiced — redundant)
+  if (stats.steadiestHabit && stats.steadiestHabit.id !== stats.mostPracticed?.habit.id) {
     statItems.push({
       id: 'steadiest',
       icon: <TrendingUp className="w-4 h-4 text-calm" />,
@@ -285,8 +285,8 @@ export function HabitStatistics({ className = '' }: HabitStatisticsProps) {
     });
   }
 
-  // Trend
-  if (stats.trend !== 'stable') {
+  // Trend (skip with single habit — restates "most practiced")
+  if (stats.trend !== 'stable' && habits.length >= 2) {
     statItems.push({
       id: 'trend',
       icon: stats.trend === 'increase' 
@@ -306,6 +306,9 @@ export function HabitStatistics({ className = '' }: HabitStatisticsProps) {
       value: '',
     });
   }
+
+  // Cap at 5 items to prevent visual clutter
+  statItems.splice(5);
 
   if (statItems.length === 0) return null;
 
