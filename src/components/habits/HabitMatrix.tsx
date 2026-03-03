@@ -3,11 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useFlowNautStore } from '@/store/flownaut-store';
 import type { HabitState } from '@/types/flownaut';
 import { format, startOfWeek, addDays, addWeeks, isToday, isBefore, startOfDay } from 'date-fns';
-import { MoreHorizontal, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, ChevronLeft, ChevronRight } from 'lucide-react';
 import { HabitOptions } from './HabitOptions';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useTranslations } from '@/hooks/use-translations';
+
+
 
 const DAYS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
@@ -15,12 +15,11 @@ export function HabitMatrix() {
   const t = useTranslations();
   const [activeReminderId, setActiveReminderId] = useState<string | null>(null);
   const [activeOptionsId, setActiveOptionsId] = useState<string | null>(null);
-  const [touchedHabitId, setTouchedHabitId] = useState<string | null>(null);
   const [weekOffset, setWeekOffset] = useState(0);
   const habits = useFlowNautStore((s) => s.getActiveHabits());
   const entries = useFlowNautStore((s) => s.entries);
   const setHabitState = useFlowNautStore((s) => s.setHabitState);
-  const isMobile = useIsMobile();
+  
 
   const weekDates = useMemo(() => {
     const currentWeekStart = startOfWeek(new Date(), { weekStartsOn: 1 });
@@ -177,39 +176,16 @@ export function HabitMatrix() {
         >
           <div className="flex items-center gap-1.5 sm:gap-3">
             {/* Habit name and controls */}
-            <div className="flex items-center gap-1 sm:gap-2 min-w-0" style={{ width: 'calc(100% - 220px)', maxWidth: '120px' }}>
-              <span className="text-sm sm:text-xl flex-shrink-0">{habit.emoji || '🌱'}</span>
-              
-              {isMobile ? (
-                <TooltipProvider delayDuration={0}>
-                  <Tooltip open={touchedHabitId === habit.id}>
-                    <TooltipTrigger asChild>
-                      <span 
-                        className="text-[10px] sm:text-sm font-medium text-foreground truncate flex-1 cursor-default leading-tight"
-                        onTouchStart={() => setTouchedHabitId(habit.id)}
-                        onTouchEnd={() => setTimeout(() => setTouchedHabitId(null), 1500)}
-                      >
-                        {habit.name}
-                      </span>
-                    </TooltipTrigger>
-                    <TooltipContent side="top" className="max-w-[200px] z-50">
-                      <p>{habit.name}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              ) : (
-                <span className="text-[10px] sm:text-sm font-medium text-foreground truncate flex-1 leading-tight">
-                  {habit.name}
-                </span>
-              )}
-            </div>
-
-            {/* Options menu */}
             <button
               onClick={() => setActiveOptionsId(activeOptionsId === habit.id ? null : habit.id)}
-              className="p-1.5 rounded-lg text-muted-foreground/60 hover:text-muted-foreground hover:bg-secondary transition-all flex-shrink-0"
+              className="flex items-center gap-1 sm:gap-2 min-w-0 rounded-lg hover:bg-secondary/50 transition-all p-1 -m-1 cursor-pointer"
+              style={{ width: 'calc(100% - 220px)', maxWidth: '140px' }}
             >
-              <MoreHorizontal className="w-4 h-4" />
+              <span className="text-sm sm:text-xl flex-shrink-0">{habit.emoji || '🌱'}</span>
+              <span className="text-[10px] sm:text-sm font-medium text-foreground truncate flex-1 leading-tight text-left">
+                {habit.name}
+              </span>
+              <Search className="w-3.5 h-3.5 text-primary/50 flex-shrink-0" />
             </button>
 
             {/* Day cells */}
