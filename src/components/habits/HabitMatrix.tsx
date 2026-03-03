@@ -207,13 +207,13 @@ export function HabitMatrix() {
             {/* Habit name and controls */}
             <button
               onClick={() => setActiveOptionsId(activeOptionsId === habit.id ? null : habit.id)}
-              className="flex items-center gap-1 sm:gap-2 min-w-0 flex-1 rounded-xl bg-amber-400/10 border border-amber-400/20 hover:bg-amber-400/20 transition-all px-2 py-1.5 cursor-pointer"
+              className="flex items-center gap-1 sm:gap-2 min-w-0 flex-1 rounded-xl bg-transparent border border-amber-400/20 hover:bg-amber-400/10 transition-all px-2 py-1.5 cursor-pointer"
             >
               <span className="text-sm sm:text-lg flex-shrink-0">{habit.emoji || '🌱'}</span>
               <span className="text-[9px] sm:text-[13px] font-medium text-foreground line-clamp-2 flex-1 leading-tight text-left">
                 {habit.name}
               </span>
-              <Search className="w-3.5 h-3.5 text-primary/50 flex-shrink-0" />
+              <Search className="w-3.5 h-3.5 text-primary/30 flex-shrink-0" />
             </button>
 
             {/* Day cells */}

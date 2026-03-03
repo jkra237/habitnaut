@@ -272,9 +272,24 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
                           )}
                         </>
                       )}
-                      {/* Planned indicator (only if no done habits shown) */}
+                      {/* Planned indicators (shown when no done habits) */}
                       {activity && activity.doneCount === 0 && hasPlanned && (
-                        <span className="text-[7px] leading-none">📌</span>
+                        <>
+                          {activity.plannedCount >= 3 ? (
+                            <>
+                              <span className="text-[7px] leading-none">📌</span>
+                              <span className="text-[7px] leading-none">📌</span>
+                              <span className="text-[7px] leading-none">📌</span>
+                            </>
+                          ) : activity.plannedCount === 2 ? (
+                            <>
+                              <span className="text-[7px] leading-none">📌</span>
+                              <span className="text-[7px] leading-none">📌</span>
+                            </>
+                          ) : (
+                            <span className="text-[7px] leading-none">📌</span>
+                          )}
+                        </>
                       )}
                     </div>
                   </motion.button>
