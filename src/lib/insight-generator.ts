@@ -23,6 +23,11 @@ export function generateInsights(
   frequency: InsightFrequency,
   existingInsights: Insight[]
 ): Insight[] {
+  // Never generate if frequency is set to 'never'
+  if (frequency === 'never') {
+    return [];
+  }
+
   // Don't generate if recent insight exists
   const recentInsight = existingInsights[0];
   if (recentInsight) {

@@ -20,7 +20,7 @@ export interface OnboardingAnswer {
 export type TimeAnchor = 'morning' | 'midday' | 'evening' | 'none';
 export type SoftFrequency = 'daily' | 'few-times-week' | 'free';
 export type RoutineFrequency = 'weekly' | 'monthly';
-export type InsightFrequency = 'rare' | 'occasional' | 'weekly';
+export type InsightFrequency = 'never' | 'rare' | 'occasional' | 'weekly';
 export type WeekStart = 'monday' | 'sunday';
 
 export interface Habit {
