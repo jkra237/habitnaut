@@ -174,7 +174,7 @@ export function HabitMatrix() {
           transition={{ delay: habitIdx * 0.1 }}
           className="space-y-2"
         >
-          <div className="flex items-center gap-0.5 sm:gap-3">
+          <div className="flex items-center gap-1.5 sm:gap-3">
             {/* Habit name and controls */}
             <button
               onClick={() => setActiveOptionsId(activeOptionsId === habit.id ? null : habit.id)}
