@@ -86,8 +86,8 @@ export function HabitOptions({ habit, onClose }: HabitOptionsProps) {
           <div className="flex items-center gap-1.5 text-xs text-primary">
             <CalendarClock className="w-3.5 h-3.5" />
             <span>
-              {t.addHabitDialog.routineActive}: {habit.routineDays!.map(d => t.addHabitDialog.weekdays[d]).join(', ')} 
-              ({habit.routineFrequency === 'monthly' 
+              {t.addHabitDialog.routineActive}: {habit.routineDays!.map(d => t.addHabitDialog.weekdays[d]).join(', ')}{' '}
+              ({habit.routineFrequency === 'monthly'
                 ? `${t.addHabitDialog.routineMonthly}, ${
                     (Array.isArray(habit.routineMonthWeek) ? habit.routineMonthWeek : [habit.routineMonthWeek || 1])
                       .map(w => t.addHabitDialog.routineMonthWeeks[w - 1]).join(', ')
