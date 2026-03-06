@@ -208,6 +208,8 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
   const exportData = useFlowNautStore((s) => s.exportData);
   const importData = useFlowNautStore((s) => s.importData);
   const reopenOnboarding = useFlowNautStore((s) => s.reopenOnboarding);
+  const milestonesDisabled = useFlowNautStore((s) => s.milestonesDisabled);
+  const setMilestonesDisabled = useFlowNautStore((s) => s.setMilestonesDisabled);
 
   const handleAuth = async () => {
     if (!email || !password) return;
