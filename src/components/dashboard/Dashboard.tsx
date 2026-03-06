@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Settings as SettingsIcon, TrendingUp } from 'lucide-react';
+import { LoginStreakPopup } from '@/components/streak/LoginStreakPopup';
 import { Button } from '@/components/ui/button';
 import { HabitMatrix } from '@/components/habits/HabitMatrix';
 import { AddHabitDialog } from '@/components/habits/AddHabitDialog';
@@ -20,8 +21,9 @@ import { useTranslations } from '@/hooks/use-translations';
 export function Dashboard() {
   const [isAddHabitOpen, setIsAddHabitOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  
   const [showTimeline, setShowTimeline] = useState(false);
+  const [streakPopup, setStreakPopup] = useState<{ show: boolean; streak: number }>({ show: false, streak: 0 });
+  const loginRecorded = useRef(false);
   const habits = useFlowNautStore((s) => s.getActiveHabits());
   const restingHabits = useFlowNautStore((s) => s.getRestingHabits());
   const entries = useFlowNautStore((s) => s.entries);
@@ -32,12 +34,23 @@ export function Dashboard() {
   const markQuoteShown = useFlowNautStore((s) => s.markQuoteShown);
   const language = useFlowNautStore((s) => s.preferences.language);
   const dailyQuoteEnabled = useFlowNautStore((s) => s.preferences.dailyQuoteEnabled);
+  const recordLogin = useFlowNautStore((s) => s.recordLogin);
   const t = useTranslations();
 
   // Check achievements whenever habits or entries change
   useEffect(() => {
     checkAndUnlockAchievements();
   }, [entries, allHabits, checkAndUnlockAchievements]);
+
+  // Record login and check for streak milestone
+  useEffect(() => {
+    if (loginRecorded.current) return;
+    loginRecorded.current = true;
+    const result = recordLogin();
+    if (result.showMilestone) {
+      setStreakPopup({ show: true, streak: result.streak });
+    }
+  }, [recordLogin]);
 
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -257,6 +270,16 @@ export function Dashboard() {
       <AnimatePresence>
         {isSettingsOpen && (
           <Settings onClose={() => setIsSettingsOpen(false)} />
+        )}
+      </AnimatePresence>
+
+      {/* Login Streak Popup */}
+      <AnimatePresence>
+        {streakPopup.show && (
+          <LoginStreakPopup
+            streak={streakPopup.streak}
+            onDismiss={() => setStreakPopup({ show: false, streak: 0 })}
+          />
         )}
       </AnimatePresence>
     </div>

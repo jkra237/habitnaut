@@ -84,6 +84,10 @@ interface FlowNautStore extends UserState {
   // Quotes
   markQuoteShown: (quoteId: number, date: string) => void;
   
+  // Login streak
+  recordLogin: () => { showMilestone: boolean; streak: number };
+  setMilestonesDisabled: (disabled: boolean) => void;
+  
   // Reset for demo
   resetStore: () => void;
 }
@@ -101,6 +105,10 @@ const initialState: UserState = {
   preferences: defaultPreferences,
   shownQuoteIds: [],
   lastQuoteDate: '',
+  loginDates: [],
+  currentLoginStreak: 0,
+  longestLoginStreak: 0,
+  milestonesDisabled: false,
 };
 
 export const useFlowNautStore = create<FlowNautStore>()(
@@ -375,6 +383,36 @@ export const useFlowNautStore = create<FlowNautStore>()(
         shownQuoteIds: [...state.shownQuoteIds, quoteId],
         lastQuoteDate: date,
       })),
+
+      recordLogin: () => {
+        const state = get();
+        const today = new Date().toISOString().split('T')[0];
+        
+        // Already recorded today
+        if (state.loginDates.includes(today)) {
+          return { showMilestone: false, streak: state.currentLoginStreak };
+        }
+        
+        // Calculate yesterday
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yesterdayStr = yesterday.toISOString().split('T')[0];
+        
+        const wasYesterday = state.loginDates.includes(yesterdayStr);
+        const newStreak = wasYesterday ? state.currentLoginStreak + 1 : 1;
+        const newLongest = Math.max(newStreak, state.longestLoginStreak);
+        const showMilestone = newStreak >= 2 && !state.milestonesDisabled;
+        
+        set({
+          loginDates: [...state.loginDates, today],
+          currentLoginStreak: newStreak,
+          longestLoginStreak: newLongest,
+        });
+        
+        return { showMilestone, streak: newStreak };
+      },
+
+      setMilestonesDisabled: (disabled) => set({ milestonesDisabled: disabled }),
 
       resetStore: () => set(initialState),
     }),
