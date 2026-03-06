@@ -208,6 +208,8 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
   const exportData = useFlowNautStore((s) => s.exportData);
   const importData = useFlowNautStore((s) => s.importData);
   const reopenOnboarding = useFlowNautStore((s) => s.reopenOnboarding);
+  const milestonesDisabled = useFlowNautStore((s) => s.milestonesDisabled);
+  const setMilestonesDisabled = useFlowNautStore((s) => s.setMilestonesDisabled);
 
   const handleAuth = async () => {
     if (!email || !password) return;
@@ -543,6 +545,19 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
           <Switch
             checked={preferences.dailyQuoteEnabled !== false}
             onCheckedChange={(checked) => updatePreferences({ dailyQuoteEnabled: checked })}
+          />
+        }
+      />
+
+      {/* Login Streak Milestones Toggle */}
+      <SettingsRow
+        icon={Trophy}
+        label={t.streak.currentStreak}
+        sublabel={t.streak.disableMilestones}
+        rightContent={
+          <Switch
+            checked={!milestonesDisabled}
+            onCheckedChange={(checked) => setMilestonesDisabled(!checked)}
           />
         }
       />
