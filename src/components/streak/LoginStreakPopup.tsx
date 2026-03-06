@@ -84,7 +84,7 @@ export function LoginStreakPopup({ streak, onDismiss }: LoginStreakPopupProps) {
             <p className="text-xs text-muted-foreground">{t.streak.currentStreak}</p>
           </div>
           <div className="bg-muted/50 rounded-2xl p-4 text-center">
-            <Trophy className="w-5 h-5 text-amber-500 mx-auto mb-1" />
+            <Trophy className="w-5 h-5 text-primary mx-auto mb-1" />
             <p className="text-2xl font-bold text-foreground">{longestStreak}</p>
             <p className="text-xs text-muted-foreground">{t.streak.longestStreak}</p>
           </div>
