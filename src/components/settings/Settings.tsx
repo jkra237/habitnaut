@@ -549,6 +549,19 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
         }
       />
 
+      {/* Login Streak Milestones Toggle */}
+      <SettingsRow
+        icon={Trophy}
+        label={t.streak.currentStreak}
+        sublabel={t.streak.disableMilestones}
+        rightContent={
+          <Switch
+            checked={!milestonesDisabled}
+            onCheckedChange={(checked) => setMilestonesDisabled(!checked)}
+          />
+        }
+      />
+
       {/* Insight Frequency */}
       <div className="space-y-2">
         <label className="text-sm font-medium text-foreground">{t.settings.experience.subtitle}</label>
