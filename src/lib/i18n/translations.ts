@@ -431,6 +431,17 @@ export interface Translations {
     categoryF: string;
     items: Record<string, { name: string; description: string }>;
   };
+  
+  // Login streak
+  streak: {
+    congratulations: string;
+    milestone: string;
+    currentStreak: string;
+    longestStreak: string;
+    consecutiveDays: string;
+    dismiss: string;
+    disableMilestones: string;
+  };
 }
 
 export const translations: Record<SupportedLanguage, Translations> = {
@@ -858,6 +869,15 @@ export const translations: Record<SupportedLanguage, Translations> = {
         aware_practice: { name: 'Aware Practice', description: 'Sustained use over time without compulsion' },
       },
     },
+    streak: {
+      congratulations: 'Congratulations, friend!',
+      milestone: 'You reached a new milestone:',
+      currentStreak: 'Current streak',
+      longestStreak: 'Longest streak',
+      consecutiveDays: 'consecutive days',
+      dismiss: 'Nice!',
+      disableMilestones: "Don't show milestones",
+    },
   },
   
   es: {
@@ -1284,6 +1304,15 @@ export const translations: Record<SupportedLanguage, Translations> = {
         aware_practice: { name: 'Práctica consciente', description: 'Uso sostenido en el tiempo sin compulsión' },
       },
     },
+    streak: {
+      congratulations: '¡Felicidades, amigo!',
+      milestone: 'Alcanzaste un nuevo hito:',
+      currentStreak: 'Racha actual',
+      longestStreak: 'Racha más larga',
+      consecutiveDays: 'días consecutivos',
+      dismiss: '¡Genial!',
+      disableMilestones: 'No mostrar hitos',
+    },
   },
   
   de: {
@@ -1709,6 +1738,15 @@ export const translations: Record<SupportedLanguage, Translations> = {
         living_with_habits: { name: 'Leben mit Gewohnheiten', description: 'Eine langfristige Beziehung zu mehreren Gewohnheiten' },
         aware_practice: { name: 'Bewusste Praxis', description: 'Nutzung über Zeit ohne Zwangslogik' },
       },
+    },
+    streak: {
+      congratulations: 'Glückwunsch, Freund!',
+      milestone: 'Du hast einen neuen Meilenstein erreicht:',
+      currentStreak: 'Aktueller Lauf',
+      longestStreak: 'Längster Lauf',
+      consecutiveDays: 'aufeinanderfolgende Tage',
+      dismiss: 'Super!',
+      disableMilestones: 'Meilensteine nicht mehr anzeigen',
     },
   },
 };

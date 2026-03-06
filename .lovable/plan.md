@@ -1,56 +1,32 @@
-## Login-Streak Tracker with Celebration Popup
 
-### Concept
 
-Track consecutive days the user opens the app. Starting from day 2, show a celebratory popup with:
+## Problem
 
-- Current streak count
-- Longest streak ever
+With only one active habit, the "Your Overview" section shows multiple stats that all say essentially the same thing:
 
-### Data Model Changes
+1. **"Most practiced"** → shows the single habit
+2. **"Steadiest rhythm"** → shows the same single habit
+3. **"Trend: more present lately"** → generic statement about the same habit
 
-`**src/types/flownaut.ts**` — Add to `UserState`:
+These are three ways of saying "you've been doing this habit regularly." The user rightly sees this as redundant.
 
-```typescript
-loginDates: string[];        // Array of YYYY-MM-DD dates the app was opened
-currentLoginStreak: number;  // Current consecutive days
-longestLoginStreak: number;  // All-time record
-```
+## Root Cause
 
-### Store Changes
+The statistics are designed for multiple habits but don't deduplicate when there's only one. Additionally, "steadiest rhythm" and "most practiced" overlap conceptually even with multiple habits — the most-done habit is often the steadiest.
 
-`**src/store/flownaut-store.ts**`:
+## Fix
 
-- Add `recordLogin()` action that:
-  1. Gets today's date (YYYY-MM-DD)
-  2. If today already recorded, skip
-  3. Add today to `loginDates`
-  4. Check if yesterday is in `loginDates` — if yes, increment `currentLoginStreak`; if no, reset to 1
-  5. Update `longestLoginStreak` if current > longest
-  6. Return whether a new milestone was reached (streak >= 2 and streak increased)
+In `src/components/statistics/HabitStatistics.tsx`:
 
-### Popup Component
+1. **Skip "steadiest rhythm" if it's the same habit as "most practiced"** — the information is already conveyed.
+2. **Skip "least practiced" if there's only one active habit** — it's the same as "most practiced."
+3. **Skip "trend" if there are fewer than 2 active habits and the trend just restates what "most practiced" already shows** — collapse redundant signals.
+4. **General dedup rule**: before pushing any stat that references a specific habit, check if that habit is already shown by a previous stat. If so, only add it if the new stat provides genuinely different information (e.g., habit pair shows a *relationship*, not just a single habit again).
 
-`**src/components/streak/LoginStreakPopup.tsx**`:
+### Concretely
 
-- A celebratory dialog/modal shown when a new streak milestone is reached
-- Displays: "Congratulations, friend! You reached a new milestone: X consecutive logins"
-- Shows current streak and longest streak
-- Dismiss button
-- Animated with framer-motion
+- Line ~261: Add condition `stats.steadiestHabit.id !== stats.mostPracticed?.habit.id`
+- Line ~221: Add condition `habits.length >= 2` (already partially there but `leastPracticed` can still equal `mostPracticed` when count differs by 0)
+- Line ~289: Add condition `habits.length >= 2` for trend — with one habit it just restates what's above
+- Add a final cap: show **max 5 stat items** to prevent visual clutter
 
-### Integration
-
-`**src/components/dashboard/Dashboard.tsx**`:
-
-- On mount, call `recordLogin()` 
-- If it returns a new milestone (streak >= 2), show the popup
-- Use a state flag `showStreakPopup` to control visibility
-
-### Translations
-
-`**src/lib/i18n/translations.ts**`:
-
-- Add keys for EN/DE/ES: streak congratulation message, current streak label, longest streak label, dismiss button
-
-Bitte in den Pop Up Fenster einen kleinen Schalter anzeigen "Milestones nicht mehr anzeigen"

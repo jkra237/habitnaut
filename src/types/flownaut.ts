@@ -92,4 +92,8 @@ export interface UserState {
   preferences: AppPreferences;
   shownQuoteIds: number[];
   lastQuoteDate: string;
+  loginDates: string[];
+  currentLoginStreak: number;
+  longestLoginStreak: number;
+  milestonesDisabled: boolean;
 }
