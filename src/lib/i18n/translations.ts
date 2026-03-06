@@ -431,6 +431,17 @@ export interface Translations {
     categoryF: string;
     items: Record<string, { name: string; description: string }>;
   };
+  
+  // Login streak
+  streak: {
+    congratulations: string;
+    milestone: string;
+    currentStreak: string;
+    longestStreak: string;
+    consecutiveDays: string;
+    dismiss: string;
+    disableMilestones: string;
+  };
 }
 
 export const translations: Record<SupportedLanguage, Translations> = {
