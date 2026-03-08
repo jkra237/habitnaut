@@ -338,7 +338,7 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
         </div>
       </div>
       {rightContent || (onClick && <ChevronRight className="w-4 h-4 text-muted-foreground" />)}
-    </button>
+    </div>
   );
 
   const BackButton = ({ to = 'main' }: { to?: SettingsSection }) => (
