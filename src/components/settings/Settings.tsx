@@ -323,11 +323,11 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
     rightContent?: React.ReactNode;
     destructive?: boolean;
   }) => (
-    <button
+    <div
       onClick={onClick}
-      disabled={!onClick}
+      role={onClick ? 'button' : undefined}
       className={`w-full p-4 rounded-xl transition-colors flex items-center justify-between ${
-        onClick ? 'hover:bg-secondary/80' : ''
+        onClick ? 'hover:bg-secondary/80 cursor-pointer' : ''
       } ${destructive ? 'bg-destructive/5' : 'bg-secondary/50'}`}
     >
       <div className="flex items-center gap-3">
@@ -338,7 +338,7 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
         </div>
       </div>
       {rightContent || (onClick && <ChevronRight className="w-4 h-4 text-muted-foreground" />)}
-    </button>
+    </div>
   );
 
   const BackButton = ({ to = 'main' }: { to?: SettingsSection }) => (
