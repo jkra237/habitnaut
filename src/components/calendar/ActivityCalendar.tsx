@@ -244,7 +244,7 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
   const hideCalendarText = language === 'de' ? 'Kalender ausblenden' : language === 'es' ? 'Ocultar calendario' : 'Hide calendar';
 
   return (
-    <div className={`bg-card rounded-2xl border border-border/50 shadow-card p-5 ${className}`}>
+    <div className={`bg-card rounded-2xl border border-border/50 shadow-card p-3 sm:p-5 ${className}`}>
       {/* Header with expand toggle */}
       <button
         onClick={() => setIsExpanded(!isExpanded)}
@@ -254,8 +254,8 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
           <CalendarIcon className="w-4 h-4 text-primary" />
           {calendarTitle}
         </h2>
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <span>{isExpanded ? hideCalendarText : showCalendarText}</span>
+        <div className="flex items-center gap-1.5 text-xs sm:text-sm text-muted-foreground">
+          <span className="hidden sm:inline">{isExpanded ? hideCalendarText : showCalendarText}</span>
           {isExpanded ? (
             <ChevronUp className="w-4 h-4" />
           ) : (
@@ -274,41 +274,41 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
             className="overflow-hidden"
           >
             {/* View mode toggle + Navigation */}
-            <div className="flex items-center justify-between mt-4 mb-3">
-              <div className="flex items-center gap-1">
+            <div className="flex items-center justify-between mt-3 mb-2 gap-1">
+              <div className="flex items-center gap-0.5 shrink-0">
                 <button
                   onClick={() => setViewMode('month')}
-                  className={`p-1.5 rounded-lg transition-all ${
+                  className={`p-1 sm:p-1.5 rounded-lg transition-all ${
                     viewMode === 'month' 
                       ? 'bg-primary/15 text-primary' 
                       : 'text-muted-foreground hover:text-foreground hover:bg-secondary/80'
                   }`}
                   title={language === 'de' ? 'Monatsansicht' : language === 'es' ? 'Vista mensual' : 'Month view'}
                 >
-                  <Grid3X3 className="w-4 h-4" />
+                  <Grid3X3 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 </button>
                 <button
                   onClick={() => setViewMode('week')}
-                  className={`p-1.5 rounded-lg transition-all ${
+                  className={`p-1 sm:p-1.5 rounded-lg transition-all ${
                     viewMode === 'week' 
                       ? 'bg-primary/15 text-primary' 
                       : 'text-muted-foreground hover:text-foreground hover:bg-secondary/80'
                   }`}
                   title={language === 'de' ? 'Wochenansicht' : language === 'es' ? 'Vista semanal' : 'Week view'}
                 >
-                  <List className="w-4 h-4" />
+                  <List className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 </button>
               </div>
 
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-0">
                 <Button variant="ghost" size="icon" onClick={viewMode === 'month' ? goToPreviousMonth : goToPreviousWeek} className="h-7 w-7">
-                  <ChevronLeft className="w-4 h-4" />
+                  <ChevronLeft className="w-3.5 h-3.5" />
                 </Button>
                 <Button 
                   variant="ghost" 
                   size="sm" 
                   onClick={goToToday}
-                  className="text-xs min-w-[100px]"
+                  className="text-[11px] sm:text-xs px-1.5 sm:px-3 min-w-0"
                 >
                   {viewMode === 'month' ? monthName : (() => {
                     const ws = weekDays[0];
@@ -317,7 +317,7 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
                   })()}
                 </Button>
                 <Button variant="ghost" size="icon" onClick={viewMode === 'month' ? goToNextMonth : goToNextWeek} className="h-7 w-7">
-                  <ChevronRight className="w-4 h-4" />
+                  <ChevronRight className="w-3.5 h-3.5" />
                 </Button>
               </div>
             </div>
@@ -434,7 +434,7 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.15 }}
-                      className={`rounded-xl p-3 transition-all ${
+                      className={`rounded-xl p-2.5 sm:p-3 transition-all ${
                         isToday ? 'ring-2 ring-primary/50 bg-primary/5' : 'bg-secondary/30'
                       } ${isFuture ? 'opacity-50' : ''}`}
                       style={activity?.mood ? getMoodBgStyle(activity.mood, isDark) : undefined}
@@ -463,7 +463,7 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
                               <button
                                 key={habitEntry.habit.id}
                                 onClick={() => setSelectedDate(dateStr)}
-                                className={`inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] transition-all hover:ring-1 hover:ring-primary/30 ${
+                                className={`inline-flex items-center gap-0.5 sm:gap-1 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-lg text-[10px] sm:text-[11px] transition-all hover:ring-1 hover:ring-primary/30 ${
                                   habitEntry.state === 'done'
                                     ? 'bg-primary/15 text-foreground font-medium'
                                     : habitEntry.state === 'conscious-skip'
@@ -473,9 +473,9 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
                                     : 'bg-muted/40 text-muted-foreground'
                                 }`}
                               >
-                                <span className="text-xs">{habitEntry.habit.emoji || '○'}</span>
-                                <span className="max-w-[80px] truncate">{habitEntry.habit.name}</span>
-                                <span className="text-[9px]">{STATE_ICONS[habitEntry.state] || ''}</span>
+                                <span className="text-[10px] sm:text-xs">{habitEntry.habit.emoji || '○'}</span>
+                                <span className="max-w-[60px] sm:max-w-[80px] truncate">{habitEntry.habit.name}</span>
+                                <span className="text-[8px] sm:text-[9px]">{STATE_ICONS[habitEntry.state] || ''}</span>
                               </button>
                             ))}
                         </div>
