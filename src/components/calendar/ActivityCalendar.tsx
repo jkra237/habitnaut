@@ -137,7 +137,9 @@ interface ActivityCalendarProps {
 
 export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [viewMode, setViewMode] = useState<'month' | 'week'>('month');
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [currentWeek, setCurrentWeek] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<{ habitId: string; habitName: string; emoji: string } | null>(null);
   const setHabitState = useFlowNautStore(s => s.setHabitState);
@@ -157,6 +159,13 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
     const paddingDays = startDay === 0 ? 6 : startDay - 1;
     return { days, paddingDays };
   }, [currentMonth]);
+
+  // Get the days of the current week
+  const weekDays = useMemo(() => {
+    const start = startOfWeek(currentWeek, { weekStartsOn: 1 });
+    const end = endOfWeek(currentWeek, { weekStartsOn: 1 });
+    return eachDayOfInterval({ start, end });
+  }, [currentWeek]);
 
   const isDark = typeof window !== 'undefined' && document.documentElement.classList.contains('dark');
 
