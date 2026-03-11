@@ -463,7 +463,7 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
                               <button
                                 key={habitEntry.habit.id}
                                 onClick={() => setSelectedDate(dateStr)}
-                                className={`inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] transition-all hover:ring-1 hover:ring-primary/30 ${
+                                className={`inline-flex items-center gap-0.5 sm:gap-1 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-lg text-[10px] sm:text-[11px] transition-all hover:ring-1 hover:ring-primary/30 ${
                                   habitEntry.state === 'done'
                                     ? 'bg-primary/15 text-foreground font-medium'
                                     : habitEntry.state === 'conscious-skip'
@@ -473,9 +473,9 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
                                     : 'bg-muted/40 text-muted-foreground'
                                 }`}
                               >
-                                <span className="text-xs">{habitEntry.habit.emoji || '○'}</span>
-                                <span className="max-w-[80px] truncate">{habitEntry.habit.name}</span>
-                                <span className="text-[9px]">{STATE_ICONS[habitEntry.state] || ''}</span>
+                                <span className="text-[10px] sm:text-xs">{habitEntry.habit.emoji || '○'}</span>
+                                <span className="max-w-[60px] sm:max-w-[80px] truncate">{habitEntry.habit.name}</span>
+                                <span className="text-[8px] sm:text-[9px]">{STATE_ICONS[habitEntry.state] || ''}</span>
                               </button>
                             ))}
                         </div>
