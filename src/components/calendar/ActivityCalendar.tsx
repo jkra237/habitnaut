@@ -170,6 +170,13 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
   const isDark = typeof window !== 'undefined' && document.documentElement.classList.contains('dark');
 
   // Build activity map including routine-planned habits
+  const allDays = useMemo(() => {
+    const monthSet = new Set(calendarDays.days.map(d => format(d, 'yyyy-MM-dd')));
+    const weekSet = weekDays.map(d => format(d, 'yyyy-MM-dd'));
+    weekSet.forEach(d => monthSet.add(d));
+    return [...calendarDays.days, ...weekDays.filter(d => !monthSet.has(format(d, 'yyyy-MM-dd')))];
+  }, [calendarDays.days, weekDays]);
+
   const activityMap = useMemo(() => {
     const map: Record<string, { 
       doneCount: number; 
@@ -179,8 +186,9 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
       habits: { habit: Habit; state: HabitState | 'none' }[] 
     }> = {};
     
-    // Process all days in the current month view
-    calendarDays.days.forEach(day => {
+    const daysToProcess = viewMode === 'week' ? weekDays : calendarDays.days;
+    
+    daysToProcess.forEach(day => {
       const dateStr = format(day, 'yyyy-MM-dd');
       const entry = entries.find(e => e.date === dateStr);
       
@@ -195,7 +203,6 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
       const plannedCount = habitStates.filter(hs => hs.state === 'planned').length;
       const hasAnyActivity = doneCount > 0 || plannedCount > 0 || (entry?.mood !== undefined);
       
-      // Only relevant habits (have a state)
       const relevantHabits = habitStates.filter(hs => hs.state !== 'none');
       
       if (hasAnyActivity || relevantHabits.length > 0) {
@@ -210,11 +217,13 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
     });
     
     return map;
-  }, [entries, activeHabits, calendarDays.days]);
+  }, [entries, activeHabits, calendarDays.days, weekDays, viewMode]);
 
   const goToPreviousMonth = () => setCurrentMonth(prev => subMonths(prev, 1));
   const goToNextMonth = () => setCurrentMonth(prev => addMonths(prev, 1));
-  const goToToday = () => setCurrentMonth(new Date());
+  const goToToday = () => { setCurrentMonth(new Date()); setCurrentWeek(new Date()); };
+  const goToPreviousWeek = () => setCurrentWeek(prev => subWeeks(prev, 1));
+  const goToNextWeek = () => setCurrentWeek(prev => addWeeks(prev, 1));
 
   const today = new Date();
   const isCurrentMonth = isSameMonth(currentMonth, today);
