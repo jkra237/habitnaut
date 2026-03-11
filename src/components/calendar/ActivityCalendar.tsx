@@ -254,8 +254,8 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
           <CalendarIcon className="w-4 h-4 text-primary" />
           {calendarTitle}
         </h2>
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <span>{isExpanded ? hideCalendarText : showCalendarText}</span>
+        <div className="flex items-center gap-1.5 text-xs sm:text-sm text-muted-foreground">
+          <span className="hidden sm:inline">{isExpanded ? hideCalendarText : showCalendarText}</span>
           {isExpanded ? (
             <ChevronUp className="w-4 h-4" />
           ) : (
