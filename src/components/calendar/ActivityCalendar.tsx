@@ -434,7 +434,7 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.15 }}
-                      className={`rounded-xl p-3 transition-all ${
+                      className={`rounded-xl p-2.5 sm:p-3 transition-all ${
                         isToday ? 'ring-2 ring-primary/50 bg-primary/5' : 'bg-secondary/30'
                       } ${isFuture ? 'opacity-50' : ''}`}
                       style={activity?.mood ? getMoodBgStyle(activity.mood, isDark) : undefined}
