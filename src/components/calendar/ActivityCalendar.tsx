@@ -3,7 +3,7 @@
 
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, ChevronDown, ChevronUp, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, ChevronDown, ChevronUp, X, Grid3X3, List } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { useFlowNautStore } from '@/store/flownaut-store';
@@ -13,11 +13,15 @@ import {
   format, 
   startOfMonth, 
   endOfMonth, 
+  startOfWeek,
+  endOfWeek,
   eachDayOfInterval, 
   isSameMonth,
   isSameDay,
   addMonths,
   subMonths,
+  addWeeks,
+  subWeeks,
   getDay,
 } from 'date-fns';
 
