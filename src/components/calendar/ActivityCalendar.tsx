@@ -244,7 +244,7 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
   const hideCalendarText = language === 'de' ? 'Kalender ausblenden' : language === 'es' ? 'Ocultar calendario' : 'Hide calendar';
 
   return (
-    <div className={`bg-card rounded-2xl border border-border/50 shadow-card p-5 ${className}`}>
+    <div className={`bg-card rounded-2xl border border-border/50 shadow-card p-3 sm:p-5 ${className}`}>
       {/* Header with expand toggle */}
       <button
         onClick={() => setIsExpanded(!isExpanded)}
