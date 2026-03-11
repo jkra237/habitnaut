@@ -274,41 +274,41 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
             className="overflow-hidden"
           >
             {/* View mode toggle + Navigation */}
-            <div className="flex items-center justify-between mt-4 mb-3">
-              <div className="flex items-center gap-1">
+            <div className="flex items-center justify-between mt-3 mb-2 gap-1">
+              <div className="flex items-center gap-0.5 shrink-0">
                 <button
                   onClick={() => setViewMode('month')}
-                  className={`p-1.5 rounded-lg transition-all ${
+                  className={`p-1 sm:p-1.5 rounded-lg transition-all ${
                     viewMode === 'month' 
                       ? 'bg-primary/15 text-primary' 
                       : 'text-muted-foreground hover:text-foreground hover:bg-secondary/80'
                   }`}
                   title={language === 'de' ? 'Monatsansicht' : language === 'es' ? 'Vista mensual' : 'Month view'}
                 >
-                  <Grid3X3 className="w-4 h-4" />
+                  <Grid3X3 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 </button>
                 <button
                   onClick={() => setViewMode('week')}
-                  className={`p-1.5 rounded-lg transition-all ${
+                  className={`p-1 sm:p-1.5 rounded-lg transition-all ${
                     viewMode === 'week' 
                       ? 'bg-primary/15 text-primary' 
                       : 'text-muted-foreground hover:text-foreground hover:bg-secondary/80'
                   }`}
                   title={language === 'de' ? 'Wochenansicht' : language === 'es' ? 'Vista semanal' : 'Week view'}
                 >
-                  <List className="w-4 h-4" />
+                  <List className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 </button>
               </div>
 
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-0">
                 <Button variant="ghost" size="icon" onClick={viewMode === 'month' ? goToPreviousMonth : goToPreviousWeek} className="h-7 w-7">
-                  <ChevronLeft className="w-4 h-4" />
+                  <ChevronLeft className="w-3.5 h-3.5" />
                 </Button>
                 <Button 
                   variant="ghost" 
                   size="sm" 
                   onClick={goToToday}
-                  className="text-xs min-w-[100px]"
+                  className="text-[11px] sm:text-xs px-1.5 sm:px-3 min-w-0"
                 >
                   {viewMode === 'month' ? monthName : (() => {
                     const ws = weekDays[0];
@@ -317,7 +317,7 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
                   })()}
                 </Button>
                 <Button variant="ghost" size="icon" onClick={viewMode === 'month' ? goToNextMonth : goToNextWeek} className="h-7 w-7">
-                  <ChevronRight className="w-4 h-4" />
+                  <ChevronRight className="w-3.5 h-3.5" />
                 </Button>
               </div>
             </div>
