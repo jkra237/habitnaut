@@ -273,121 +273,222 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
             transition={{ duration: 0.2 }}
             className="overflow-hidden"
           >
-            {/* Month navigation */}
-            <div className="flex items-center justify-center gap-2 mt-4 mb-3">
-              <Button variant="ghost" size="icon" onClick={goToPreviousMonth} className="h-8 w-8">
-                <ChevronLeft className="w-4 h-4" />
-              </Button>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={goToToday}
-                className="text-xs min-w-[120px]"
-              >
-                {monthName}
-              </Button>
-              <Button variant="ghost" size="icon" onClick={goToNextMonth} className="h-8 w-8">
-                <ChevronRight className="w-4 h-4" />
-              </Button>
-            </div>
-
-            {/* Weekday headers */}
-            <div className="grid grid-cols-7 gap-1 mb-1">
-              {weekdayKeys.map(day => (
-                <div 
-                  key={day} 
-                  className="text-center text-[10px] font-medium text-muted-foreground uppercase tracking-wider py-1"
+            {/* View mode toggle + Navigation */}
+            <div className="flex items-center justify-between mt-4 mb-3">
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => setViewMode('month')}
+                  className={`p-1.5 rounded-lg transition-all ${
+                    viewMode === 'month' 
+                      ? 'bg-primary/15 text-primary' 
+                      : 'text-muted-foreground hover:text-foreground hover:bg-secondary/80'
+                  }`}
+                  title={language === 'de' ? 'Monatsansicht' : language === 'es' ? 'Vista mensual' : 'Month view'}
                 >
-                  {t.time.weekdays[day].slice(0, 2)}
-                </div>
-              ))}
+                  <Grid3X3 className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => setViewMode('week')}
+                  className={`p-1.5 rounded-lg transition-all ${
+                    viewMode === 'week' 
+                      ? 'bg-primary/15 text-primary' 
+                      : 'text-muted-foreground hover:text-foreground hover:bg-secondary/80'
+                  }`}
+                  title={language === 'de' ? 'Wochenansicht' : language === 'es' ? 'Vista semanal' : 'Week view'}
+                >
+                  <List className="w-4 h-4" />
+                </button>
+              </div>
+
+              <div className="flex items-center gap-1">
+                <Button variant="ghost" size="icon" onClick={viewMode === 'month' ? goToPreviousMonth : goToPreviousWeek} className="h-7 w-7">
+                  <ChevronLeft className="w-4 h-4" />
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={goToToday}
+                  className="text-xs min-w-[100px]"
+                >
+                  {viewMode === 'month' ? monthName : (() => {
+                    const ws = weekDays[0];
+                    const we = weekDays[6];
+                    return `${format(ws, 'd MMM')} – ${format(we, 'd MMM')}`;
+                  })()}
+                </Button>
+                <Button variant="ghost" size="icon" onClick={viewMode === 'month' ? goToNextMonth : goToNextWeek} className="h-7 w-7">
+                  <ChevronRight className="w-4 h-4" />
+                </Button>
+              </div>
             </div>
 
-            {/* Calendar grid */}
-            <div className="grid grid-cols-7 gap-1">
-              {/* Padding days */}
-              {Array.from({ length: calendarDays.paddingDays }).map((_, i) => (
-                <div key={`pad-${i}`} className="aspect-square" />
-              ))}
-              
-              {/* Actual days */}
-              {calendarDays.days.map(day => {
-                const dateStr = format(day, 'yyyy-MM-dd');
-                const activity = activityMap[dateStr];
-                const isToday = isSameDay(day, today);
-                const isFuture = day > today;
-                const isSelected = selectedDate === dateStr;
-                
-                const fillLevel = activity && activity.totalHabits > 0 
-                  ? activity.doneCount / activity.totalHabits 
-                  : 0;
-
-                const hasPlanned = activity && activity.plannedCount > 0;
-                
-                return (
-                  <motion.button
-                    key={dateStr}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.2 }}
-                    onClick={() => setSelectedDate(isSelected ? null : dateStr)}
-                    className={`
-                      aspect-square rounded-lg flex flex-col items-center justify-center relative transition-all
-                      ${isToday ? 'ring-2 ring-primary ring-inset' : ''}
-                      ${isFuture && !hasPlanned ? 'opacity-30 cursor-default' : 'cursor-pointer hover:bg-primary/5'}
-                      ${isSelected ? 'bg-primary/20 ring-2 ring-primary/50 ring-inset' : !activity?.mood ? (fillLevel > 0 ? 'bg-primary/10' : 'bg-muted/30') : ''}
-                    `}
-                    style={!isSelected && activity?.mood ? getMoodBgStyle(activity.mood, isDark) : undefined}
-                  >
-                    <span className={`text-xs font-medium ${isToday ? 'text-primary' : 'text-foreground/70'}`}>
-                      {format(day, 'd')}
-                    </span>
-                    
-                    {/* Activity indicators */}
-                    <div className="flex gap-0.5 mt-0.5">
-                      {/* Done dots */}
-                      {activity && activity.doneCount > 0 && (
-                        <>
-                          {activity.doneCount >= 3 ? (
-                            <>
-                              <div className="w-1 h-1 rounded-full bg-primary" />
-                              <div className="w-1 h-1 rounded-full bg-primary" />
-                              <div className="w-1 h-1 rounded-full bg-primary" />
-                            </>
-                          ) : activity.doneCount === 2 ? (
-                            <>
-                              <div className="w-1 h-1 rounded-full bg-primary/80" />
-                              <div className="w-1 h-1 rounded-full bg-primary/80" />
-                            </>
-                          ) : (
-                            <div className="w-1 h-1 rounded-full bg-primary/60" />
-                          )}
-                        </>
-                      )}
-                      {/* Planned indicators (shown when no done habits) */}
-                      {activity && activity.doneCount === 0 && hasPlanned && (
-                        <>
-                          {activity.plannedCount >= 3 ? (
-                            <>
-                              <span className="text-[7px] leading-none">📌</span>
-                              <span className="text-[7px] leading-none">📌</span>
-                              <span className="text-[7px] leading-none">📌</span>
-                            </>
-                          ) : activity.plannedCount === 2 ? (
-                            <>
-                              <span className="text-[7px] leading-none">📌</span>
-                              <span className="text-[7px] leading-none">📌</span>
-                            </>
-                          ) : (
-                            <span className="text-[7px] leading-none">📌</span>
-                          )}
-                        </>
-                      )}
+            {viewMode === 'month' ? (
+              <>
+                {/* Weekday headers */}
+                <div className="grid grid-cols-7 gap-1 mb-1">
+                  {weekdayKeys.map(day => (
+                    <div 
+                      key={day} 
+                      className="text-center text-[10px] font-medium text-muted-foreground uppercase tracking-wider py-1"
+                    >
+                      {t.time.weekdays[day].slice(0, 2)}
                     </div>
-                  </motion.button>
-                );
-              })}
-            </div>
+                  ))}
+                </div>
+
+                {/* Calendar grid */}
+                <div className="grid grid-cols-7 gap-1">
+                  {Array.from({ length: calendarDays.paddingDays }).map((_, i) => (
+                    <div key={`pad-${i}`} className="aspect-square" />
+                  ))}
+                  
+                  {calendarDays.days.map(day => {
+                    const dateStr = format(day, 'yyyy-MM-dd');
+                    const activity = activityMap[dateStr];
+                    const isToday = isSameDay(day, today);
+                    const isFuture = day > today;
+                    const isSelected = selectedDate === dateStr;
+                    
+                    const fillLevel = activity && activity.totalHabits > 0 
+                      ? activity.doneCount / activity.totalHabits 
+                      : 0;
+
+                    const hasPlanned = activity && activity.plannedCount > 0;
+                    
+                    return (
+                      <motion.button
+                        key={dateStr}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.2 }}
+                        onClick={() => setSelectedDate(isSelected ? null : dateStr)}
+                        className={`
+                          aspect-square rounded-lg flex flex-col items-center justify-center relative transition-all
+                          ${isToday ? 'ring-2 ring-primary ring-inset' : ''}
+                          ${isFuture && !hasPlanned ? 'opacity-30 cursor-default' : 'cursor-pointer hover:bg-primary/5'}
+                          ${isSelected ? 'bg-primary/20 ring-2 ring-primary/50 ring-inset' : !activity?.mood ? (fillLevel > 0 ? 'bg-primary/10' : 'bg-muted/30') : ''}
+                        `}
+                        style={!isSelected && activity?.mood ? getMoodBgStyle(activity.mood, isDark) : undefined}
+                      >
+                        <span className={`text-xs font-medium ${isToday ? 'text-primary' : 'text-foreground/70'}`}>
+                          {format(day, 'd')}
+                        </span>
+                        
+                        <div className="flex gap-0.5 mt-0.5">
+                          {activity && activity.doneCount > 0 && (
+                            <>
+                              {activity.doneCount >= 3 ? (
+                                <>
+                                  <div className="w-1 h-1 rounded-full bg-primary" />
+                                  <div className="w-1 h-1 rounded-full bg-primary" />
+                                  <div className="w-1 h-1 rounded-full bg-primary" />
+                                </>
+                              ) : activity.doneCount === 2 ? (
+                                <>
+                                  <div className="w-1 h-1 rounded-full bg-primary/80" />
+                                  <div className="w-1 h-1 rounded-full bg-primary/80" />
+                                </>
+                              ) : (
+                                <div className="w-1 h-1 rounded-full bg-primary/60" />
+                              )}
+                            </>
+                          )}
+                          {activity && activity.doneCount === 0 && hasPlanned && (
+                            <>
+                              {activity.plannedCount >= 3 ? (
+                                <>
+                                  <span className="text-[7px] leading-none">📌</span>
+                                  <span className="text-[7px] leading-none">📌</span>
+                                  <span className="text-[7px] leading-none">📌</span>
+                                </>
+                              ) : activity.plannedCount === 2 ? (
+                                <>
+                                  <span className="text-[7px] leading-none">📌</span>
+                                  <span className="text-[7px] leading-none">📌</span>
+                                </>
+                              ) : (
+                                <span className="text-[7px] leading-none">📌</span>
+                              )}
+                            </>
+                          )}
+                        </div>
+                      </motion.button>
+                    );
+                  })}
+                </div>
+              </>
+            ) : (
+              /* Weekly detailed view */
+              <div className="space-y-2">
+                {weekDays.map(day => {
+                  const dateStr = format(day, 'yyyy-MM-dd');
+                  const activity = activityMap[dateStr];
+                  const isToday = isSameDay(day, today);
+                  const isFuture = day > today;
+                  const dayIndex = getDay(day);
+                  const isoDay = dayIndex === 0 ? 6 : dayIndex - 1;
+
+                  return (
+                    <motion.div
+                      key={dateStr}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.15 }}
+                      className={`rounded-xl p-3 transition-all ${
+                        isToday ? 'ring-2 ring-primary/50 bg-primary/5' : 'bg-secondary/30'
+                      } ${isFuture ? 'opacity-50' : ''}`}
+                      style={activity?.mood ? getMoodBgStyle(activity.mood, isDark) : undefined}
+                    >
+                      {/* Day header */}
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          <span className={`text-xs font-semibold ${isToday ? 'text-primary' : 'text-foreground'}`}>
+                            {t.time.weekdays[weekdayKeys[isoDay]]}
+                          </span>
+                          <span className="text-xs text-muted-foreground">
+                            {format(day, 'd MMM')}
+                          </span>
+                        </div>
+                        {activity?.mood && (
+                          <span className="text-sm">{MOOD_EMOJIS[activity.mood]}</span>
+                        )}
+                      </div>
+
+                      {/* Habit list for this day */}
+                      {activity && activity.habits.filter(h => h.state !== 'none').length > 0 ? (
+                        <div className="flex flex-wrap gap-1.5">
+                          {activity.habits
+                            .filter(h => h.state !== 'none')
+                            .map(habitEntry => (
+                              <button
+                                key={habitEntry.habit.id}
+                                onClick={() => setSelectedDate(dateStr)}
+                                className={`inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] transition-all hover:ring-1 hover:ring-primary/30 ${
+                                  habitEntry.state === 'done'
+                                    ? 'bg-primary/15 text-foreground font-medium'
+                                    : habitEntry.state === 'conscious-skip'
+                                    ? 'bg-accent/15 text-foreground'
+                                    : habitEntry.state === 'planned'
+                                    ? 'bg-blue-500/10 text-muted-foreground'
+                                    : 'bg-muted/40 text-muted-foreground'
+                                }`}
+                              >
+                                <span className="text-xs">{habitEntry.habit.emoji || '○'}</span>
+                                <span className="max-w-[80px] truncate">{habitEntry.habit.name}</span>
+                                <span className="text-[9px]">{STATE_ICONS[habitEntry.state] || ''}</span>
+                              </button>
+                            ))}
+                        </div>
+                      ) : (
+                        <p className="text-[11px] text-muted-foreground/60 italic">
+                          {language === 'de' ? 'Keine Aktivitäten' : language === 'es' ? 'Sin actividades' : 'No activities'}
+                        </p>
+                      )}
+                    </motion.div>
+                  );
+                })}
+              </div>
+            )}
 
             {/* Collapsible Legend */}
             {(() => {
