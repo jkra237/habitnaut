@@ -30,6 +30,7 @@ interface StatItem {
   label: string;
   value: string;
   sublabel?: string;
+  explanation: string;
 }
 
 export function HabitStatistics({ className = '' }: HabitStatisticsProps) {
