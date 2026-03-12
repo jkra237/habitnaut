@@ -12,6 +12,7 @@ import {
   BarChart3,
   Plus,
   Minus,
+  X,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { DetailedHabitStats } from './DetailedHabitStats';
