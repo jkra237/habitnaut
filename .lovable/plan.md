@@ -1,32 +1,22 @@
 
 
-## Problem
+## Fix: Add Habit Dialog Visibility on Mobile & Desktop
 
-With only one active habit, the "Your Overview" section shows multiple stats that all say essentially the same thing:
+### Problem
+The dialog uses `fixed top-1/3 -translate-y-1/2` positioning. When the routine selector expands (weekday buttons + frequency toggle + month week selector), the dialog grows significantly taller. On mobile (664px viewport), this causes the bottom of the dialog (buttons) to overflow below the visible area. The `top-1/3` anchor point doesn't adapt to content height changes.
 
-1. **"Most practiced"** → shows the single habit
-2. **"Steadiest rhythm"** → shows the same single habit
-3. **"Trend: more present lately"** → generic statement about the same habit
+### Solution
+Change the dialog container to use full-viewport flexbox centering instead of fixed percentage positioning. This ensures the dialog is always vertically centered regardless of content height, and the inner `max-h-[80vh] overflow-y-auto` already handles scrolling when content exceeds available space.
 
-These are three ways of saying "you've been doing this habit regularly." The user rightly sees this as redundant.
+### Changes
 
-## Root Cause
+**`src/components/habits/AddHabitDialog.tsx`** (line 75):
+- Replace: `fixed inset-x-4 top-1/3 -translate-y-1/2 z-50 mx-auto max-w-md`
+- With: `fixed inset-0 z-50 flex items-center justify-center p-4` — and move `max-w-md w-full` to the inner card div.
 
-The statistics are designed for multiple habits but don't deduplicate when there's only one. Additionally, "steadiest rhythm" and "most practiced" overlap conceptually even with multiple habits — the most-done habit is often the steadiest.
-
-## Fix
-
-In `src/components/statistics/HabitStatistics.tsx`:
-
-1. **Skip "steadiest rhythm" if it's the same habit as "most practiced"** — the information is already conveyed.
-2. **Skip "least practiced" if there's only one active habit** — it's the same as "most practiced."
-3. **Skip "trend" if there are fewer than 2 active habits and the trend just restates what "most practiced" already shows** — collapse redundant signals.
-4. **General dedup rule**: before pushing any stat that references a specific habit, check if that habit is already shown by a previous stat. If so, only add it if the new stat provides genuinely different information (e.g., habit pair shows a *relationship*, not just a single habit again).
-
-### Concretely
-
-- Line ~261: Add condition `stats.steadiestHabit.id !== stats.mostPracticed?.habit.id`
-- Line ~221: Add condition `habits.length >= 2` (already partially there but `leastPracticed` can still equal `mostPracticed` when count differs by 0)
-- Line ~289: Add condition `habits.length >= 2` for trend — with one habit it just restates what's above
-- Add a final cap: show **max 5 stat items** to prevent visual clutter
+This way:
+- The outer `motion.div` becomes a full-screen flex container that centers its child
+- The inner card keeps `max-h-[80vh] overflow-y-auto` for scrollability
+- Works identically on mobile (400px) and desktop viewports
+- Routine expansion simply grows the card within the centered container, scrolling if needed
 
