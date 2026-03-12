@@ -72,9 +72,9 @@ export function AddHabitDialog({ isOpen, onClose }: AddHabitDialogProps) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: "spring", duration: 0.4 }}
-            className="fixed inset-x-4 top-1/3 -translate-y-1/2 z-50 mx-auto max-w-md"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4"
           >
-            <div className="bg-card rounded-3xl shadow-elevated p-6 space-y-6 max-h-[80vh] overflow-y-auto">
+            <div className="bg-card rounded-3xl shadow-elevated p-6 space-y-6 max-h-[80vh] overflow-y-auto w-full max-w-md">
               <div className="text-center space-y-2">
                 <h3 className="text-xl font-serif font-medium text-foreground">
                   {t.addHabitDialog.title}
