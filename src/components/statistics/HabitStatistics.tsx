@@ -39,8 +39,11 @@ export function HabitStatistics({ className = '' }: HabitStatisticsProps) {
   const language = useLanguage();
   const t = useTranslations();
   const [showDetailed, setShowDetailed] = useState(false);
+  const [expandedStat, setExpandedStat] = useState<string | null>(null);
 
-
+  const toggleExplanation = (id: string) => {
+    setExpandedStat(prev => prev === id ? null : id);
+  };
 
   // Calculate statistics - updateKey forces recalculation
   const stats = useMemo(() => {
@@ -216,6 +219,11 @@ export function HabitStatistics({ className = '' }: HabitStatisticsProps) {
         ? 'Este hábito ha sido el que más te has encontrado últimamente.'
         : 'This habit has been meeting you most often lately.',
       value: `${stats.mostPracticed.habit.emoji || ''} ${stats.mostPracticed.habit.name}`,
+      explanation: language === 'de'
+        ? `In den letzten 30 Tagen hast du diese Gewohnheit am häufigsten als erledigt markiert – insgesamt ${stats.mostPracticed.count} Mal.`
+        : language === 'es'
+        ? `En los últimos 30 días, marcaste este hábito como completado con más frecuencia – ${stats.mostPracticed.count} veces en total.`
+        : `Over the last 30 days, you marked this habit as done most frequently – ${stats.mostPracticed.count} times total.`,
     });
   }
 
@@ -230,6 +238,11 @@ export function HabitStatistics({ className = '' }: HabitStatisticsProps) {
         ? 'Este hábito ha tenido menos espacio últimamente.'
         : 'This habit had less space lately.',
       value: `${stats.leastPracticed.habit.emoji || ''} ${stats.leastPracticed.habit.name}`,
+      explanation: language === 'de'
+        ? `Diese Gewohnheit wurde in den letzten 30 Tagen am seltensten markiert – nur ${stats.leastPracticed.count} Mal. Das ist kein Urteil, nur eine Beobachtung.`
+        : language === 'es'
+        ? `Este hábito fue marcado con menos frecuencia en los últimos 30 días – solo ${stats.leastPracticed.count} veces. Sin juicio, solo una observación.`
+        : `This habit was marked least often over the last 30 days – only ${stats.leastPracticed.count} times. No judgment, just an observation.`,
     });
   }
 
@@ -243,6 +256,11 @@ export function HabitStatistics({ className = '' }: HabitStatisticsProps) {
       ? 'Actividad en los últimos 7 días.'
       : 'Activity in the last 7 days.',
     value: `${stats.activityPercentage}%`,
+    explanation: language === 'de'
+      ? `An ${Math.round(stats.activityPercentage / 100 * 7)} von 7 Tagen hast du mindestens eine Gewohnheit als erledigt markiert. ${stats.activityPercentage}% bedeutet, du warst an fast ${stats.activityPercentage >= 70 ? 'jedem' : 'der Hälfte der'} Tag${stats.activityPercentage >= 70 ? '' : 'e'} aktiv.`
+      : language === 'es'
+      ? `En ${Math.round(stats.activityPercentage / 100 * 7)} de 7 días completaste al menos un hábito. ${stats.activityPercentage}% significa que estuviste activo casi ${stats.activityPercentage >= 70 ? 'todos los días' : 'la mitad de los días'}.`
+      : `On ${Math.round(stats.activityPercentage / 100 * 7)} out of 7 days, you completed at least one habit. ${stats.activityPercentage}% means you were active on ${stats.activityPercentage >= 70 ? 'nearly every day' : 'about half the days'}.`,
   });
 
   // Most active weekday
@@ -256,6 +274,11 @@ export function HabitStatistics({ className = '' }: HabitStatisticsProps) {
         ? 'Este día de la semana lleva muchos de tus hábitos.'
         : 'This weekday carries many of your habits.',
       value: t.time.weekdays[weekdayNames[stats.mostActiveDay]],
+      explanation: language === 'de'
+        ? 'An diesem Wochentag hast du in den letzten 30 Tagen die meisten Gewohnheiten als erledigt markiert. Vielleicht passt dieser Tag besonders gut in deinen Rhythmus.'
+        : language === 'es'
+        ? 'En este día de la semana completaste más hábitos en los últimos 30 días. Quizás este día encaja especialmente bien en tu ritmo.'
+        : 'On this weekday, you completed the most habits over the last 30 days. Perhaps this day fits your rhythm especially well.',
     });
   }
 
@@ -270,6 +293,11 @@ export function HabitStatistics({ className = '' }: HabitStatisticsProps) {
         ? 'Este hábito tiene un ritmo tranquilo y constante.'
         : 'This habit has a quiet, even rhythm.',
       value: `${stats.steadiestHabit.emoji || ''} ${stats.steadiestHabit.name}`,
+      explanation: language === 'de'
+        ? 'Die Abstände zwischen deinen Check-ins bei dieser Gewohnheit sind am gleichmäßigsten – du praktizierst sie in einem konstanten Rhythmus, ohne große Schwankungen.'
+        : language === 'es'
+        ? 'Los intervalos entre tus check-ins de este hábito son los más regulares – lo practicas en un ritmo constante, sin grandes fluctuaciones.'
+        : 'The gaps between your check-ins for this habit are the most even – you practice it in a steady rhythm without big fluctuations.',
     });
   }
 
@@ -284,6 +312,11 @@ export function HabitStatistics({ className = '' }: HabitStatisticsProps) {
         ? 'Estos hábitos se encuentran a menudo.'
         : 'These habits often meet.',
       value: `${stats.habitPair.habitA.emoji || ''} ${stats.habitPair.habitA.name} & ${stats.habitPair.habitB.emoji || ''} ${stats.habitPair.habitB.name}`,
+      explanation: language === 'de'
+        ? `Diese beiden Gewohnheiten wurden in den letzten 30 Tagen ${stats.habitPair.count} Mal am selben Tag erledigt. Sie scheinen natürlich zusammenzugehören.`
+        : language === 'es'
+        ? `Estos dos hábitos se completaron el mismo día ${stats.habitPair.count} veces en los últimos 30 días. Parecen ir juntos de forma natural.`
+        : `These two habits were completed on the same day ${stats.habitPair.count} times in the last 30 days. They seem to naturally go together.`,
     });
   }
 
@@ -306,6 +339,17 @@ export function HabitStatistics({ className = '' }: HabitStatisticsProps) {
             ? 'Tus hábitos han estado un poco más tranquilos últimamente.'
             : 'Your habits have been a bit quieter lately.'),
       value: '',
+      explanation: stats.trend === 'increase'
+        ? (language === 'de'
+            ? 'In der neueren Hälfte der letzten 30 Tage hast du mehr Gewohnheiten erledigt als in der älteren Hälfte. Deine Aktivität nimmt also zu.'
+            : language === 'es'
+            ? 'En la mitad más reciente de los últimos 30 días completaste más hábitos que en la mitad anterior. Tu actividad está aumentando.'
+            : 'In the more recent half of the last 30 days, you completed more habits than in the earlier half. Your activity is increasing.')
+        : (language === 'de'
+            ? 'In der neueren Hälfte der letzten 30 Tage hast du weniger Gewohnheiten erledigt als zuvor. Das ist natürlich – Rhythmen schwanken.'
+            : language === 'es'
+            ? 'En la mitad más reciente de los últimos 30 días completaste menos hábitos que antes. Es natural – los ritmos fluctúan.'
+            : 'In the more recent half of the last 30 days, you completed fewer habits than before. That\'s natural – rhythms fluctuate.'),
     });
   }
 
@@ -334,31 +378,60 @@ export function HabitStatistics({ className = '' }: HabitStatisticsProps) {
         </Button>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-3">
         {statItems.map((item, index) => (
           <motion.div
             key={item.id}
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: index * 0.05 }}
-            className="flex items-start gap-3"
           >
-            <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-muted/50 flex items-center justify-center">
-              {item.icon}
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                {item.label}
-              </p>
-              {item.value && (
-                <p className="text-sm font-medium text-foreground mt-0.5">
-                  {item.value}
-                  {item.sublabel && (
-                    <span className="text-muted-foreground font-normal ml-1">{item.sublabel}</span>
-                  )}
+            <button
+              type="button"
+              onClick={() => toggleExplanation(item.id)}
+              className="flex items-start gap-3 w-full text-left rounded-xl p-2 -m-2 transition-colors hover:bg-muted/40 active:bg-muted/60"
+            >
+              <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-muted/50 flex items-center justify-center">
+                {item.icon}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  {item.label}
                 </p>
+                {item.value && (
+                  <p className="text-sm font-medium text-foreground mt-0.5">
+                    {item.value}
+                    {item.sublabel && (
+                      <span className="text-muted-foreground font-normal ml-1">{item.sublabel}</span>
+                    )}
+                  </p>
+                )}
+              </div>
+            </button>
+            <AnimatePresence>
+              {expandedStat === item.id && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="overflow-hidden"
+                >
+                  <div className="ml-11 mt-2 p-3 rounded-xl bg-muted/30 border border-border/30 relative">
+                    <button
+                      type="button"
+                      onClick={(e) => { e.stopPropagation(); setExpandedStat(null); }}
+                      className="absolute top-2 right-2 p-0.5 rounded-md hover:bg-muted/60 transition-colors text-muted-foreground hover:text-foreground"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                    <p className="text-xs text-foreground/80 leading-relaxed pr-5">
+                      {item.explanation}
+                    </p>
+                  </div>
+                </motion.div>
               )}
-            </div>
+            </AnimatePresence>
           </motion.div>
         ))}
       </div>
