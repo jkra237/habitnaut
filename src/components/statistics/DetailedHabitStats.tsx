@@ -542,7 +542,7 @@ function StatBox({ id, label, value, sub, highlight, icon, onToggle }: {
   icon?: React.ReactNode;
   explanation?: string;
   expandedStat?: string | null;
-  onToggle: (id: string) => void;
+  onToggle: (id: string, e?: React.MouseEvent) => void;
 }) {
   return (
     <button
