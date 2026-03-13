@@ -359,7 +359,7 @@ export function HabitStatistics({ className = '' }: HabitStatisticsProps) {
   if (statItems.length === 0) return null;
 
   return (
-    <div className={`bg-card rounded-2xl border border-border/50 shadow-card p-5 ${className}`}>
+    <div className={`bg-card rounded-2xl border border-border/50 shadow-card p-5 relative ${className}`}>
       <div className="mb-4 flex items-center justify-between">
         <h2 className="font-serif font-medium text-foreground flex items-center gap-2">
           <BarChart3 className="w-4 h-4 text-primary" />
@@ -408,33 +408,56 @@ export function HabitStatistics({ className = '' }: HabitStatisticsProps) {
                 )}
               </div>
             </button>
-            <AnimatePresence>
-              {expandedStat === item.id && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.2 }}
-                  className="overflow-hidden"
-                >
-                  <div className="ml-11 mt-2 p-3 rounded-xl bg-muted/30 border border-border/30 relative">
-                    <button
-                      type="button"
-                      onClick={(e) => { e.stopPropagation(); setExpandedStat(null); }}
-                      className="absolute top-2 right-2 p-0.5 rounded-md hover:bg-muted/60 transition-colors text-muted-foreground hover:text-foreground"
-                    >
-                      <X className="w-3.5 h-3.5" />
-                    </button>
-                    <p className="text-xs text-foreground/80 leading-relaxed pr-5">
-                      {item.explanation}
-                    </p>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
           </motion.div>
         ))}
       </div>
+
+      {/* Overlay explanation */}
+      <AnimatePresence>
+        {expandedStat && (() => {
+          const item = statItems.find(s => s.id === expandedStat);
+          if (!item) return null;
+          return (
+            <motion.div
+              key={item.id}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15 }}
+              className="absolute inset-0 z-10 flex items-center justify-center p-4"
+              onClick={() => setExpandedStat(null)}
+            >
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.15 }}
+                className="bg-card/95 backdrop-blur-sm rounded-2xl border border-border shadow-elevated p-5 max-w-sm w-full relative"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button
+                  type="button"
+                  onClick={() => setExpandedStat(null)}
+                  className="absolute top-3 right-3 p-1 rounded-lg hover:bg-muted/60 transition-colors text-muted-foreground hover:text-foreground"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-8 h-8 rounded-lg bg-muted/50 flex items-center justify-center">
+                    {item.icon}
+                  </div>
+                  {item.value && (
+                    <p className="text-sm font-medium text-foreground">{item.value}</p>
+                  )}
+                </div>
+                <p className="text-sm text-foreground/80 leading-relaxed pr-4">
+                  {item.explanation}
+                </p>
+              </motion.div>
+            </motion.div>
+          );
+        })()}
+      </AnimatePresence>
 
       {/* Detailed Statistics Panel */}
       <AnimatePresence>

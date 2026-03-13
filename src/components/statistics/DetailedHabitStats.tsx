@@ -217,7 +217,7 @@ export function DetailedHabitStats() {
       animate={{ opacity: 1, height: 'auto' }}
       exit={{ opacity: 0, height: 0 }}
       transition={{ duration: 0.3 }}
-      className="space-y-5 pt-4 border-t border-border/30"
+      className="space-y-5 pt-4 border-t border-border/30 relative"
     >
       {/* 1. Streaks */}
       <Section icon={<Flame className="w-4 h-4 text-primary" />} title={labels.streaks}>
@@ -457,6 +457,51 @@ export function DetailedHabitStats() {
           </ExplainableBlock>
         </Section>
       )}
+
+      {/* Overlay explanation */}
+      <AnimatePresence>
+        {expandedStat && (() => {
+          const allExplanations: Record<string, { label: string; explanation: string }> = {};
+          // Build lookup from explanation keys
+          Object.keys(exp).forEach(key => {
+            allExplanations[key] = { label: (labels as any)[key] || key, explanation: (exp as any)[key] };
+          });
+          const item = allExplanations[expandedStat];
+          if (!item) return null;
+          return (
+            <motion.div
+              key={expandedStat}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15 }}
+              className="absolute inset-0 z-10 flex items-center justify-center p-4"
+              onClick={() => setExpandedStat(null)}
+            >
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.15 }}
+                className="bg-card/95 backdrop-blur-sm rounded-2xl border border-border shadow-elevated p-5 max-w-sm w-full relative"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button
+                  type="button"
+                  onClick={() => setExpandedStat(null)}
+                  className="absolute top-3 right-3 p-1 rounded-lg hover:bg-muted/60 transition-colors text-muted-foreground hover:text-foreground"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+                <p className="text-xs font-medium text-muted-foreground mb-2 pr-6">{item.label}</p>
+                <p className="text-sm text-foreground/80 leading-relaxed pr-4">
+                  {item.explanation}
+                </p>
+              </motion.div>
+            </motion.div>
+          );
+        })()}
+      </AnimatePresence>
     </motion.div>
   );
 }
@@ -474,66 +519,35 @@ function Section({ icon, title, children }: { icon: React.ReactNode; title: stri
   );
 }
 
-function ExplanationBubble({ explanation, onClose }: { explanation: string; onClose: () => void }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, height: 0 }}
-      animate={{ opacity: 1, height: 'auto' }}
-      exit={{ opacity: 0, height: 0 }}
-      transition={{ duration: 0.2 }}
-      className="overflow-hidden"
-    >
-      <div className="mt-2 p-3 rounded-xl bg-muted/40 border border-border/30 relative">
-        <button
-          type="button"
-          onClick={(e) => { e.stopPropagation(); onClose(); }}
-          className="absolute top-2 right-2 p-0.5 rounded-md hover:bg-muted/60 transition-colors text-muted-foreground hover:text-foreground"
-        >
-          <X className="w-3.5 h-3.5" />
-        </button>
-        <p className="text-xs text-foreground/80 leading-relaxed pr-5">
-          {explanation}
-        </p>
-      </div>
-    </motion.div>
-  );
-}
 
-function StatBox({ id, label, value, sub, highlight, icon, explanation, expandedStat, onToggle }: {
+function StatBox({ id, label, value, sub, highlight, icon, onToggle }: {
   id: string;
   label: string;
   value: string;
   sub?: string;
   highlight?: boolean;
   icon?: React.ReactNode;
-  explanation: string;
-  expandedStat: string | null;
+  explanation?: string;
+  expandedStat?: string | null;
   onToggle: (id: string) => void;
 }) {
   return (
-    <div>
-      <button
-        type="button"
-        onClick={() => onToggle(id)}
-        className={`w-full text-left p-2.5 rounded-xl transition-colors active:scale-[0.98] ${
-          highlight
-            ? 'bg-primary/10 border border-primary/20 hover:bg-primary/15'
-            : 'bg-muted/30 hover:bg-muted/50'
-        }`}
-      >
-        <p className="text-[10px] text-muted-foreground leading-tight">{label}</p>
-        <div className="flex items-center gap-1 mt-1">
-          {icon}
-          <p className={`text-lg font-semibold ${highlight ? 'text-primary' : 'text-foreground'}`}>{value}</p>
-        </div>
-        {sub && <p className="text-[10px] text-muted-foreground">{sub}</p>}
-      </button>
-      <AnimatePresence>
-        {expandedStat === id && (
-          <ExplanationBubble explanation={explanation} onClose={() => onToggle(id)} />
-        )}
-      </AnimatePresence>
-    </div>
+    <button
+      type="button"
+      onClick={() => onToggle(id)}
+      className={`w-full text-left p-2.5 rounded-xl transition-colors active:scale-[0.98] ${
+        highlight
+          ? 'bg-primary/10 border border-primary/20 hover:bg-primary/15'
+          : 'bg-muted/30 hover:bg-muted/50'
+      }`}
+    >
+      <p className="text-[10px] text-muted-foreground leading-tight">{label}</p>
+      <div className="flex items-center gap-1 mt-1">
+        {icon}
+        <p className={`text-lg font-semibold ${highlight ? 'text-primary' : 'text-foreground'}`}>{value}</p>
+      </div>
+      {sub && <p className="text-[10px] text-muted-foreground">{sub}</p>}
+    </button>
   );
 }
 
@@ -554,11 +568,6 @@ function ExplainableBlock({ id, explanation, expandedStat, onToggle, children }:
       >
         {children}
       </button>
-      <AnimatePresence>
-        {expandedStat === id && (
-          <ExplanationBubble explanation={explanation} onClose={() => onToggle(id)} />
-        )}
-      </AnimatePresence>
     </div>
   );
 }
