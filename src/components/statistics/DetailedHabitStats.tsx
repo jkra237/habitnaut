@@ -519,30 +519,6 @@ function Section({ icon, title, children }: { icon: React.ReactNode; title: stri
   );
 }
 
-function ExplanationBubble({ explanation, onClose }: { explanation: string; onClose: () => void }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, height: 0 }}
-      animate={{ opacity: 1, height: 'auto' }}
-      exit={{ opacity: 0, height: 0 }}
-      transition={{ duration: 0.2 }}
-      className="overflow-hidden"
-    >
-      <div className="mt-2 p-3 rounded-xl bg-muted/40 border border-border/30 relative">
-        <button
-          type="button"
-          onClick={(e) => { e.stopPropagation(); onClose(); }}
-          className="absolute top-2 right-2 p-0.5 rounded-md hover:bg-muted/60 transition-colors text-muted-foreground hover:text-foreground"
-        >
-          <X className="w-3.5 h-3.5" />
-        </button>
-        <p className="text-xs text-foreground/80 leading-relaxed pr-5">
-          {explanation}
-        </p>
-      </div>
-    </motion.div>
-  );
-}
 
 function StatBox({ id, label, value, sub, highlight, icon, onToggle }: {
   id: string;
