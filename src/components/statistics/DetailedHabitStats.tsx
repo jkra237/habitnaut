@@ -547,7 +547,7 @@ function StatBox({ id, label, value, sub, highlight, icon, onToggle }: {
   return (
     <button
       type="button"
-      onClick={() => onToggle(id)}
+      onClick={(e) => onToggle(id, e)}
       className={`w-full text-left p-2.5 rounded-xl transition-colors active:scale-[0.98] ${
         highlight
           ? 'bg-primary/10 border border-primary/20 hover:bg-primary/15'
