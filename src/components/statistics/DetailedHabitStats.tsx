@@ -568,14 +568,14 @@ function ExplainableBlock({ id, explanation, expandedStat, onToggle, children }:
   id: string;
   explanation: string;
   expandedStat: string | null;
-  onToggle: (id: string) => void;
+  onToggle: (id: string, e?: React.MouseEvent) => void;
   children: React.ReactNode;
 }) {
   return (
     <div className="mt-3">
       <button
         type="button"
-        onClick={() => onToggle(id)}
+        onClick={(e) => onToggle(id, e)}
         className="w-full text-left rounded-xl p-2 -mx-2 transition-colors hover:bg-muted/30 active:bg-muted/50"
         style={{ width: 'calc(100% + 16px)' }}
       >
