@@ -544,41 +544,34 @@ function ExplanationBubble({ explanation, onClose }: { explanation: string; onCl
   );
 }
 
-function StatBox({ id, label, value, sub, highlight, icon, explanation, expandedStat, onToggle }: {
+function StatBox({ id, label, value, sub, highlight, icon, onToggle }: {
   id: string;
   label: string;
   value: string;
   sub?: string;
   highlight?: boolean;
   icon?: React.ReactNode;
-  explanation: string;
-  expandedStat: string | null;
+  explanation?: string;
+  expandedStat?: string | null;
   onToggle: (id: string) => void;
 }) {
   return (
-    <div>
-      <button
-        type="button"
-        onClick={() => onToggle(id)}
-        className={`w-full text-left p-2.5 rounded-xl transition-colors active:scale-[0.98] ${
-          highlight
-            ? 'bg-primary/10 border border-primary/20 hover:bg-primary/15'
-            : 'bg-muted/30 hover:bg-muted/50'
-        }`}
-      >
-        <p className="text-[10px] text-muted-foreground leading-tight">{label}</p>
-        <div className="flex items-center gap-1 mt-1">
-          {icon}
-          <p className={`text-lg font-semibold ${highlight ? 'text-primary' : 'text-foreground'}`}>{value}</p>
-        </div>
-        {sub && <p className="text-[10px] text-muted-foreground">{sub}</p>}
-      </button>
-      <AnimatePresence>
-        {expandedStat === id && (
-          <ExplanationBubble explanation={explanation} onClose={() => onToggle(id)} />
-        )}
-      </AnimatePresence>
-    </div>
+    <button
+      type="button"
+      onClick={() => onToggle(id)}
+      className={`w-full text-left p-2.5 rounded-xl transition-colors active:scale-[0.98] ${
+        highlight
+          ? 'bg-primary/10 border border-primary/20 hover:bg-primary/15'
+          : 'bg-muted/30 hover:bg-muted/50'
+      }`}
+    >
+      <p className="text-[10px] text-muted-foreground leading-tight">{label}</p>
+      <div className="flex items-center gap-1 mt-1">
+        {icon}
+        <p className={`text-lg font-semibold ${highlight ? 'text-primary' : 'text-foreground'}`}>{value}</p>
+      </div>
+      {sub && <p className="text-[10px] text-muted-foreground">{sub}</p>}
+    </button>
   );
 }
 
