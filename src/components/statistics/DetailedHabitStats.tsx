@@ -487,7 +487,7 @@ export function DetailedHabitStats() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.15 }}
-              className="absolute inset-0 z-10 flex items-center justify-center p-4"
+              className="absolute inset-0 z-10"
               onClick={() => setExpandedStat(null)}
             >
               <motion.div
@@ -495,7 +495,8 @@ export function DetailedHabitStats() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.15 }}
-                className="bg-card/95 backdrop-blur-sm rounded-2xl border border-border shadow-elevated p-5 max-w-sm w-full relative"
+                className="absolute left-2 right-2 bg-card/95 backdrop-blur-sm rounded-2xl border border-border shadow-elevated p-5 max-w-sm w-auto relative"
+                style={{ top: `${overlayTop}px` }}
                 onClick={(e) => e.stopPropagation()}
               >
                 <button
