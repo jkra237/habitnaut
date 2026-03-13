@@ -217,7 +217,7 @@ export function DetailedHabitStats() {
       animate={{ opacity: 1, height: 'auto' }}
       exit={{ opacity: 0, height: 0 }}
       transition={{ duration: 0.3 }}
-      className="space-y-5 pt-4 border-t border-border/30"
+      className="space-y-5 pt-4 border-t border-border/30 relative"
     >
       {/* 1. Streaks */}
       <Section icon={<Flame className="w-4 h-4 text-primary" />} title={labels.streaks}>
