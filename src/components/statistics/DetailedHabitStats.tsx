@@ -14,9 +14,20 @@ export function DetailedHabitStats() {
   const habits = useFlowNautStore(s => s.getActiveHabits());
   const language = useLanguage();
   const [expandedStat, setExpandedStat] = useState<string | null>(null);
+  const [overlayTop, setOverlayTop] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const toggleExplanation = (id: string) => {
-    setExpandedStat(prev => prev === id ? null : id);
+  const toggleExplanation = (id: string, e?: React.MouseEvent) => {
+    if (expandedStat === id) {
+      setExpandedStat(null);
+    } else {
+      if (e && containerRef.current) {
+        const containerRect = containerRef.current.getBoundingClientRect();
+        const buttonRect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+        setOverlayTop(buttonRect.top - containerRect.top);
+      }
+      setExpandedStat(id);
+    }
   };
 
   const weekdayNames = useMemo(() => ({

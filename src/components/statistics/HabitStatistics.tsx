@@ -40,9 +40,20 @@ export function HabitStatistics({ className = '' }: HabitStatisticsProps) {
   const t = useTranslations();
   const [showDetailed, setShowDetailed] = useState(false);
   const [expandedStat, setExpandedStat] = useState<string | null>(null);
+  const [overlayTop, setOverlayTop] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const toggleExplanation = (id: string) => {
-    setExpandedStat(prev => prev === id ? null : id);
+  const toggleExplanation = (id: string, e?: React.MouseEvent) => {
+    if (expandedStat === id) {
+      setExpandedStat(null);
+    } else {
+      if (e && containerRef.current) {
+        const containerRect = containerRef.current.getBoundingClientRect();
+        const buttonRect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+        setOverlayTop(buttonRect.top - containerRect.top);
+      }
+      setExpandedStat(id);
+    }
   };
 
   // Calculate statistics - updateKey forces recalculation
