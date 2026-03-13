@@ -1,5 +1,5 @@
 // Detailed Habit Statistics - Expandable panel with comprehensive stats
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Flame, Trophy, BarChart3, Target,
@@ -14,9 +14,20 @@ export function DetailedHabitStats() {
   const habits = useFlowNautStore(s => s.getActiveHabits());
   const language = useLanguage();
   const [expandedStat, setExpandedStat] = useState<string | null>(null);
+  const [overlayTop, setOverlayTop] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const toggleExplanation = (id: string) => {
-    setExpandedStat(prev => prev === id ? null : id);
+  const toggleExplanation = (id: string, e?: React.MouseEvent) => {
+    if (expandedStat === id) {
+      setExpandedStat(null);
+    } else {
+      if (e && containerRef.current) {
+        const containerRect = containerRef.current.getBoundingClientRect();
+        const buttonRect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+        setOverlayTop(buttonRect.top - containerRect.top);
+      }
+      setExpandedStat(id);
+    }
   };
 
   const weekdayNames = useMemo(() => ({
@@ -213,6 +224,7 @@ export function DetailedHabitStats() {
 
   return (
     <motion.div
+      ref={containerRef}
       initial={{ opacity: 0, height: 0 }}
       animate={{ opacity: 1, height: 'auto' }}
       exit={{ opacity: 0, height: 0 }}
@@ -475,7 +487,7 @@ export function DetailedHabitStats() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.15 }}
-              className="absolute inset-0 z-10 flex items-center justify-center p-4"
+              className="absolute inset-0 z-10"
               onClick={() => setExpandedStat(null)}
             >
               <motion.div
@@ -483,7 +495,8 @@ export function DetailedHabitStats() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.15 }}
-                className="bg-card/95 backdrop-blur-sm rounded-2xl border border-border shadow-elevated p-5 max-w-sm w-full relative"
+                className="absolute left-2 right-2 bg-card/95 backdrop-blur-sm rounded-2xl border border-border shadow-elevated p-5 max-w-sm w-auto relative"
+                style={{ top: `${overlayTop}px` }}
                 onClick={(e) => e.stopPropagation()}
               >
                 <button
@@ -529,12 +542,12 @@ function StatBox({ id, label, value, sub, highlight, icon, onToggle }: {
   icon?: React.ReactNode;
   explanation?: string;
   expandedStat?: string | null;
-  onToggle: (id: string) => void;
+  onToggle: (id: string, e?: React.MouseEvent) => void;
 }) {
   return (
     <button
       type="button"
-      onClick={() => onToggle(id)}
+      onClick={(e) => onToggle(id, e)}
       className={`w-full text-left p-2.5 rounded-xl transition-colors active:scale-[0.98] ${
         highlight
           ? 'bg-primary/10 border border-primary/20 hover:bg-primary/15'
@@ -555,14 +568,14 @@ function ExplainableBlock({ id, explanation, expandedStat, onToggle, children }:
   id: string;
   explanation: string;
   expandedStat: string | null;
-  onToggle: (id: string) => void;
+  onToggle: (id: string, e?: React.MouseEvent) => void;
   children: React.ReactNode;
 }) {
   return (
     <div className="mt-3">
       <button
         type="button"
-        onClick={() => onToggle(id)}
+        onClick={(e) => onToggle(id, e)}
         className="w-full text-left rounded-xl p-2 -mx-2 transition-colors hover:bg-muted/30 active:bg-muted/50"
         style={{ width: 'calc(100% + 16px)' }}
       >

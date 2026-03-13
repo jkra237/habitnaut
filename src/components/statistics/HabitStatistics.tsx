@@ -1,7 +1,7 @@
 // Habit Statistics Component
 // Displays gentle, non-judgmental statistics about habit patterns
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   TrendingUp, 
@@ -40,9 +40,20 @@ export function HabitStatistics({ className = '' }: HabitStatisticsProps) {
   const t = useTranslations();
   const [showDetailed, setShowDetailed] = useState(false);
   const [expandedStat, setExpandedStat] = useState<string | null>(null);
+  const [overlayTop, setOverlayTop] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const toggleExplanation = (id: string) => {
-    setExpandedStat(prev => prev === id ? null : id);
+  const toggleExplanation = (id: string, e?: React.MouseEvent) => {
+    if (expandedStat === id) {
+      setExpandedStat(null);
+    } else {
+      if (e && containerRef.current) {
+        const containerRect = containerRef.current.getBoundingClientRect();
+        const buttonRect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+        setOverlayTop(buttonRect.top - containerRect.top);
+      }
+      setExpandedStat(id);
+    }
   };
 
   // Calculate statistics - updateKey forces recalculation
@@ -359,7 +370,7 @@ export function HabitStatistics({ className = '' }: HabitStatisticsProps) {
   if (statItems.length === 0) return null;
 
   return (
-    <div className={`bg-card rounded-2xl border border-border/50 shadow-card p-5 relative ${className}`}>
+    <div ref={containerRef} className={`bg-card rounded-2xl border border-border/50 shadow-card p-5 relative ${className}`}>
       <div className="mb-4 flex items-center justify-between">
         <h2 className="font-serif font-medium text-foreground flex items-center gap-2">
           <BarChart3 className="w-4 h-4 text-primary" />
@@ -388,7 +399,7 @@ export function HabitStatistics({ className = '' }: HabitStatisticsProps) {
           >
             <button
               type="button"
-              onClick={() => toggleExplanation(item.id)}
+              onClick={(e) => toggleExplanation(item.id, e)}
               className="flex items-start gap-3 w-full text-left rounded-xl p-2 -m-2 transition-colors hover:bg-muted/40 active:bg-muted/60"
             >
               <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-muted/50 flex items-center justify-center">
@@ -424,7 +435,7 @@ export function HabitStatistics({ className = '' }: HabitStatisticsProps) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.15 }}
-              className="absolute inset-0 z-10 flex items-center justify-center p-4"
+              className="absolute inset-0 z-10"
               onClick={() => setExpandedStat(null)}
             >
               <motion.div
@@ -432,7 +443,8 @@ export function HabitStatistics({ className = '' }: HabitStatisticsProps) {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.15 }}
-                className="bg-card/95 backdrop-blur-sm rounded-2xl border border-border shadow-elevated p-5 max-w-sm w-full relative"
+                className="absolute left-4 right-4 bg-card/95 backdrop-blur-sm rounded-2xl border border-border shadow-elevated p-5 max-w-sm w-auto relative"
+                style={{ top: `${overlayTop}px` }}
                 onClick={(e) => e.stopPropagation()}
               >
                 <button
