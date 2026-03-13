@@ -592,11 +592,6 @@ function ExplainableBlock({ id, explanation, expandedStat, onToggle, children }:
       >
         {children}
       </button>
-      <AnimatePresence>
-        {expandedStat === id && (
-          <ExplanationBubble explanation={explanation} onClose={() => onToggle(id)} />
-        )}
-      </AnimatePresence>
     </div>
   );
 }
