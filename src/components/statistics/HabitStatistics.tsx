@@ -1,7 +1,7 @@
 // Habit Statistics Component
 // Displays gentle, non-judgmental statistics about habit patterns
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   TrendingUp, 

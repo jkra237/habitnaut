@@ -1,5 +1,5 @@
 // Detailed Habit Statistics - Expandable panel with comprehensive stats
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Flame, Trophy, BarChart3, Target,
