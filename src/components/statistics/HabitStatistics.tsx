@@ -458,8 +458,6 @@ export function HabitStatistics({ className = '' }: HabitStatisticsProps) {
           );
         })()}
       </AnimatePresence>
-        ))}
-      </div>
 
       {/* Detailed Statistics Panel */}
       <AnimatePresence>
