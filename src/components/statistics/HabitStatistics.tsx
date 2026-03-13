@@ -399,7 +399,7 @@ export function HabitStatistics({ className = '' }: HabitStatisticsProps) {
           >
             <button
               type="button"
-              onClick={() => toggleExplanation(item.id)}
+              onClick={(e) => toggleExplanation(item.id, e)}
               className="flex items-start gap-3 w-full text-left rounded-xl p-2 -m-2 transition-colors hover:bg-muted/40 active:bg-muted/60"
             >
               <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-muted/50 flex items-center justify-center">
