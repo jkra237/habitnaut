@@ -359,7 +359,7 @@ export function HabitStatistics({ className = '' }: HabitStatisticsProps) {
   if (statItems.length === 0) return null;
 
   return (
-    <div className={`bg-card rounded-2xl border border-border/50 shadow-card p-5 ${className}`}>
+    <div className={`bg-card rounded-2xl border border-border/50 shadow-card p-5 relative ${className}`}>
       <div className="mb-4 flex items-center justify-between">
         <h2 className="font-serif font-medium text-foreground flex items-center gap-2">
           <BarChart3 className="w-4 h-4 text-primary" />
