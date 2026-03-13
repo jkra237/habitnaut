@@ -457,6 +457,51 @@ export function DetailedHabitStats() {
           </ExplainableBlock>
         </Section>
       )}
+
+      {/* Overlay explanation */}
+      <AnimatePresence>
+        {expandedStat && (() => {
+          const allExplanations: Record<string, { label: string; explanation: string }> = {};
+          // Build lookup from explanation keys
+          Object.keys(exp).forEach(key => {
+            allExplanations[key] = { label: (labels as any)[key] || key, explanation: (exp as any)[key] };
+          });
+          const item = allExplanations[expandedStat];
+          if (!item) return null;
+          return (
+            <motion.div
+              key={expandedStat}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15 }}
+              className="absolute inset-0 z-10 flex items-center justify-center p-4"
+              onClick={() => setExpandedStat(null)}
+            >
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.15 }}
+                className="bg-card/95 backdrop-blur-sm rounded-2xl border border-border shadow-elevated p-5 max-w-sm w-full relative"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button
+                  type="button"
+                  onClick={() => setExpandedStat(null)}
+                  className="absolute top-3 right-3 p-1 rounded-lg hover:bg-muted/60 transition-colors text-muted-foreground hover:text-foreground"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+                <p className="text-xs font-medium text-muted-foreground mb-2 pr-6">{item.label}</p>
+                <p className="text-sm text-foreground/80 leading-relaxed pr-4">
+                  {item.explanation}
+                </p>
+              </motion.div>
+            </motion.div>
+          );
+        })()}
+      </AnimatePresence>
     </motion.div>
   );
 }
