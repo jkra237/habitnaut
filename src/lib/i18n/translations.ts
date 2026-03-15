@@ -36,30 +36,27 @@ export interface Translations {
     languageSubtitle: string;
     // Questions
     questions: {
-      rhythm: string;
-      rhythmA: string;
-      rhythmB: string;
-      energy: string;
-      energyA: string;
-      energyB: string;
+      energySource: string;
+      energySourceA: string;
+      energySourceB: string;
+      structure: string;
+      structureA: string;
+      structureB: string;
       motivation: string;
       motivationA: string;
       motivationB: string;
-      approach: string;
-      approachA: string;
-      approachB: string;
-      focus: string;
-      focusA: string;
-      focusB: string;
-      recovery: string;
-      recoveryA: string;
-      recoveryB: string;
-      pace: string;
-      paceA: string;
-      paceB: string;
-      tone: string;
-      toneA: string;
-      toneB: string;
+      reflection: string;
+      reflectionA: string;
+      reflectionB: string;
+      dailyEnergy: string;
+      dailyEnergyA: string;
+      dailyEnergyB: string;
+      chaos: string;
+      chaosA: string;
+      chaosB: string;
+      growth: string;
+      growthA: string;
+      growthB: string;
     };
   };
   
