@@ -219,10 +219,11 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
   const getPersonalitySummary = () => {
     if (!personality) return null;
     const summaryParts = [
-      PERSONALITY_DESCRIPTIONS.rhythm[personality.rhythm]?.[currentLanguage],
-      PERSONALITY_DESCRIPTIONS.energy[personality.energy]?.[currentLanguage],
+      PERSONALITY_DESCRIPTIONS.energyStyle[personality.energyStyle]?.[currentLanguage],
+      PERSONALITY_DESCRIPTIONS.structureStyle[personality.structureStyle]?.[currentLanguage],
+      PERSONALITY_DESCRIPTIONS.motivationStyle[personality.motivationStyle]?.[currentLanguage],
     ].filter(Boolean);
-    return summaryParts.slice(0, 2).join('. ') + '.';
+    return summaryParts.join('. ') + '.';
   };
 
   const SettingsRow = ({ 
