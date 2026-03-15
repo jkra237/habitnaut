@@ -380,39 +380,21 @@ export interface Translations {
   
   // Recommended habits
   recommendedHabits: {
-    morningPages: { name: string; reason: string };
-    sunriseWalk: { name: string; reason: string };
-    morningStretch: { name: string; reason: string };
-    eveningReflection: { name: string; reason: string };
-    windDown: { name: string; reason: string };
-    nightReading: { name: string; reason: string };
-    mindfulPause: { name: string; reason: string };
-    flowCheck: { name: string; reason: string };
-    dailyMovement: { name: string; reason: string };
-    anchorRoutine: { name: string; reason: string };
-    creativeSprint: { name: string; reason: string };
-    restRitual: { name: string; reason: string };
-    powerBreak: { name: string; reason: string };
-    energyCheck: { name: string; reason: string };
-    rideTheWave: { name: string; reason: string };
-    gratitude: { name: string; reason: string };
-    valuesCheck: { name: string; reason: string };
-    progressNote: { name: string; reason: string };
-    shareLearning: { name: string; reason: string };
-    intentionSetting: { name: string; reason: string };
-    planTomorrow: { name: string; reason: string };
-    weeklyReview: { name: string; reason: string };
-    followCuriosity: { name: string; reason: string };
-    surpriseSelf: { name: string; reason: string };
-    flexibleFocus: { name: string; reason: string };
-    deepWork: { name: string; reason: string };
-    singleTask: { name: string; reason: string };
-    taskVariety: { name: string; reason: string };
-    quietTime: { name: string; reason: string };
-    natureMoment: { name: string; reason: string };
-    connectSomeone: { name: string; reason: string };
-    slowMorning: { name: string; reason: string };
-    quickWins: { name: string; reason: string };
+    shortWalk: { name: string; reason: string };
+    stretchBody: { name: string; reason: string };
+    moveBody: { name: string; reason: string };
+    freshAir: { name: string; reason: string };
+    breatheConsciously: { name: string; reason: string };
+    quietMoment: { name: string; reason: string };
+    noticeFeelingsToday: { name: string; reason: string };
+    positiveMoment: { name: string; reason: string };
+    gratitudeEntry: { name: string; reason: string };
+    reflectDay: { name: string; reason: string };
+    setIntention: { name: string; reason: string };
+    smallTask: { name: string; reason: string };
+    drinkWater: { name: string; reason: string };
+    phoneAway: { name: string; reason: string };
+    readPages: { name: string; reason: string };
   };
   
   // Achievements
