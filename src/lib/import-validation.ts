@@ -28,16 +28,25 @@ const sanitizeString = (str: string): string => {
 const sanitizedString = (maxLength: number) => 
   z.string().max(maxLength).transform(sanitizeString);
 
-// Personality profile schema - all fields required when profile exists
-const PersonalityProfileSchema = z.object({
-  rhythm: z.enum(['morning', 'evening', 'flexible']),
-  energy: z.enum(['steady', 'bursts', 'waves']),
-  motivation: z.enum(['internal', 'external', 'mixed']),
-  approach: z.enum(['structured', 'spontaneous', 'adaptive']),
-  focus: z.enum(['deep', 'varied', 'contextual']),
-  recovery: z.enum(['solitude', 'social', 'mixed']),
-  pace: z.enum(['slow', 'moderate', 'fast']),
-}).optional();
+// Personality profile schema - supports both new 3-axis and legacy 7-axis formats
+const PersonalityProfileSchema = z.union([
+  // New 3-axis model
+  z.object({
+    energyStyle: z.enum(['active', 'calming']),
+    structureStyle: z.enum(['structured', 'flexible']),
+    motivationStyle: z.enum(['progress', 'feeling']),
+  }),
+  // Legacy 7-axis model (for backward compatibility with imports)
+  z.object({
+    rhythm: z.enum(['morning', 'evening', 'flexible']),
+    energy: z.enum(['steady', 'bursts', 'waves']),
+    motivation: z.enum(['internal', 'external', 'mixed']),
+    approach: z.enum(['structured', 'spontaneous', 'adaptive']),
+    focus: z.enum(['deep', 'varied', 'contextual']),
+    recovery: z.enum(['solitude', 'social', 'mixed']),
+    pace: z.enum(['slow', 'moderate', 'fast']),
+  }),
+]).optional();
 
 // Habit schema
 const HabitSchema = z.object({

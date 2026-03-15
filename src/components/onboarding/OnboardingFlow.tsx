@@ -2,237 +2,215 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { useFlowNautStore } from '@/store/flownaut-store';
-import type { PersonalityProfile, OnboardingAnswer, TimeAnchor } from '@/types/flownaut';
-import { Moon, Sun, Zap, Heart, Compass, Check, Globe, Leaf } from 'lucide-react';
+import type { PersonalityProfile, TimeAnchor } from '@/types/flownaut';
+import { Check, Globe, Activity, Calendar, Target, Brain, Battery, Compass, Sparkles } from 'lucide-react';
 import { useTranslations, useSetLanguage } from '@/hooks/use-translations';
 import { LANGUAGE_OPTIONS, type SupportedLanguage } from '@/lib/i18n/translations';
 import { FlagComponents } from '@/components/ui/language-flags';
 import habitnautMascot from '@/assets/habitnaut-mascot.png';
 
-/**
- * Suggest a time anchor based on habit name heuristics.
- */
 function suggestTimeAnchor(habitName: string): TimeAnchor {
   const lowerName = habitName.toLowerCase();
-  
-  if (lowerName.includes('morning') || lowerName.includes('sunrise') || lowerName.includes('wake')) {
-    return 'morning';
-  }
-  if (lowerName.includes('evening') || lowerName.includes('night') || lowerName.includes('wind-down') || lowerName.includes('reflection')) {
-    return 'evening';
-  }
-  if (lowerName.includes('lunch') || lowerName.includes('midday') || lowerName.includes('afternoon')) {
-    return 'midday';
-  }
-  
+  if (lowerName.includes('morning') || lowerName.includes('morgen')) return 'morning';
+  if (lowerName.includes('evening') || lowerName.includes('abend') || lowerName.includes('night')) return 'evening';
   return 'none';
 }
+
 interface RecommendedHabit {
   id: string;
   name: string;
   emoji: string;
   reason: string;
+  // Affinity scores for each axis value
+  affinities: {
+    active?: number;
+    calming?: number;
+    structured?: number;
+    flexible?: number;
+    progress?: number;
+    feeling?: number;
+  };
 }
 
-const getRecommendedHabits = (personality: PersonalityProfile, t: ReturnType<typeof useTranslations>): RecommendedHabit[] => {
-  const habits: RecommendedHabit[] = [];
+const getAllHabits = (t: ReturnType<typeof useTranslations>): RecommendedHabit[] => {
   const h = t.recommendedHabits;
-
-  // Based on rhythm
-  if (personality.rhythm === 'morning') {
-    habits.push({ id: 'morning-pages', name: h.morningPages.name, emoji: '📝', reason: h.morningPages.reason });
-    habits.push({ id: 'sunrise-walk', name: h.sunriseWalk.name, emoji: '🌅', reason: h.sunriseWalk.reason });
-    habits.push({ id: 'morning-stretch', name: h.morningStretch.name, emoji: '🧘', reason: h.morningStretch.reason });
-  } else if (personality.rhythm === 'evening') {
-    habits.push({ id: 'evening-reflection', name: h.eveningReflection.name, emoji: '🌙', reason: h.eveningReflection.reason });
-    habits.push({ id: 'wind-down', name: h.windDown.name, emoji: '🕯️', reason: h.windDown.reason });
-    habits.push({ id: 'night-reading', name: h.nightReading.name, emoji: '📚', reason: h.nightReading.reason });
-  } else {
-    habits.push({ id: 'mindful-pause', name: h.mindfulPause.name, emoji: '🧘', reason: h.mindfulPause.reason });
-    habits.push({ id: 'flow-check', name: h.flowCheck.name, emoji: '🌊', reason: h.flowCheck.reason });
-  }
-
-  // Based on energy
-  if (personality.energy === 'steady') {
-    habits.push({ id: 'daily-movement', name: h.dailyMovement.name, emoji: '🚶', reason: h.dailyMovement.reason });
-    habits.push({ id: 'consistent-routine', name: h.anchorRoutine.name, emoji: '⚓', reason: h.anchorRoutine.reason });
-  } else if (personality.energy === 'bursts') {
-    habits.push({ id: 'creative-sprint', name: h.creativeSprint.name, emoji: '⚡', reason: h.creativeSprint.reason });
-    habits.push({ id: 'rest-ritual', name: h.restRitual.name, emoji: '☁️', reason: h.restRitual.reason });
-    habits.push({ id: 'power-break', name: h.powerBreak.name, emoji: '💪', reason: h.powerBreak.reason });
-  } else {
-    habits.push({ id: 'energy-check', name: h.energyCheck.name, emoji: '🌊', reason: h.energyCheck.reason });
-    habits.push({ id: 'ride-the-wave', name: h.rideTheWave.name, emoji: '🏄', reason: h.rideTheWave.reason });
-  }
-
-  // Based on motivation
-  if (personality.motivation === 'internal') {
-    habits.push({ id: 'gratitude', name: h.gratitude.name, emoji: '💚', reason: h.gratitude.reason });
-    habits.push({ id: 'values-check', name: h.valuesCheck.name, emoji: '🧭', reason: h.valuesCheck.reason });
-  } else if (personality.motivation === 'external') {
-    habits.push({ id: 'progress-note', name: h.progressNote.name, emoji: '📊', reason: h.progressNote.reason });
-    habits.push({ id: 'share-learning', name: h.shareLearning.name, emoji: '💬', reason: h.shareLearning.reason });
-  } else {
-    habits.push({ id: 'intention-setting', name: h.intentionSetting.name, emoji: '🎯', reason: h.intentionSetting.reason });
-  }
-
-  // Based on approach
-  if (personality.approach === 'structured') {
-    habits.push({ id: 'plan-tomorrow', name: h.planTomorrow.name, emoji: '📋', reason: h.planTomorrow.reason });
-    habits.push({ id: 'weekly-review', name: h.weeklyReview.name, emoji: '📅', reason: h.weeklyReview.reason });
-  } else if (personality.approach === 'spontaneous') {
-    habits.push({ id: 'follow-curiosity', name: h.followCuriosity.name, emoji: '✨', reason: h.followCuriosity.reason });
-    habits.push({ id: 'surprise-self', name: h.surpriseSelf.name, emoji: '🎲', reason: h.surpriseSelf.reason });
-  } else {
-    habits.push({ id: 'flexible-focus', name: h.flexibleFocus.name, emoji: '🌿', reason: h.flexibleFocus.reason });
-  }
-
-  // Based on focus
-  if (personality.focus === 'deep') {
-    habits.push({ id: 'deep-work', name: h.deepWork.name, emoji: '🎯', reason: h.deepWork.reason });
-    habits.push({ id: 'single-task', name: h.singleTask.name, emoji: '🔬', reason: h.singleTask.reason });
-  } else if (personality.focus === 'varied') {
-    habits.push({ id: 'task-variety', name: h.taskVariety.name, emoji: '🎨', reason: h.taskVariety.reason });
-  }
-
-  // Based on recovery
-  if (personality.recovery === 'solitude') {
-    habits.push({ id: 'quiet-time', name: h.quietTime.name, emoji: '🤫', reason: h.quietTime.reason });
-    habits.push({ id: 'nature-moment', name: h.natureMoment.name, emoji: '🌲', reason: h.natureMoment.reason });
-  } else if (personality.recovery === 'social') {
-    habits.push({ id: 'connect-someone', name: h.connectSomeone.name, emoji: '👋', reason: h.connectSomeone.reason });
-  }
-
-  // Based on pace
-  if (personality.pace === 'slow') {
-    habits.push({ id: 'slow-morning', name: h.slowMorning.name, emoji: '🐌', reason: h.slowMorning.reason });
-  } else if (personality.pace === 'fast') {
-    habits.push({ id: 'quick-wins', name: h.quickWins.name, emoji: '🚀', reason: h.quickWins.reason });
-  }
-
-  // Return top 8 unique habits (more options)
-  const uniqueHabits = habits.filter((habit, index, self) => 
-    index === self.findIndex((h) => h.id === habit.id)
-  );
-  return uniqueHabits.slice(0, 8);
+  return [
+    // Movement & Body
+    { id: 'short-walk', name: h.shortWalk.name, emoji: '🚶', reason: h.shortWalk.reason, affinities: { active: 3, flexible: 1, feeling: 1 } },
+    { id: 'stretch-body', name: h.stretchBody.name, emoji: '🤸', reason: h.stretchBody.reason, affinities: { active: 2, calming: 1, feeling: 2 } },
+    { id: 'move-body', name: h.moveBody.name, emoji: '💃', reason: h.moveBody.reason, affinities: { active: 3, flexible: 2, feeling: 1 } },
+    { id: 'fresh-air', name: h.freshAir.name, emoji: '🌿', reason: h.freshAir.reason, affinities: { active: 2, calming: 1, flexible: 1 } },
+    // Mindfulness & Calm
+    { id: 'breathe-consciously', name: h.breatheConsciously.name, emoji: '🌬️', reason: h.breatheConsciously.reason, affinities: { calming: 3, feeling: 2 } },
+    { id: 'quiet-moment', name: h.quietMoment.name, emoji: '🧘', reason: h.quietMoment.reason, affinities: { calming: 3, flexible: 1, feeling: 2 } },
+    { id: 'notice-feelings', name: h.noticeFeelingsToday.name, emoji: '💭', reason: h.noticeFeelingsToday.reason, affinities: { calming: 2, feeling: 3 } },
+    // Reflection & Awareness
+    { id: 'positive-moment', name: h.positiveMoment.name, emoji: '✨', reason: h.positiveMoment.reason, affinities: { calming: 1, feeling: 3, flexible: 1 } },
+    { id: 'gratitude-entry', name: h.gratitudeEntry.name, emoji: '💚', reason: h.gratitudeEntry.reason, affinities: { calming: 1, feeling: 3 } },
+    { id: 'reflect-day', name: h.reflectDay.name, emoji: '📝', reason: h.reflectDay.reason, affinities: { calming: 1, structured: 1, feeling: 2 } },
+    // Focus & Intention
+    { id: 'set-intention', name: h.setIntention.name, emoji: '🎯', reason: h.setIntention.reason, affinities: { structured: 3, progress: 3 } },
+    { id: 'small-task', name: h.smallTask.name, emoji: '✅', reason: h.smallTask.reason, affinities: { structured: 2, progress: 3, active: 1 } },
+    // Healthy Micro Habits
+    { id: 'drink-water', name: h.drinkWater.name, emoji: '💧', reason: h.drinkWater.reason, affinities: { calming: 1, flexible: 2 } },
+    { id: 'phone-away', name: h.phoneAway.name, emoji: '📵', reason: h.phoneAway.reason, affinities: { calming: 2, structured: 1, feeling: 1 } },
+    { id: 'read-pages', name: h.readPages.name, emoji: '📖', reason: h.readPages.reason, affinities: { calming: 2, structured: 1, progress: 1 } },
+  ];
 };
 
-interface Question {
+const getRecommendedHabits = (personality: PersonalityProfile, t: ReturnType<typeof useTranslations>): RecommendedHabit[] => {
+  const allHabits = getAllHabits(t);
+
+  // Score each habit based on personality match
+  const scored = allHabits.map(habit => {
+    let score = 0;
+    const a = habit.affinities;
+
+    // Energy style
+    if (personality.energyStyle === 'active') {
+      score += (a.active || 0) * 2;
+      score += (a.calming || 0) * 0.5;
+    } else {
+      score += (a.calming || 0) * 2;
+      score += (a.active || 0) * 0.5;
+    }
+
+    // Structure style
+    if (personality.structureStyle === 'structured') {
+      score += (a.structured || 0) * 2;
+      score += (a.flexible || 0) * 0.5;
+    } else {
+      score += (a.flexible || 0) * 2;
+      score += (a.structured || 0) * 0.5;
+    }
+
+    // Motivation style
+    if (personality.motivationStyle === 'progress') {
+      score += (a.progress || 0) * 2;
+      score += (a.feeling || 0) * 0.5;
+    } else {
+      score += (a.feeling || 0) * 2;
+      score += (a.progress || 0) * 0.5;
+    }
+
+    return { ...habit, score };
+  });
+
+  // Sort by score descending, take top 10
+  scored.sort((a, b) => b.score - a.score);
+  return scored.slice(0, 10);
+};
+
+interface OnboardingQuestion {
   id: string;
-  questionKey: keyof ReturnType<typeof useTranslations>['onboarding']['questions'];
-  optionAKey: keyof ReturnType<typeof useTranslations>['onboarding']['questions'];
-  optionBKey: keyof ReturnType<typeof useTranslations>['onboarding']['questions'];
+  questionKey: string;
+  optionAKey: string;
+  optionBKey: string;
   iconA: React.ReactNode;
   iconB: React.ReactNode;
-  axis: keyof PersonalityProfile | 'tone';
+  axis: keyof PersonalityProfile;
   aValue: string;
   bValue: string;
 }
 
-const questions: Question[] = [
+const questions: OnboardingQuestion[] = [
   {
-    id: 'rhythm',
-    questionKey: 'rhythm',
-    optionAKey: 'rhythmA',
-    optionBKey: 'rhythmB',
-    iconA: <Sun className="w-5 h-5" />,
-    iconB: <Moon className="w-5 h-5" />,
-    axis: 'rhythm',
-    aValue: 'morning',
-    bValue: 'evening',
+    id: 'q1-energy-source',
+    questionKey: 'energySource',
+    optionAKey: 'energySourceA',
+    optionBKey: 'energySourceB',
+    iconA: <Activity className="w-5 h-5" />,
+    iconB: <Sparkles className="w-5 h-5" />,
+    axis: 'energyStyle',
+    aValue: 'active',
+    bValue: 'calming',
   },
   {
-    id: 'energy',
-    questionKey: 'energy',
-    optionAKey: 'energyA',
-    optionBKey: 'energyB',
-    iconA: <Leaf className="w-5 h-5" />,
-    iconB: <Zap className="w-5 h-5" />,
-    axis: 'energy',
-    aValue: 'steady',
-    bValue: 'bursts',
+    id: 'q2-structure',
+    questionKey: 'structure',
+    optionAKey: 'structureA',
+    optionBKey: 'structureB',
+    iconA: <Calendar className="w-5 h-5" />,
+    iconB: <Compass className="w-5 h-5" />,
+    axis: 'structureStyle',
+    aValue: 'structured',
+    bValue: 'flexible',
   },
   {
-    id: 'motivation',
+    id: 'q3-motivation',
     questionKey: 'motivation',
     optionAKey: 'motivationA',
     optionBKey: 'motivationB',
-    iconA: <Heart className="w-5 h-5" />,
-    iconB: <Compass className="w-5 h-5" />,
-    axis: 'motivation',
-    aValue: 'internal',
-    bValue: 'external',
+    iconA: <Target className="w-5 h-5" />,
+    iconB: <Sparkles className="w-5 h-5" />,
+    axis: 'motivationStyle',
+    aValue: 'progress',
+    bValue: 'feeling',
   },
   {
-    id: 'approach',
-    questionKey: 'approach',
-    optionAKey: 'approachA',
-    optionBKey: 'approachB',
-    iconA: <Leaf className="w-5 h-5" />,
-    iconB: <Compass className="w-5 h-5" />,
-    axis: 'approach',
-    aValue: 'structured',
-    bValue: 'spontaneous',
+    id: 'q4-reflection',
+    questionKey: 'reflection',
+    optionAKey: 'reflectionA',
+    optionBKey: 'reflectionB',
+    iconA: <Brain className="w-5 h-5" />,
+    iconB: <Activity className="w-5 h-5" />,
+    axis: 'motivationStyle',
+    aValue: 'feeling',
+    bValue: 'progress',
   },
   {
-    id: 'focus',
-    questionKey: 'focus',
-    optionAKey: 'focusA',
-    optionBKey: 'focusB',
-    iconA: <Compass className="w-5 h-5" />,
-    iconB: <Zap className="w-5 h-5" />,
-    axis: 'focus',
-    aValue: 'deep',
-    bValue: 'varied',
+    id: 'q5-daily-energy',
+    questionKey: 'dailyEnergy',
+    optionAKey: 'dailyEnergyA',
+    optionBKey: 'dailyEnergyB',
+    iconA: <Sparkles className="w-5 h-5" />,
+    iconB: <Activity className="w-5 h-5" />,
+    axis: 'energyStyle',
+    aValue: 'calming',
+    bValue: 'active',
   },
   {
-    id: 'recovery',
-    questionKey: 'recovery',
-    optionAKey: 'recoveryA',
-    optionBKey: 'recoveryB',
-    iconA: <Moon className="w-5 h-5" />,
-    iconB: <Heart className="w-5 h-5" />,
-    axis: 'recovery',
-    aValue: 'solitude',
-    bValue: 'social',
+    id: 'q6-chaos',
+    questionKey: 'chaos',
+    optionAKey: 'chaosA',
+    optionBKey: 'chaosB',
+    iconA: <Sparkles className="w-5 h-5" />,
+    iconB: <Target className="w-5 h-5" />,
+    axis: 'structureStyle',
+    aValue: 'flexible',
+    bValue: 'structured',
   },
   {
-    id: 'pace',
-    questionKey: 'pace',
-    optionAKey: 'paceA',
-    optionBKey: 'paceB',
-    iconA: <Leaf className="w-5 h-5" />,
-    iconB: <Zap className="w-5 h-5" />,
-    axis: 'pace',
-    aValue: 'slow',
-    bValue: 'fast',
-  },
-  {
-    id: 'tone',
-    questionKey: 'tone',
-    optionAKey: 'toneA',
-    optionBKey: 'toneB',
-    iconA: <Heart className="w-5 h-5" />,
-    iconB: <Zap className="w-5 h-5" />,
-    axis: 'tone',
-    aValue: 'gentle',
-    bValue: 'clear',
+    id: 'q7-growth',
+    questionKey: 'growth',
+    optionAKey: 'growthA',
+    optionBKey: 'growthB',
+    iconA: <Brain className="w-5 h-5" />,
+    iconB: <Battery className="w-5 h-5" />,
+    axis: 'energyStyle',
+    aValue: 'calming',
+    bValue: 'active',
   },
 ];
+
+const MAX_HABITS = 3;
 
 export function OnboardingFlow() {
   const t = useTranslations();
   const setLanguage = useSetLanguage();
-  
+
   const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState<OnboardingAnswer[]>([]);
+  const [axisVotes, setAxisVotes] = useState<Record<string, string[]>>({
+    energyStyle: [],
+    structureStyle: [],
+    motivationStyle: [],
+  });
   const [selectedHabits, setSelectedHabits] = useState<Set<string>>(new Set());
   const [personality, setPersonality] = useState<PersonalityProfile | null>(null);
-  const [tone, setTone] = useState<'gentle' | 'clear'>('gentle');
   const completeOnboarding = useFlowNautStore((s) => s.completeOnboarding);
   const addHabit = useFlowNautStore((s) => s.addHabit);
 
-  // Steps: 0 = language, 1 = welcome, 2-9 = questions, 10 = habit selection, 11 = complete
+  // Steps: 0 = language, 1 = welcome, 2-8 = questions (7), 9 = habit selection, 10 = complete
   const isLanguageSelection = step === 0;
   const isWelcome = step === 1;
   const currentQuestionIndex = step - 2;
@@ -249,40 +227,30 @@ export function OnboardingFlow() {
 
   const handleChoice = (choice: 'a' | 'b') => {
     if (!currentQuestion) return;
-    
-    const newAnswers = [...answers, { questionId: currentQuestion.id, choice }];
-    setAnswers(newAnswers);
-    
-    // If this was the last question, build personality for habit recommendations
-    if (currentQuestionIndex === questions.length - 1) {
-      const builtPersonality: PersonalityProfile = {
-        rhythm: 'flexible',
-        energy: 'waves',
-        motivation: 'mixed',
-        approach: 'adaptive',
-        focus: 'contextual',
-        recovery: 'mixed',
-        pace: 'moderate',
-      };
-      
-      let builtTone: 'gentle' | 'clear' = 'gentle';
 
-      newAnswers.forEach((answer) => {
-        const question = questions.find((q) => q.id === answer.questionId);
-        if (!question) return;
-        
-        if (question.axis === 'tone') {
-          builtTone = answer.choice === 'a' ? 'gentle' : 'clear';
-        } else {
-          const value = answer.choice === 'a' ? question.aValue : question.bValue;
-          (builtPersonality as any)[question.axis] = value;
-        }
-      });
+    const value = choice === 'a' ? currentQuestion.aValue : currentQuestion.bValue;
+    const newVotes = { ...axisVotes };
+    newVotes[currentQuestion.axis] = [...(newVotes[currentQuestion.axis] || []), value];
+    setAxisVotes(newVotes);
+
+    // If last question, build personality from votes
+    if (currentQuestionIndex === questions.length - 1) {
+      const resolveAxis = (axis: string, optA: string, optB: string): string => {
+        const votes = newVotes[axis] || [];
+        const countA = votes.filter(v => v === optA).length;
+        const countB = votes.filter(v => v === optB).length;
+        return countA >= countB ? optA : optB;
+      };
+
+      const builtPersonality: PersonalityProfile = {
+        energyStyle: resolveAxis('energyStyle', 'active', 'calming') as 'active' | 'calming',
+        structureStyle: resolveAxis('structureStyle', 'structured', 'flexible') as 'structured' | 'flexible',
+        motivationStyle: resolveAxis('motivationStyle', 'progress', 'feeling') as 'progress' | 'feeling',
+      };
 
       setPersonality(builtPersonality);
-      setTone(builtTone);
     }
-    
+
     setStep(step + 1);
   };
 
@@ -290,7 +258,7 @@ export function OnboardingFlow() {
     const newSelected = new Set(selectedHabits);
     if (newSelected.has(habitId)) {
       newSelected.delete(habitId);
-    } else {
+    } else if (newSelected.size < MAX_HABITS) {
       newSelected.add(habitId);
     }
     setSelectedHabits(newSelected);
@@ -298,8 +266,7 @@ export function OnboardingFlow() {
 
   const handleComplete = () => {
     if (!personality) return;
-    
-    // Add selected habits with proper options
+
     recommendedHabits
       .filter((h) => selectedHabits.has(h.id))
       .forEach((h) => addHabit({
@@ -308,9 +275,11 @@ export function OnboardingFlow() {
         timeAnchor: suggestTimeAnchor(h.name),
         softFrequency: 'free',
       }));
-    
-    completeOnboarding(personality, tone);
+
+    completeOnboarding(personality, 'gentle');
   };
+
+  const onbQ = t.onboarding.questions;
 
   return (
     <div className="min-h-screen flex items-center justify-center p-6">
@@ -341,7 +310,7 @@ export function OnboardingFlow() {
                   {t.onboarding.languageSubtitle}
                 </p>
               </div>
-              
+
               <div className="space-y-3">
                 {LANGUAGE_OPTIONS.map((option) => {
                   const FlagComponent = FlagComponents[option.value];
@@ -379,9 +348,9 @@ export function OnboardingFlow() {
                   animate={{ y: [0, -8, 0] }}
                   transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                 >
-                  <img 
-                    src={habitnautMascot} 
-                    alt="HabitNaut mascot - a cute astronaut" 
+                  <img
+                    src={habitnautMascot}
+                    alt="HabitNaut mascot - a cute astronaut"
                     className="w-full h-full object-contain"
                   />
                 </motion.div>
@@ -394,16 +363,16 @@ export function OnboardingFlow() {
                   <span className="text-foreground/80">{t.onboarding.welcomeSubtitle2}</span>
                 </p>
               </div>
-              
-              <Button 
-                onClick={() => setStep(2)} 
-                size="xl" 
+
+              <Button
+                onClick={() => setStep(2)}
+                size="xl"
                 variant="gentle"
                 className="px-10"
               >
                 {t.onboarding.begin}
               </Button>
-              
+
               <p className="text-sm text-muted-foreground">
                 {t.onboarding.questionsAhead}
               </p>
@@ -438,7 +407,7 @@ export function OnboardingFlow() {
               {/* Question */}
               <div className="text-center space-y-2">
                 <h2 className="text-2xl font-serif font-medium text-foreground">
-                  {t.onboarding.questions[currentQuestion.questionKey]}
+                  {(onbQ as any)[currentQuestion.questionKey]}
                 </h2>
               </div>
 
@@ -454,7 +423,7 @@ export function OnboardingFlow() {
                     {currentQuestion.iconA}
                   </div>
                   <span className="text-lg text-foreground">
-                    {t.onboarding.questions[currentQuestion.optionAKey]}
+                    {(onbQ as any)[currentQuestion.optionAKey]}
                   </span>
                 </motion.button>
 
@@ -468,7 +437,7 @@ export function OnboardingFlow() {
                     {currentQuestion.iconB}
                   </div>
                   <span className="text-lg text-foreground">
-                    {t.onboarding.questions[currentQuestion.optionBKey]}
+                    {(onbQ as any)[currentQuestion.optionBKey]}
                   </span>
                 </motion.button>
               </div>
@@ -500,32 +469,38 @@ export function OnboardingFlow() {
               </div>
 
               <div className="space-y-3">
-                {recommendedHabits.map((habit) => (
-                  <motion.button
-                    key={habit.id}
-                    whileHover={{ scale: 1.01 }}
-                    whileTap={{ scale: 0.99 }}
-                    onClick={() => toggleHabit(habit.id)}
-                    className={`w-full p-4 rounded-xl border-2 transition-all duration-300 text-left flex items-center gap-4 ${
-                      selectedHabits.has(habit.id)
-                        ? 'border-primary bg-primary/10'
-                        : 'border-border bg-card hover:border-primary/50'
-                    }`}
-                  >
-                    <div className="w-12 h-12 rounded-xl bg-background flex items-center justify-center text-2xl">
-                      {habit.emoji}
-                    </div>
-                    <div className="flex-1">
-                      <div className="font-medium text-foreground">{habit.name}</div>
-                      <div className="text-sm text-muted-foreground">{habit.reason}</div>
-                    </div>
-                    {selectedHabits.has(habit.id) && (
-                      <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
-                        <Check className="w-4 h-4 text-primary-foreground" />
+                {recommendedHabits.map((habit) => {
+                  const isSelected = selectedHabits.has(habit.id);
+                  const isDisabled = !isSelected && selectedHabits.size >= MAX_HABITS;
+                  return (
+                    <motion.button
+                      key={habit.id}
+                      whileHover={!isDisabled ? { scale: 1.01 } : {}}
+                      whileTap={!isDisabled ? { scale: 0.99 } : {}}
+                      onClick={() => !isDisabled && toggleHabit(habit.id)}
+                      className={`w-full p-4 rounded-xl border-2 transition-all duration-300 text-left flex items-center gap-4 ${
+                        isSelected
+                          ? 'border-primary bg-primary/10'
+                          : isDisabled
+                          ? 'border-border bg-card opacity-40 cursor-not-allowed'
+                          : 'border-border bg-card hover:border-primary/50'
+                      }`}
+                    >
+                      <div className="w-12 h-12 rounded-xl bg-background flex items-center justify-center text-2xl">
+                        {habit.emoji}
                       </div>
-                    )}
-                  </motion.button>
-                ))}
+                      <div className="flex-1">
+                        <div className="font-medium text-foreground">{habit.name}</div>
+                        <div className="text-sm text-muted-foreground">{habit.reason}</div>
+                      </div>
+                      {isSelected && (
+                        <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
+                          <Check className="w-4 h-4 text-primary-foreground" />
+                        </div>
+                      )}
+                    </motion.button>
+                  );
+                })}
               </div>
 
               <div className="flex gap-3">
@@ -541,7 +516,7 @@ export function OnboardingFlow() {
                   disabled={selectedHabits.size === 0}
                   className="flex-1"
                 >
-                  {t.onboarding.continueWithSelected} ({selectedHabits.size})
+                  {t.onboarding.continueWithSelected} ({selectedHabits.size}/{MAX_HABITS})
                 </Button>
               </div>
             </motion.div>
@@ -563,7 +538,7 @@ export function OnboardingFlow() {
               >
                 <Check className="w-12 h-12 text-primary" />
               </motion.div>
-              
+
               <div className="space-y-4">
                 <h2 className="text-3xl font-serif font-medium text-foreground">
                   {t.onboarding.allSet}
@@ -571,7 +546,7 @@ export function OnboardingFlow() {
                 <p className="text-muted-foreground max-w-sm mx-auto">
                   {t.onboarding.allSetSubtitle}
                 </p>
-                <motion.p 
+                <motion.p
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5 }}
@@ -579,7 +554,7 @@ export function OnboardingFlow() {
                 >
                   {t.onboarding.allSetMessage}
                 </motion.p>
-                <motion.p 
+                <motion.p
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.8 }}
@@ -589,9 +564,9 @@ export function OnboardingFlow() {
                 </motion.p>
               </div>
 
-              <Button 
-                onClick={handleComplete} 
-                size="xl" 
+              <Button
+                onClick={handleComplete}
+                size="xl"
                 variant="gentle"
                 className="px-10"
               >

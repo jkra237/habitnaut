@@ -245,29 +245,29 @@ function weightByPersonality(
 
     const { category } = candidate.observation;
 
-    // Reflective users (solitude recovery, slow pace) → quieter observations
-    if (personality.recovery === 'solitude' || personality.pace === 'slow') {
+    // Calming/feeling users → quieter observations
+    if (personality.energyStyle === 'calming' || personality.motivationStyle === 'feeling') {
       if (category === 'quiet-regularity' || category === 'pause-break') {
         personalityBoost += 0.2;
       }
     }
 
-    // Action-oriented users (external motivation, fast pace) → pattern-based observations
-    if (personality.motivation === 'external' || personality.pace === 'fast') {
+    // Active/progress users → pattern-based observations
+    if (personality.energyStyle === 'active' || personality.motivationStyle === 'progress') {
       if (category === 'weekday-cycle' || category === 'change-over-time') {
         personalityBoost += 0.2;
       }
     }
 
-    // Users who prefer structure → consistency and rhythm observations
-    if (personality.approach === 'structured') {
+    // Structured users → consistency and rhythm observations
+    if (personality.structureStyle === 'structured') {
       if (category === 'quiet-regularity') {
         personalityBoost += 0.15;
       }
     }
 
-    // Users with burst energy → observations about phases and variation
-    if (personality.energy === 'bursts' || personality.energy === 'waves') {
+    // Flexible users → observations about phases and variation
+    if (personality.structureStyle === 'flexible') {
       if (category === 'pause-break' || category === 'change-over-time') {
         personalityBoost += 0.15;
       }

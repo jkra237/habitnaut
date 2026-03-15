@@ -1,15 +1,10 @@
 // FlowNaut Types - Self-observation, not optimization
 
 export interface PersonalityProfile {
-  // Four axes - each is a spectrum, not a binary
-  rhythm: 'morning' | 'evening' | 'flexible';
-  energy: 'steady' | 'bursts' | 'waves';
-  motivation: 'internal' | 'external' | 'mixed';
-  approach: 'structured' | 'spontaneous' | 'adaptive';
-  // Extended axes for deeper personality understanding
-  focus: 'deep' | 'varied' | 'contextual';
-  recovery: 'solitude' | 'social' | 'mixed';
-  pace: 'slow' | 'moderate' | 'fast';
+  // Three simplified axes from onboarding
+  energyStyle: 'active' | 'calming';
+  structureStyle: 'structured' | 'flexible';
+  motivationStyle: 'progress' | 'feeling';
 }
 
 export interface OnboardingAnswer {

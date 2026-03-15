@@ -36,30 +36,27 @@ export interface Translations {
     languageSubtitle: string;
     // Questions
     questions: {
-      rhythm: string;
-      rhythmA: string;
-      rhythmB: string;
-      energy: string;
-      energyA: string;
-      energyB: string;
+      energySource: string;
+      energySourceA: string;
+      energySourceB: string;
+      structure: string;
+      structureA: string;
+      structureB: string;
       motivation: string;
       motivationA: string;
       motivationB: string;
-      approach: string;
-      approachA: string;
-      approachB: string;
-      focus: string;
-      focusA: string;
-      focusB: string;
-      recovery: string;
-      recoveryA: string;
-      recoveryB: string;
-      pace: string;
-      paceA: string;
-      paceB: string;
-      tone: string;
-      toneA: string;
-      toneB: string;
+      reflection: string;
+      reflectionA: string;
+      reflectionB: string;
+      dailyEnergy: string;
+      dailyEnergyA: string;
+      dailyEnergyB: string;
+      chaos: string;
+      chaosA: string;
+      chaosB: string;
+      growth: string;
+      growthA: string;
+      growthB: string;
     };
   };
   
@@ -383,39 +380,21 @@ export interface Translations {
   
   // Recommended habits
   recommendedHabits: {
-    morningPages: { name: string; reason: string };
-    sunriseWalk: { name: string; reason: string };
-    morningStretch: { name: string; reason: string };
-    eveningReflection: { name: string; reason: string };
-    windDown: { name: string; reason: string };
-    nightReading: { name: string; reason: string };
-    mindfulPause: { name: string; reason: string };
-    flowCheck: { name: string; reason: string };
-    dailyMovement: { name: string; reason: string };
-    anchorRoutine: { name: string; reason: string };
-    creativeSprint: { name: string; reason: string };
-    restRitual: { name: string; reason: string };
-    powerBreak: { name: string; reason: string };
-    energyCheck: { name: string; reason: string };
-    rideTheWave: { name: string; reason: string };
-    gratitude: { name: string; reason: string };
-    valuesCheck: { name: string; reason: string };
-    progressNote: { name: string; reason: string };
-    shareLearning: { name: string; reason: string };
-    intentionSetting: { name: string; reason: string };
-    planTomorrow: { name: string; reason: string };
-    weeklyReview: { name: string; reason: string };
-    followCuriosity: { name: string; reason: string };
-    surpriseSelf: { name: string; reason: string };
-    flexibleFocus: { name: string; reason: string };
-    deepWork: { name: string; reason: string };
-    singleTask: { name: string; reason: string };
-    taskVariety: { name: string; reason: string };
-    quietTime: { name: string; reason: string };
-    natureMoment: { name: string; reason: string };
-    connectSomeone: { name: string; reason: string };
-    slowMorning: { name: string; reason: string };
-    quickWins: { name: string; reason: string };
+    shortWalk: { name: string; reason: string };
+    stretchBody: { name: string; reason: string };
+    moveBody: { name: string; reason: string };
+    freshAir: { name: string; reason: string };
+    breatheConsciously: { name: string; reason: string };
+    quietMoment: { name: string; reason: string };
+    noticeFeelingsToday: { name: string; reason: string };
+    positiveMoment: { name: string; reason: string };
+    gratitudeEntry: { name: string; reason: string };
+    reflectDay: { name: string; reason: string };
+    setIntention: { name: string; reason: string };
+    smallTask: { name: string; reason: string };
+    drinkWater: { name: string; reason: string };
+    phoneAway: { name: string; reason: string };
+    readPages: { name: string; reason: string };
   };
   
   // Achievements
@@ -474,30 +453,27 @@ export const translations: Record<SupportedLanguage, Translations> = {
       chooseLanguage: 'Choose your language',
       languageSubtitle: 'You can change this anytime in settings',
       questions: {
-        rhythm: 'When do you feel most alive?',
-        rhythmA: 'In the quiet morning hours',
-        rhythmB: 'When the world slows down at night',
-        energy: 'How does your energy usually flow?',
-        energyA: 'Steady and consistent throughout',
-        energyB: 'In waves and bursts of intensity',
-        motivation: 'What moves you forward?',
-        motivationA: 'An inner sense of what matters',
-        motivationB: 'The pull of goals and outcomes',
-        approach: 'How do you prefer to navigate your days?',
-        approachA: 'With a gentle structure',
-        approachB: 'Following what feels right',
-        focus: 'How do you prefer to work on things?',
-        focusA: 'Deep and focused on one thing',
-        focusB: 'Varied and switching between interests',
-        recovery: 'How do you best recharge?',
-        recoveryA: 'In quiet solitude',
-        recoveryB: 'Around people I care about',
-        pace: 'What pace feels natural to you?',
-        paceA: 'Slow and deliberate',
-        paceB: 'Quick and dynamic',
-        tone: "When something doesn't work, what helps you more?",
-        toneA: 'A gentle reminder',
-        toneB: 'A clear nudge',
+        energySource: 'What usually helps you feel better?',
+        energySourceA: 'Moving my body or doing something active',
+        energySourceB: 'Slowing down and taking a moment for myself',
+        structure: 'How do you usually deal with routines?',
+        structureA: 'I like having a bit of structure',
+        structureB: 'I prefer flexibility and doing things when it feels right',
+        motivation: 'What motivates you more?',
+        motivationA: 'Seeing progress',
+        motivationB: 'Feeling better in the moment',
+        reflection: 'How often do you reflect on your day?',
+        reflectionA: 'I often think about my day or feelings',
+        reflectionB: 'I usually move on without reflecting much',
+        dailyEnergy: 'What do you feel you need more of in daily life?',
+        dailyEnergyA: 'More calm and balance',
+        dailyEnergyB: 'More movement and activity',
+        chaos: 'When your day feels chaotic, what helps most?',
+        chaosA: 'Taking a short pause',
+        chaosB: 'Doing something small and productive',
+        growth: 'What would you like to bring more into your life?',
+        growthA: 'More clarity and awareness',
+        growthB: 'More energy and positivity',
       },
     },
     settings: {
@@ -781,39 +757,21 @@ export const translations: Record<SupportedLanguage, Translations> = {
       },
     },
     recommendedHabits: {
-      morningPages: { name: 'Morning pages', reason: 'Aligns with your morning clarity' },
-      sunriseWalk: { name: 'Sunrise walk', reason: 'Captures your peak energy time' },
-      morningStretch: { name: 'Morning stretch', reason: 'Gentle start to your day' },
-      eveningReflection: { name: 'Evening reflection', reason: 'Honors your contemplative nights' },
-      windDown: { name: 'Wind-down ritual', reason: 'Supports your evening rhythm' },
-      nightReading: { name: 'Night reading', reason: 'Feeds your nocturnal mind' },
-      mindfulPause: { name: 'Mindful pause', reason: 'Fits your flexible rhythm' },
-      flowCheck: { name: 'Flow check-in', reason: 'Honors your natural timing' },
-      dailyMovement: { name: 'Daily movement', reason: 'Maintains your steady flow' },
-      anchorRoutine: { name: 'Anchor routine', reason: 'Supports your steady nature' },
-      creativeSprint: { name: 'Creative sprint', reason: 'Channels your burst energy' },
-      restRitual: { name: 'Rest ritual', reason: 'Balances your intensity' },
-      powerBreak: { name: 'Power break', reason: 'Recharge between bursts' },
-      energyCheck: { name: 'Energy check-in', reason: 'Honors your natural waves' },
-      rideTheWave: { name: 'Ride the wave', reason: 'Work with your flow' },
-      gratitude: { name: 'Gratitude moment', reason: 'Nurtures your inner compass' },
-      valuesCheck: { name: 'Values check-in', reason: 'Reconnects with what matters' },
-      progressNote: { name: 'Progress note', reason: 'Celebrates visible growth' },
-      shareLearning: { name: 'Share a learning', reason: 'Connects with others' },
-      intentionSetting: { name: 'Set an intention', reason: 'Bridges inner and outer goals' },
-      planTomorrow: { name: 'Plan the day', reason: 'Supports your love of structure' },
-      weeklyReview: { name: 'Weekly review', reason: 'Creates clarity and order' },
-      followCuriosity: { name: 'Follow curiosity', reason: 'Celebrates your spontaneity' },
-      surpriseSelf: { name: 'Surprise yourself', reason: 'Keeps things fresh' },
-      flexibleFocus: { name: 'One focus thing', reason: 'Adapts to your day' },
-      deepWork: { name: 'Deep work block', reason: 'Protects your focus time' },
-      singleTask: { name: 'Single-tasking', reason: 'Honors your depth' },
-      taskVariety: { name: 'Mix it up', reason: 'Feeds your varied interests' },
-      quietTime: { name: 'Quiet time', reason: 'Restores your energy' },
-      natureMoment: { name: 'Nature moment', reason: 'Peaceful recharge' },
-      connectSomeone: { name: 'Connect with someone', reason: 'Energizes through others' },
-      slowMorning: { name: 'Slow morning', reason: 'Honors your natural pace' },
-      quickWins: { name: 'Quick wins', reason: 'Matches your momentum' },
+      shortWalk: { name: 'Take a short walk', reason: 'A simple way to clear your mind' },
+      stretchBody: { name: 'Stretch your body', reason: 'Release tension gently' },
+      moveBody: { name: 'Move your body', reason: 'In any way you enjoy' },
+      freshAir: { name: 'Step outside for fresh air', reason: 'A quick reset for your senses' },
+      breatheConsciously: { name: 'Breathe consciously for 3 min', reason: 'A moment of calm awareness' },
+      quietMoment: { name: 'Pause for a quiet moment', reason: 'Let stillness find you' },
+      noticeFeelingsToday: { name: 'Notice how you feel today', reason: 'Awareness without judgment' },
+      positiveMoment: { name: 'Write down a positive moment', reason: 'Capture what went well' },
+      gratitudeEntry: { name: 'Write down something you\'re grateful for', reason: 'Nurture appreciation' },
+      reflectDay: { name: 'Reflect briefly on your day', reason: 'A gentle look back' },
+      setIntention: { name: 'Write down one small intention', reason: 'Start with clarity' },
+      smallTask: { name: 'Do one small postponed task', reason: 'A little progress goes far' },
+      drinkWater: { name: 'Drink a glass of water consciously', reason: 'A mindful micro-habit' },
+      phoneAway: { name: 'Put your phone away for 10 min', reason: 'Create space for presence' },
+      readPages: { name: 'Read a few pages of a book', reason: 'Feed your curiosity' },
     },
     timeline: {
       week: 'Week',
@@ -909,30 +867,27 @@ export const translations: Record<SupportedLanguage, Translations> = {
       chooseLanguage: 'Elige tu idioma',
       languageSubtitle: 'Puedes cambiarlo en cualquier momento en los ajustes',
       questions: {
-        rhythm: '¿Cuándo te sientes con más vida?',
-        rhythmA: 'En la calma de las mañanas',
-        rhythmB: 'Cuando el mundo se calma por la noche',
-        energy: '¿Cómo fluye tu energía normalmente?',
-        energyA: 'De forma constante y regular',
-        energyB: 'En oleadas e impulsos intensos',
-        motivation: '¿Qué te impulsa a seguir adelante?',
-        motivationA: 'Una brújula interna de lo que importa',
-        motivationB: 'La atracción de metas y resultados',
-        approach: '¿Cómo prefieres organizar tus días?',
-        approachA: 'Con cierta estructura flexible',
-        approachB: 'Siguiendo lo que siento en el momento',
-        focus: '¿Cómo prefieres trabajar?',
-        focusA: 'Concentrado en una sola cosa',
-        focusB: 'Alternando entre distintos intereses',
-        recovery: '¿Cómo recargas mejor las pilas?',
-        recoveryA: 'En soledad y tranquilidad',
-        recoveryB: 'Rodeado de personas queridas',
-        pace: '¿Qué ritmo te resulta más natural?',
-        paceA: 'Pausado y reflexivo',
-        paceB: 'Rápido y dinámico',
-        tone: 'Cuando algo no sale bien, ¿qué te ayuda más?',
-        toneA: 'Un recordatorio amable',
-        toneB: 'Un empujón directo',
+        energySource: '¿Qué suele ayudarte a sentirte mejor?',
+        energySourceA: 'Mover el cuerpo o hacer algo activo',
+        energySourceB: 'Ralentizar y tomarme un momento para mí',
+        structure: '¿Cómo sueles lidiar con las rutinas?',
+        structureA: 'Me gusta tener algo de estructura',
+        structureB: 'Prefiero flexibilidad y hacer las cosas cuando se siente bien',
+        motivation: '¿Qué te motiva más?',
+        motivationA: 'Ver progreso',
+        motivationB: 'Sentirme mejor en el momento',
+        reflection: '¿Con qué frecuencia reflexionas sobre tu día?',
+        reflectionA: 'A menudo pienso en mi día o sentimientos',
+        reflectionB: 'Suelo seguir adelante sin reflexionar mucho',
+        dailyEnergy: '¿Qué sientes que necesitas más en tu día a día?',
+        dailyEnergyA: 'Más calma y equilibrio',
+        dailyEnergyB: 'Más movimiento y actividad',
+        chaos: 'Cuando tu día se siente caótico, ¿qué ayuda más?',
+        chaosA: 'Tomar una breve pausa',
+        chaosB: 'Hacer algo pequeño y productivo',
+        growth: '¿Qué te gustaría traer más a tu vida?',
+        growthA: 'Más claridad y conciencia',
+        growthB: 'Más energía y positividad',
       },
     },
     settings: {
@@ -1216,39 +1171,21 @@ export const translations: Record<SupportedLanguage, Translations> = {
       },
     },
     recommendedHabits: {
-      morningPages: { name: 'Páginas matutinas', reason: 'Aprovecha tu claridad por las mañanas' },
-      sunriseWalk: { name: 'Paseo al amanecer', reason: 'Captura tu momento de máxima energía' },
-      morningStretch: { name: 'Estiramientos matutinos', reason: 'Un comienzo suave del día' },
-      eveningReflection: { name: 'Reflexión nocturna', reason: 'Honra tus noches contemplativas' },
-      windDown: { name: 'Ritual de desconexión', reason: 'Acompaña tu ritmo vespertino' },
-      nightReading: { name: 'Lectura nocturna', reason: 'Alimenta tu mente nocturna' },
-      mindfulPause: { name: 'Pausa consciente', reason: 'Se adapta a tu ritmo flexible' },
-      flowCheck: { name: 'Chequeo de flujo', reason: 'Respeta tu timing natural' },
-      dailyMovement: { name: 'Movimiento diario', reason: 'Mantiene tu energía constante' },
-      anchorRoutine: { name: 'Rutina ancla', reason: 'Apoya tu naturaleza estable' },
-      creativeSprint: { name: 'Sprint creativo', reason: 'Canaliza tus ráfagas de energía' },
-      restRitual: { name: 'Ritual de descanso', reason: 'Equilibra tu intensidad' },
-      powerBreak: { name: 'Pausa energética', reason: 'Recarga entre impulsos' },
-      energyCheck: { name: 'Chequeo de energía', reason: 'Respeta tus oleadas naturales' },
-      rideTheWave: { name: 'Surfea la ola', reason: 'Fluye con tu ritmo' },
-      gratitude: { name: 'Momento de gratitud', reason: 'Nutre tu brújula interior' },
-      valuesCheck: { name: 'Chequeo de valores', reason: 'Reconecta con lo importante' },
-      progressNote: { name: 'Nota de progreso', reason: 'Celebra tu crecimiento' },
-      shareLearning: { name: 'Compartir aprendizaje', reason: 'Conecta con otros' },
-      intentionSetting: { name: 'Establecer intención', reason: 'Une metas internas y externas' },
-      planTomorrow: { name: 'Planificar mañana', reason: 'Satisface tu gusto por la estructura' },
-      weeklyReview: { name: 'Revisión semanal', reason: 'Aporta claridad y orden' },
-      followCuriosity: { name: 'Seguir la curiosidad', reason: 'Celebra tu espontaneidad' },
-      surpriseSelf: { name: 'Sorpréndete', reason: 'Mantiene las cosas frescas' },
-      flexibleFocus: { name: 'Un foco flexible', reason: 'Se adapta a tu día' },
-      deepWork: { name: 'Bloque de trabajo profundo', reason: 'Protege tu tiempo de concentración' },
-      singleTask: { name: 'Una sola tarea', reason: 'Honra tu profundidad' },
-      taskVariety: { name: 'Variedad de tareas', reason: 'Alimenta tus intereses diversos' },
-      quietTime: { name: 'Tiempo tranquilo', reason: 'Restaura tu energía' },
-      natureMoment: { name: 'Momento en la naturaleza', reason: 'Recarga pacífica' },
-      connectSomeone: { name: 'Conectar con alguien', reason: 'Te energiza a través de otros' },
-      slowMorning: { name: 'Mañana tranquila', reason: 'Respeta tu ritmo natural' },
-      quickWins: { name: 'Victorias rápidas', reason: 'Acompaña tu impulso' },
+      shortWalk: { name: 'Dar un paseo corto', reason: 'Una forma sencilla de despejar la mente' },
+      stretchBody: { name: 'Estirar el cuerpo', reason: 'Libera tensión suavemente' },
+      moveBody: { name: 'Mover el cuerpo', reason: 'De la forma que más disfrutes' },
+      freshAir: { name: 'Salir a tomar aire fresco', reason: 'Un reseteo rápido para tus sentidos' },
+      breatheConsciously: { name: 'Respirar conscientemente 3 min', reason: 'Un momento de calma consciente' },
+      quietMoment: { name: 'Hacer una pausa tranquila', reason: 'Deja que la quietud te encuentre' },
+      noticeFeelingsToday: { name: 'Notar cómo te sientes hoy', reason: 'Conciencia sin juicio' },
+      positiveMoment: { name: 'Anotar un momento positivo', reason: 'Captura lo que salió bien' },
+      gratitudeEntry: { name: 'Anotar algo por lo que estés agradecido', reason: 'Nutre la apreciación' },
+      reflectDay: { name: 'Reflexionar brevemente sobre tu día', reason: 'Una mirada suave hacia atrás' },
+      setIntention: { name: 'Escribir una pequeña intención', reason: 'Empieza con claridad' },
+      smallTask: { name: 'Hacer una tarea pendiente pequeña', reason: 'Un poco de progreso va lejos' },
+      drinkWater: { name: 'Beber un vaso de agua conscientemente', reason: 'Un micro-hábito consciente' },
+      phoneAway: { name: 'Guardar el móvil 10 minutos', reason: 'Crea espacio para la presencia' },
+      readPages: { name: 'Leer unas páginas de un libro', reason: 'Alimenta tu curiosidad' },
     },
     timeline: {
       week: 'Semana',
@@ -1344,30 +1281,27 @@ export const translations: Record<SupportedLanguage, Translations> = {
       chooseLanguage: 'Wähle deine Sprache',
       languageSubtitle: 'Du kannst das jederzeit in den Einstellungen ändern',
       questions: {
-        rhythm: 'Wann fühlst du dich am lebendigsten?',
-        rhythmA: 'In den ruhigen Morgenstunden',
-        rhythmB: 'Wenn abends alles zur Ruhe kommt',
-        energy: 'Wie fließt deine Energie normalerweise?',
-        energyA: 'Gleichmäßig und beständig',
-        energyB: 'In Wellen und intensiven Schüben',
-        motivation: 'Was treibt dich an?',
-        motivationA: 'Ein innerer Kompass für das, was zählt',
-        motivationB: 'Die Anziehungskraft von Zielen und Ergebnissen',
-        approach: 'Wie gestaltest du am liebsten deine Tage?',
-        approachA: 'Mit einer lockeren Struktur',
-        approachB: 'Spontan, nach Gefühl',
-        focus: 'Wie arbeitest du am liebsten?',
-        focusA: 'Vertieft in eine Sache',
-        focusB: 'Abwechslungsreich zwischen verschiedenen Themen',
-        recovery: 'Wie tankst du am besten auf?',
-        recoveryA: 'In Ruhe und für mich allein',
-        recoveryB: 'Im Austausch mit Menschen, die mir wichtig sind',
-        pace: 'Welches Tempo liegt dir?',
-        paceA: 'Ruhig und bedacht',
-        paceB: 'Schnell und dynamisch',
-        tone: 'Wenn etwas nicht klappt – was hilft dir mehr?',
-        toneA: 'Ein sanfter Hinweis',
-        toneB: 'Ein klarer Anstoß',
+        energySource: 'Was hilft dir normalerweise, dich besser zu fühlen?',
+        energySourceA: 'Mich bewegen oder etwas Aktives tun',
+        energySourceB: 'Zur Ruhe kommen und mir einen Moment nehmen',
+        structure: 'Wie gehst du normalerweise mit Routinen um?',
+        structureA: 'Ich mag es, etwas Struktur zu haben',
+        structureB: 'Ich bevorzuge Flexibilität und handle nach Gefühl',
+        motivation: 'Was motiviert dich mehr?',
+        motivationA: 'Fortschritt zu sehen',
+        motivationB: 'Mich im Moment besser zu fühlen',
+        reflection: 'Wie oft reflektierst du über deinen Tag?',
+        reflectionA: 'Ich denke oft über meinen Tag oder meine Gefühle nach',
+        reflectionB: 'Ich mache meistens einfach weiter, ohne viel zu reflektieren',
+        dailyEnergy: 'Was brauchst du mehr in deinem Alltag?',
+        dailyEnergyA: 'Mehr Ruhe und Balance',
+        dailyEnergyB: 'Mehr Bewegung und Aktivität',
+        chaos: 'Wenn dein Tag sich chaotisch anfühlt, was hilft am meisten?',
+        chaosA: 'Eine kurze Pause machen',
+        chaosB: 'Etwas Kleines und Produktives tun',
+        growth: 'Was möchtest du mehr in dein Leben bringen?',
+        growthA: 'Mehr Klarheit und Bewusstsein',
+        growthB: 'Mehr Energie und Positivität',
       },
     },
     settings: {
@@ -1651,39 +1585,21 @@ export const translations: Record<SupportedLanguage, Translations> = {
       },
     },
     recommendedHabits: {
-      morningPages: { name: 'Morgenseiten', reason: 'Passt zu deiner morgendlichen Klarheit' },
-      sunriseWalk: { name: 'Spaziergang bei Sonnenaufgang', reason: 'Nutzt deine beste Energiezeit' },
-      morningStretch: { name: 'Morgendehnung', reason: 'Ein sanfter Start in den Tag' },
-      eveningReflection: { name: 'Abendreflexion', reason: 'Würdigt deine besinnlichen Abende' },
-      windDown: { name: 'Abendritual', reason: 'Begleitet deinen Abendrhythmus' },
-      nightReading: { name: 'Nachtlektüre', reason: 'Nährt deinen nachtaktiven Geist' },
-      mindfulPause: { name: 'Achtsame Pause', reason: 'Passt zu deinem flexiblen Rhythmus' },
-      flowCheck: { name: 'Flow-Check', reason: 'Respektiert dein natürliches Timing' },
-      dailyMovement: { name: 'Tägliche Bewegung', reason: 'Hält deinen gleichmäßigen Fluss' },
-      anchorRoutine: { name: 'Anker-Routine', reason: 'Stützt deine beständige Art' },
-      creativeSprint: { name: 'Kreativ-Sprint', reason: 'Kanalisiert deine Energieschübe' },
-      restRitual: { name: 'Ruhe-Ritual', reason: 'Balanciert deine Intensität' },
-      powerBreak: { name: 'Power-Pause', reason: 'Auftanken zwischen den Schüben' },
-      energyCheck: { name: 'Energie-Check', reason: 'Respektiert deine natürlichen Wellen' },
-      rideTheWave: { name: 'Die Welle reiten', reason: 'Arbeite mit deinem Flow' },
-      gratitude: { name: 'Dankbarkeitsmoment', reason: 'Nährt deinen inneren Kompass' },
-      valuesCheck: { name: 'Werte-Check', reason: 'Verbindet dich mit dem, was zählt' },
-      progressNote: { name: 'Fortschrittsnotiz', reason: 'Feiert sichtbares Wachstum' },
-      shareLearning: { name: 'Lernerfahrung teilen', reason: 'Verbindet dich mit anderen' },
-      intentionSetting: { name: 'Absicht setzen', reason: 'Verbindet innere und äußere Ziele' },
-      planTomorrow: { name: 'Morgen planen', reason: 'Befriedigt deine Liebe zur Struktur' },
-      weeklyReview: { name: 'Wochenrückblick', reason: 'Schafft Klarheit und Ordnung' },
-      followCuriosity: { name: 'Neugier folgen', reason: 'Feiert deine Spontaneität' },
-      surpriseSelf: { name: 'Überrasch dich selbst', reason: 'Hält die Dinge frisch' },
-      flexibleFocus: { name: 'Flexibler Fokus', reason: 'Passt sich deinem Tag an' },
-      deepWork: { name: 'Deep-Work-Block', reason: 'Schützt deine Fokuszeit' },
-      singleTask: { name: 'Single-Tasking', reason: 'Würdigt deine Tiefe' },
-      taskVariety: { name: 'Abwechslung', reason: 'Nährt deine vielfältigen Interessen' },
-      quietTime: { name: 'Stille Zeit', reason: 'Gibt dir Energie zurück' },
-      natureMoment: { name: 'Naturmoment', reason: 'Friedliche Erholung' },
-      connectSomeone: { name: 'Mit jemandem verbinden', reason: 'Gibt Energie durch Austausch' },
-      slowMorning: { name: 'Langsamer Morgen', reason: 'Respektiert dein natürliches Tempo' },
-      quickWins: { name: 'Schnelle Erfolge', reason: 'Passt zu deinem Schwung' },
+      shortWalk: { name: 'Einen kurzen Spaziergang machen', reason: 'Ein einfacher Weg, den Kopf frei zu bekommen' },
+      stretchBody: { name: 'Den Körper dehnen', reason: 'Sanft Spannung lösen' },
+      moveBody: { name: 'Den Körper bewegen', reason: 'Auf die Art, die dir Freude macht' },
+      freshAir: { name: 'Frische Luft schnappen', reason: 'Ein kurzer Reset für die Sinne' },
+      breatheConsciously: { name: '3 Minuten bewusst atmen', reason: 'Ein Moment ruhiger Achtsamkeit' },
+      quietMoment: { name: 'Einen ruhigen Moment einlegen', reason: 'Lass die Stille dich finden' },
+      noticeFeelingsToday: { name: 'Wahrnehmen, wie du dich heute fühlst', reason: 'Achtsamkeit ohne Urteil' },
+      positiveMoment: { name: 'Einen positiven Moment aufschreiben', reason: 'Festhalten, was gut lief' },
+      gratitudeEntry: { name: 'Etwas aufschreiben, wofür du dankbar bist', reason: 'Wertschätzung nähren' },
+      reflectDay: { name: 'Kurz über den Tag reflektieren', reason: 'Ein sanfter Rückblick' },
+      setIntention: { name: 'Eine kleine Absicht aufschreiben', reason: 'Mit Klarheit beginnen' },
+      smallTask: { name: 'Eine aufgeschobene Kleinigkeit erledigen', reason: 'Ein bisschen Fortschritt wirkt viel' },
+      drinkWater: { name: 'Bewusst ein Glas Wasser trinken', reason: 'Ein achtsamer Mikro-Habit' },
+      phoneAway: { name: 'Handy 10 Minuten weglegen', reason: 'Raum für Präsenz schaffen' },
+      readPages: { name: 'Ein paar Seiten in einem Buch lesen', reason: 'Neugier stillen' },
     },
     timeline: {
       week: 'Woche',

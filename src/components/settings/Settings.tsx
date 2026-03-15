@@ -46,123 +46,40 @@ interface SettingsProps {
 type SettingsSection = 'main' | 'profile' | 'cloud' | 'auth' | 'reset' | 'delete' | 'habits' | 'experience' | 'privacy' | 'about' | 'google-cloud' | 'language' | 'achievements';
 
 const PERSONALITY_DESCRIPTIONS: Record<string, Record<string, Record<SupportedLanguage, string>>> = {
-  rhythm: {
-    morning: {
-      en: 'You tend to feel most alive in the morning hours',
-      es: 'Tiendes a sentirte más vivo en las horas de la mañana',
-      de: 'Du fühlst dich in den Morgenstunden am lebendigsten',
+  energyStyle: {
+    active: {
+      en: 'You feel better through movement and activity',
+      es: 'Te sientes mejor con movimiento y actividad',
+      de: 'Du fühlst dich besser durch Bewegung und Aktivität',
     },
-    evening: {
-      en: 'You come alive as the day winds down',
-      es: 'Cobras vida cuando el día termina',
-      de: 'Du wirst lebendig, wenn der Tag ausklingt',
+    calming: {
+      en: 'You recharge by slowing down and finding calm',
+      es: 'Recargas energía al ralentizar y encontrar calma',
+      de: 'Du tankst auf, indem du zur Ruhe kommst',
+    },
+  },
+  structureStyle: {
+    structured: {
+      en: 'You like having a bit of structure in your day',
+      es: 'Te gusta tener algo de estructura en tu día',
+      de: 'Du magst etwas Struktur in deinem Tag',
     },
     flexible: {
-      en: 'Your rhythm flows naturally with the day',
-      es: 'Tu ritmo fluye naturalmente con el día',
-      de: 'Dein Rhythmus fließt natürlich mit dem Tag',
+      en: 'You prefer flexibility and doing things when it feels right',
+      es: 'Prefieres flexibilidad y hacer las cosas cuando se siente bien',
+      de: 'Du bevorzugst Flexibilität und tust Dinge, wenn es sich richtig anfühlt',
     },
   },
-  energy: {
-    steady: {
-      en: 'Your energy flows steadily throughout the day',
-      es: 'Tu energía fluye constantemente durante el día',
-      de: 'Deine Energie fließt stetig durch den Tag',
+  motivationStyle: {
+    progress: {
+      en: 'Seeing progress motivates you',
+      es: 'Ver progreso te motiva',
+      de: 'Fortschritt zu sehen motiviert dich',
     },
-    bursts: {
-      en: 'You work in bursts of intense energy',
-      es: 'Trabajas en ráfagas de energía intensa',
-      de: 'Du arbeitest in intensiven Energieschüben',
-    },
-    waves: {
-      en: 'Your energy moves in natural waves',
-      es: 'Tu energía se mueve en oleadas naturales',
-      de: 'Deine Energie bewegt sich in natürlichen Wellen',
-    },
-  },
-  motivation: {
-    internal: {
-      en: "You're guided by an inner sense of what matters",
-      es: 'Te guías por un sentido interno de lo que importa',
-      de: 'Du wirst von einem inneren Sinn für das Wichtige geleitet',
-    },
-    external: {
-      en: 'Goals and visible outcomes energize you',
-      es: 'Las metas y resultados visibles te energizan',
-      de: 'Ziele und sichtbare Ergebnisse energetisieren dich',
-    },
-    mixed: {
-      en: 'You balance inner values with external goals',
-      es: 'Equilibras valores internos con metas externas',
-      de: 'Du balancierst innere Werte mit äußeren Zielen',
-    },
-  },
-  approach: {
-    structured: {
-      en: 'You find comfort in gentle structure',
-      es: 'Encuentras comodidad en una estructura suave',
-      de: 'Du findest Komfort in sanfter Struktur',
-    },
-    spontaneous: {
-      en: 'You prefer following what feels right',
-      es: 'Prefieres seguir lo que se siente correcto',
-      de: 'Du bevorzugst dem zu folgen, was sich richtig anfühlt',
-    },
-    adaptive: {
-      en: 'You adapt your approach to each situation',
-      es: 'Adaptas tu enfoque a cada situación',
-      de: 'Du passt deinen Ansatz an jede Situation an',
-    },
-  },
-  focus: {
-    deep: {
-      en: 'You prefer deep focus on one thing at a time',
-      es: 'Prefieres un enfoque profundo en una cosa a la vez',
-      de: 'Du bevorzugst tiefen Fokus auf eine Sache',
-    },
-    varied: {
-      en: 'You thrive with variety and switching tasks',
-      es: 'Prosperas con variedad y cambio de tareas',
-      de: 'Du blühst auf mit Abwechslung und Aufgabenwechsel',
-    },
-    contextual: {
-      en: "Your focus adapts to what's needed",
-      es: 'Tu enfoque se adapta a lo que se necesita',
-      de: 'Dein Fokus passt sich dem Bedarf an',
-    },
-  },
-  recovery: {
-    solitude: {
-      en: 'Quiet time restores your energy',
-      es: 'El tiempo tranquilo restaura tu energía',
-      de: 'Ruhige Zeit stellt deine Energie wieder her',
-    },
-    social: {
-      en: 'Being with others recharges you',
-      es: 'Estar con otros te recarga',
-      de: 'Mit anderen zusammen zu sein lädt dich auf',
-    },
-    mixed: {
-      en: 'You balance solitude and connection',
-      es: 'Equilibras soledad y conexión',
-      de: 'Du balancierst Einsamkeit und Verbundenheit',
-    },
-  },
-  pace: {
-    slow: {
-      en: 'A deliberate, unhurried pace suits you',
-      es: 'Un ritmo deliberado y sin prisa te sienta bien',
-      de: 'Ein bedachtes, ungehetztes Tempo passt zu dir',
-    },
-    moderate: {
-      en: 'You find a balanced rhythm',
-      es: 'Encuentras un ritmo equilibrado',
-      de: 'Du findest einen ausgewogenen Rhythmus',
-    },
-    fast: {
-      en: 'You thrive with quick, dynamic movement',
-      es: 'Prosperas con movimientos rápidos y dinámicos',
-      de: 'Du blühst mit schneller, dynamischer Bewegung auf',
+    feeling: {
+      en: 'Feeling better in the moment is what drives you',
+      es: 'Sentirte mejor en el momento es lo que te impulsa',
+      de: 'Dich im Moment besser zu fühlen treibt dich an',
     },
   },
 };
@@ -302,10 +219,11 @@ export function Settings({ onClose, onEditProfile }: SettingsProps) {
   const getPersonalitySummary = () => {
     if (!personality) return null;
     const summaryParts = [
-      PERSONALITY_DESCRIPTIONS.rhythm[personality.rhythm]?.[currentLanguage],
-      PERSONALITY_DESCRIPTIONS.energy[personality.energy]?.[currentLanguage],
+      PERSONALITY_DESCRIPTIONS.energyStyle[personality.energyStyle]?.[currentLanguage],
+      PERSONALITY_DESCRIPTIONS.structureStyle[personality.structureStyle]?.[currentLanguage],
+      PERSONALITY_DESCRIPTIONS.motivationStyle[personality.motivationStyle]?.[currentLanguage],
     ].filter(Boolean);
-    return summaryParts.slice(0, 2).join('. ') + '.';
+    return summaryParts.join('. ') + '.';
   };
 
   const SettingsRow = ({ 
