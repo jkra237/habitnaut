@@ -245,6 +245,10 @@ export interface Translations {
     routineMonthWeekLabel: string;
     routineMonthWeeks: string[];
     routineOptional: string;
+    time: string;
+    editTime: string;
+    removeTime: string;
+    timeOptional: string;
   };
   
   // Mood options
