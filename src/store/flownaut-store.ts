@@ -47,6 +47,7 @@ interface FlowNautStore extends UserState {
   wakeHabit: (habitId: string) => void;
   deleteHabit: (habitId: string) => void;
   updateHabitRoutine: (habitId: string, routineDays?: number[], routineFrequency?: RoutineFrequency, routineMonthWeek?: number | number[]) => void;
+  updateHabitTime: (habitId: string, time?: string) => void;
   
   // Daily tracking
   setHabitState: (date: string, habitId: string, state: HabitState) => void;
