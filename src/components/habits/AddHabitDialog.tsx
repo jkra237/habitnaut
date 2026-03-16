@@ -43,6 +43,7 @@ export function AddHabitDialog({ isOpen, onClose }: AddHabitDialogProps) {
     addHabit({
       name: name.trim(),
       emoji: selectedEmoji,
+      scheduledTime: scheduledTime || undefined,
       routineDays: routineDays.length > 0 ? routineDays : undefined,
       routineFrequency: routineDays.length > 0 ? routineFrequency : undefined,
       routineMonthWeek: routineDays.length > 0 && routineFrequency === 'monthly' ? routineMonthWeeks : undefined,
