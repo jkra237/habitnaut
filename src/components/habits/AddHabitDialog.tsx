@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useFlowNautStore } from '@/store/flownaut-store';
-import { Plus, CalendarClock } from 'lucide-react';
+import { Plus, CalendarClock, Clock } from 'lucide-react';
 import { useTranslations } from '@/hooks/use-translations';
 import { RoutineSelector } from './RoutineSelector';
 import type { RoutineFrequency } from '@/types/flownaut';
@@ -29,6 +29,8 @@ export function AddHabitDialog({ isOpen, onClose }: AddHabitDialogProps) {
   const [name, setName] = useState('');
   const [selectedEmoji, setSelectedEmoji] = useState('🌱');
   const [showRoutine, setShowRoutine] = useState(false);
+  const [showTime, setShowTime] = useState(false);
+  const [scheduledTime, setScheduledTime] = useState('');
   const [routineDays, setRoutineDays] = useState<number[]>([]);
   const [routineFrequency, setRoutineFrequency] = useState<RoutineFrequency>('weekly');
   const [routineMonthWeeks, setRoutineMonthWeeks] = useState<number[]>([1]);
@@ -41,6 +43,7 @@ export function AddHabitDialog({ isOpen, onClose }: AddHabitDialogProps) {
     addHabit({
       name: name.trim(),
       emoji: selectedEmoji,
+      scheduledTime: scheduledTime || undefined,
       routineDays: routineDays.length > 0 ? routineDays : undefined,
       routineFrequency: routineDays.length > 0 ? routineFrequency : undefined,
       routineMonthWeek: routineDays.length > 0 && routineFrequency === 'monthly' ? routineMonthWeeks : undefined,
@@ -49,6 +52,8 @@ export function AddHabitDialog({ isOpen, onClose }: AddHabitDialogProps) {
     setName('');
     setSelectedEmoji('🌱');
     setShowRoutine(false);
+    setShowTime(false);
+    setScheduledTime('');
     setRoutineDays([]);
     setRoutineFrequency('weekly');
     setRoutineMonthWeeks([1]);
@@ -142,6 +147,52 @@ export function AddHabitDialog({ isOpen, onClose }: AddHabitDialogProps) {
                             monthWeeks={routineMonthWeeks}
                             onMonthWeeksChange={setRoutineMonthWeeks}
                           />
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                {/* Time toggle */}
+                <div>
+                  <button
+                    type="button"
+                    onClick={() => setShowTime(!showTime)}
+                    className={`flex items-center gap-2 text-sm transition-colors ${
+                      showTime ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
+                    }`}
+                  >
+                    <Clock className="w-4 h-4" />
+                    {t.addHabitDialog.time || 'Time'}
+                    {scheduledTime && (
+                      <span className="text-xs text-primary ml-1">({scheduledTime})</span>
+                    )}
+                  </button>
+                  
+                  <AnimatePresence>
+                    {showTime && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="overflow-hidden"
+                      >
+                        <div className="pt-3 flex items-center gap-3">
+                          <input
+                            type="time"
+                            value={scheduledTime}
+                            onChange={(e) => setScheduledTime(e.target.value)}
+                            className="h-10 px-3 py-2 rounded-xl bg-secondary border border-border/50 text-foreground text-sm focus:border-primary focus:outline-none"
+                          />
+                          {scheduledTime && (
+                            <button
+                              type="button"
+                              onClick={() => setScheduledTime('')}
+                              className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+                            >
+                              {t.addHabitDialog.removeTime || 'Remove'}
+                            </button>
+                          )}
                         </div>
                       </motion.div>
                     )}

@@ -59,7 +59,8 @@ const HabitSchema = z.object({
   createdAt: z.union([z.string(), z.date()]).optional(),
   isResting: z.boolean().optional().default(false),
   restingNote: sanitizedString(MAX_STRING_LENGTH).optional(),
-}).passthrough(); // Allow additional fields for forward compatibility
+  scheduledTime: z.string().regex(/^\d{2}:\d{2}$/).optional(),
+}).passthrough();
 
 // Habit state schema
 const HabitStateSchema = z.enum(['done', 'not-done', 'conscious-skip']);

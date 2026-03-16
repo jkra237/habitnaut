@@ -245,6 +245,10 @@ export interface Translations {
     routineMonthWeekLabel: string;
     routineMonthWeeks: string[];
     routineOptional: string;
+    time: string;
+    editTime: string;
+    removeTime: string;
+    timeOptional: string;
   };
   
   // Mood options
@@ -640,6 +644,10 @@ export const translations: Record<SupportedLanguage, Translations> = {
       routineMonthWeekLabel: 'Which week(s) of the month?',
       routineMonthWeeks: ['1st week', '2nd week', '3rd week', '4th week'],
       routineOptional: 'Optional',
+      time: 'Time',
+      editTime: 'Edit time',
+      removeTime: 'Remove',
+      timeOptional: 'Optional',
     },
     mood: {
       heavy: 'Heavy',
@@ -1054,6 +1062,10 @@ export const translations: Record<SupportedLanguage, Translations> = {
       routineMonthWeekLabel: '¿En qué semana(s) del mes?',
       routineMonthWeeks: ['1ª semana', '2ª semana', '3ª semana', '4ª semana'],
       routineOptional: 'Opcional',
+      time: 'Hora',
+      editTime: 'Editar hora',
+      removeTime: 'Eliminar',
+      timeOptional: 'Opcional',
     },
     mood: {
       heavy: 'Pesado',
@@ -1468,6 +1480,10 @@ export const translations: Record<SupportedLanguage, Translations> = {
       routineMonthWeekLabel: 'In welcher Monatswoche(n)?',
       routineMonthWeeks: ['1. Woche', '2. Woche', '3. Woche', '4. Woche'],
       routineOptional: 'Optional',
+      time: 'Uhrzeit',
+      editTime: 'Uhrzeit bearbeiten',
+      removeTime: 'Entfernen',
+      timeOptional: 'Optional',
     },
     mood: {
       heavy: 'Schwer',

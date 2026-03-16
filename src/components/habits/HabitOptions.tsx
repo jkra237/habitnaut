@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { useFlowNautStore } from '@/store/flownaut-store';
 import type { Habit, RoutineFrequency } from '@/types/flownaut';
-import { Moon, Trash2, X, Info, CalendarClock, CalendarX } from 'lucide-react';
+import { Moon, Trash2, X, Info, CalendarClock, CalendarX, Clock } from 'lucide-react';
 import { useTranslations } from '@/hooks/use-translations';
 import { SingleHabitStatsDialog } from './SingleHabitStatsDialog';
 import { RoutineSelector } from './RoutineSelector';
@@ -17,9 +17,12 @@ export function HabitOptions({ habit, onClose }: HabitOptionsProps) {
   const letHabitRest = useFlowNautStore((s) => s.letHabitRest);
   const deleteHabit = useFlowNautStore((s) => s.deleteHabit);
   const updateHabitRoutine = useFlowNautStore((s) => s.updateHabitRoutine);
+  const updateHabitTime = useFlowNautStore((s) => s.updateHabitTime);
   const t = useTranslations();
   const [showStats, setShowStats] = useState(false);
   const [showRoutineEdit, setShowRoutineEdit] = useState(false);
+  const [showTimeEdit, setShowTimeEdit] = useState(false);
+  const [editTime, setEditTime] = useState(habit.scheduledTime || '');
   const [routineDays, setRoutineDays] = useState<number[]>(habit.routineDays || []);
   const [routineFrequency, setRoutineFrequency] = useState<RoutineFrequency>(habit.routineFrequency || 'weekly');
   const [routineMonthWeeks, setRoutineMonthWeeks] = useState<number[]>(
@@ -97,6 +100,14 @@ export function HabitOptions({ habit, onClose }: HabitOptionsProps) {
           </div>
         )}
 
+        {/* Time badge */}
+        {habit.scheduledTime && !showTimeEdit && (
+          <div className="flex items-center gap-1.5 text-xs text-primary">
+            <Clock className="w-3.5 h-3.5" />
+            <span>{habit.scheduledTime}</span>
+          </div>
+        )}
+
         <div className="flex gap-2 text-xs text-muted-foreground">
           {habit.timeAnchor !== 'none' && (
             <span className="px-2 py-1 rounded-md bg-secondary">
@@ -137,6 +148,50 @@ export function HabitOptions({ habit, onClose }: HabitOptionsProps) {
               {t.addHabitDialog.routineOptional}
             </span>
           </Button>
+
+          {/* Time edit/add button */}
+          <Button
+            variant="ghost"
+            className="w-full justify-start"
+            onClick={() => setShowTimeEdit(!showTimeEdit)}
+          >
+            <Clock className="w-4 h-4 mr-2" />
+            {habit.scheduledTime ? (t.addHabitDialog.editTime || 'Edit time') : (t.addHabitDialog.time || 'Time')}
+            <span className="text-xs text-muted-foreground ml-auto">
+              {t.addHabitDialog.timeOptional || 'Optional'}
+            </span>
+          </Button>
+
+          {/* Time editor */}
+          <AnimatePresence>
+            {showTimeEdit && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="overflow-hidden"
+              >
+                <div className="p-3 bg-secondary/50 rounded-lg space-y-3">
+                  <input
+                    type="time"
+                    value={editTime}
+                    onChange={(e) => setEditTime(e.target.value)}
+                    className="h-10 px-3 py-2 rounded-xl bg-background border border-border/50 text-foreground text-sm focus:border-primary focus:outline-none w-full"
+                  />
+                  <div className="flex gap-2">
+                    <Button size="sm" variant="default" onClick={() => { updateHabitTime(habit.id, editTime || undefined); setShowTimeEdit(false); }} className="flex-1">
+                      {t.common.save}
+                    </Button>
+                    {habit.scheduledTime && (
+                      <Button size="sm" variant="ghost" onClick={() => { updateHabitTime(habit.id, undefined); setEditTime(''); setShowTimeEdit(false); }} className="text-muted-foreground">
+                        {t.addHabitDialog.removeTime || 'Remove'}
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Routine editor */}
           <AnimatePresence>
