@@ -100,6 +100,14 @@ export function HabitOptions({ habit, onClose }: HabitOptionsProps) {
           </div>
         )}
 
+        {/* Time badge */}
+        {habit.scheduledTime && !showTimeEdit && (
+          <div className="flex items-center gap-1.5 text-xs text-primary">
+            <Clock className="w-3.5 h-3.5" />
+            <span>{habit.scheduledTime}</span>
+          </div>
+        )}
+
         <div className="flex gap-2 text-xs text-muted-foreground">
           {habit.timeAnchor !== 'none' && (
             <span className="px-2 py-1 rounded-md bg-secondary">
