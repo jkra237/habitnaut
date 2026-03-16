@@ -140,6 +140,7 @@ export const useFlowNautStore = create<FlowNautStore>()(
           routineDays: options.routineDays,
           routineFrequency: options.routineFrequency,
           routineMonthWeek: options.routineMonthWeek,
+          scheduledTime: options.scheduledTime,
           createdAt: new Date(),
           isResting: false,
         };
