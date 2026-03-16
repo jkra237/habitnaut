@@ -1062,6 +1062,10 @@ export const translations: Record<SupportedLanguage, Translations> = {
       routineMonthWeekLabel: '¿En qué semana(s) del mes?',
       routineMonthWeeks: ['1ª semana', '2ª semana', '3ª semana', '4ª semana'],
       routineOptional: 'Opcional',
+      time: 'Hora',
+      editTime: 'Editar hora',
+      removeTime: 'Eliminar',
+      timeOptional: 'Opcional',
     },
     mood: {
       heavy: 'Pesado',
