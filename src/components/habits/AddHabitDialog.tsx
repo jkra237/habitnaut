@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useFlowNautStore } from '@/store/flownaut-store';
-import { Plus, CalendarClock } from 'lucide-react';
+import { Plus, CalendarClock, Clock } from 'lucide-react';
 import { useTranslations } from '@/hooks/use-translations';
 import { RoutineSelector } from './RoutineSelector';
 import type { RoutineFrequency } from '@/types/flownaut';
