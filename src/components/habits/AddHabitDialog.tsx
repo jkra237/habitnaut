@@ -29,6 +29,8 @@ export function AddHabitDialog({ isOpen, onClose }: AddHabitDialogProps) {
   const [name, setName] = useState('');
   const [selectedEmoji, setSelectedEmoji] = useState('🌱');
   const [showRoutine, setShowRoutine] = useState(false);
+  const [showTime, setShowTime] = useState(false);
+  const [scheduledTime, setScheduledTime] = useState('');
   const [routineDays, setRoutineDays] = useState<number[]>([]);
   const [routineFrequency, setRoutineFrequency] = useState<RoutineFrequency>('weekly');
   const [routineMonthWeeks, setRoutineMonthWeeks] = useState<number[]>([1]);
