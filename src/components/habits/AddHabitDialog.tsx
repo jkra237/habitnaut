@@ -153,6 +153,52 @@ export function AddHabitDialog({ isOpen, onClose }: AddHabitDialogProps) {
                   </AnimatePresence>
                 </div>
 
+                {/* Time toggle */}
+                <div>
+                  <button
+                    type="button"
+                    onClick={() => setShowTime(!showTime)}
+                    className={`flex items-center gap-2 text-sm transition-colors ${
+                      showTime ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
+                    }`}
+                  >
+                    <Clock className="w-4 h-4" />
+                    {t.addHabitDialog.time || 'Time'}
+                    {scheduledTime && (
+                      <span className="text-xs text-primary ml-1">({scheduledTime})</span>
+                    )}
+                  </button>
+                  
+                  <AnimatePresence>
+                    {showTime && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="overflow-hidden"
+                      >
+                        <div className="pt-3 flex items-center gap-3">
+                          <input
+                            type="time"
+                            value={scheduledTime}
+                            onChange={(e) => setScheduledTime(e.target.value)}
+                            className="h-10 px-3 py-2 rounded-xl bg-secondary border border-border/50 text-foreground text-sm focus:border-primary focus:outline-none"
+                          />
+                          {scheduledTime && (
+                            <button
+                              type="button"
+                              onClick={() => setScheduledTime('')}
+                              className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+                            >
+                              {t.addHabitDialog.removeTime || 'Remove'}
+                            </button>
+                          )}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
                 {/* Actions */}
                 <div className="flex gap-3">
                   <Button

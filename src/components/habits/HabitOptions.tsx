@@ -149,6 +149,50 @@ export function HabitOptions({ habit, onClose }: HabitOptionsProps) {
             </span>
           </Button>
 
+          {/* Time edit/add button */}
+          <Button
+            variant="ghost"
+            className="w-full justify-start"
+            onClick={() => setShowTimeEdit(!showTimeEdit)}
+          >
+            <Clock className="w-4 h-4 mr-2" />
+            {habit.scheduledTime ? (t.addHabitDialog.editTime || 'Edit time') : (t.addHabitDialog.time || 'Time')}
+            <span className="text-xs text-muted-foreground ml-auto">
+              {t.addHabitDialog.timeOptional || 'Optional'}
+            </span>
+          </Button>
+
+          {/* Time editor */}
+          <AnimatePresence>
+            {showTimeEdit && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="overflow-hidden"
+              >
+                <div className="p-3 bg-secondary/50 rounded-lg space-y-3">
+                  <input
+                    type="time"
+                    value={editTime}
+                    onChange={(e) => setEditTime(e.target.value)}
+                    className="h-10 px-3 py-2 rounded-xl bg-background border border-border/50 text-foreground text-sm focus:border-primary focus:outline-none w-full"
+                  />
+                  <div className="flex gap-2">
+                    <Button size="sm" variant="default" onClick={() => { updateHabitTime(habit.id, editTime || undefined); setShowTimeEdit(false); }} className="flex-1">
+                      {t.common.save}
+                    </Button>
+                    {habit.scheduledTime && (
+                      <Button size="sm" variant="ghost" onClick={() => { updateHabitTime(habit.id, undefined); setEditTime(''); setShowTimeEdit(false); }} className="text-muted-foreground">
+                        {t.addHabitDialog.removeTime || 'Remove'}
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
           {/* Routine editor */}
           <AnimatePresence>
             {showRoutineEdit && (
