@@ -172,6 +172,12 @@ export const useFlowNautStore = create<FlowNautStore>()(
         ),
       })),
 
+      updateHabitTime: (habitId, time) => set((state) => ({
+        habits: state.habits.map((h) =>
+          h.id === habitId ? { ...h, scheduledTime: time } : h
+        ),
+      })),
+
       setHabitState: (date, habitId, state) => set((store) => {
         const existingEntry = store.entries.find((e) => e.date === date);
         if (existingEntry) {
