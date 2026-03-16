@@ -1480,6 +1480,10 @@ export const translations: Record<SupportedLanguage, Translations> = {
       routineMonthWeekLabel: 'In welcher Monatswoche(n)?',
       routineMonthWeeks: ['1. Woche', '2. Woche', '3. Woche', '4. Woche'],
       routineOptional: 'Optional',
+      time: 'Uhrzeit',
+      editTime: 'Uhrzeit bearbeiten',
+      removeTime: 'Entfernen',
+      timeOptional: 'Optional',
     },
     mood: {
       heavy: 'Schwer',
