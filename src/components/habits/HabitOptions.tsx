@@ -21,6 +21,8 @@ export function HabitOptions({ habit, onClose }: HabitOptionsProps) {
   const t = useTranslations();
   const [showStats, setShowStats] = useState(false);
   const [showRoutineEdit, setShowRoutineEdit] = useState(false);
+  const [showTimeEdit, setShowTimeEdit] = useState(false);
+  const [editTime, setEditTime] = useState(habit.scheduledTime || '');
   const [routineDays, setRoutineDays] = useState<number[]>(habit.routineDays || []);
   const [routineFrequency, setRoutineFrequency] = useState<RoutineFrequency>(habit.routineFrequency || 'weekly');
   const [routineMonthWeeks, setRoutineMonthWeeks] = useState<number[]>(
