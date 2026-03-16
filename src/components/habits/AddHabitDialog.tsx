@@ -52,6 +52,8 @@ export function AddHabitDialog({ isOpen, onClose }: AddHabitDialogProps) {
     setName('');
     setSelectedEmoji('🌱');
     setShowRoutine(false);
+    setShowTime(false);
+    setScheduledTime('');
     setRoutineDays([]);
     setRoutineFrequency('weekly');
     setRoutineMonthWeeks([1]);
