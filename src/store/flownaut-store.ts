@@ -25,6 +25,7 @@ interface AddHabitOptions {
   routineDays?: number[];
   routineFrequency?: RoutineFrequency;
   routineMonthWeek?: number | number[];
+  scheduledTime?: string;
 }
 
 const defaultPreferences: AppPreferences = {
