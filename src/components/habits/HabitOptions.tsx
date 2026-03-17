@@ -3,11 +3,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { useFlowNautStore } from '@/store/flownaut-store';
 import type { Habit, RoutineFrequency } from '@/types/flownaut';
-import { Moon, Trash2, X, Info, CalendarClock, CalendarX, Clock, Bell, BellOff } from 'lucide-react';
+import { Moon, Trash2, X, Info, CalendarClock, CalendarX, Clock } from 'lucide-react';
 import { useTranslations } from '@/hooks/use-translations';
 import { SingleHabitStatsDialog } from './SingleHabitStatsDialog';
 import { RoutineSelector } from './RoutineSelector';
-import { requestNotificationPermission } from '@/hooks/use-habit-notifications';
 
 interface HabitOptionsProps {
   habit: Habit;
@@ -19,7 +18,6 @@ export function HabitOptions({ habit, onClose }: HabitOptionsProps) {
   const deleteHabit = useFlowNautStore((s) => s.deleteHabit);
   const updateHabitRoutine = useFlowNautStore((s) => s.updateHabitRoutine);
   const updateHabitTime = useFlowNautStore((s) => s.updateHabitTime);
-  const toggleHabitNotification = useFlowNautStore((s) => s.toggleHabitNotification);
   const t = useTranslations();
   const [showStats, setShowStats] = useState(false);
   const [showRoutineEdit, setShowRoutineEdit] = useState(false);
@@ -194,34 +192,6 @@ export function HabitOptions({ habit, onClose }: HabitOptionsProps) {
               </motion.div>
             )}
           </AnimatePresence>
-
-          {/* Notification toggle - only when scheduledTime is set */}
-          {habit.scheduledTime && (
-            <Button
-              variant="ghost"
-              className="w-full justify-start"
-              onClick={async () => {
-                if (!habit.notificationEnabled) {
-                  const granted = await requestNotificationPermission();
-                  if (!granted) return;
-                }
-                toggleHabitNotification(habit.id);
-              }}
-            >
-              {habit.notificationEnabled ? (
-                <Bell className="w-4 h-4 mr-2 text-primary" />
-              ) : (
-                <BellOff className="w-4 h-4 mr-2" />
-              )}
-              {habit.notificationEnabled 
-                ? (t.habits?.notificationOn || 'Notification active')
-                : (t.habits?.notificationOff || 'Enable notification')
-              }
-              <span className="text-xs text-muted-foreground ml-auto">
-                {habit.scheduledTime}
-              </span>
-            </Button>
-          )}
 
           {/* Routine editor */}
           <AnimatePresence>

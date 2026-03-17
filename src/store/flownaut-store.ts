@@ -48,7 +48,6 @@ interface FlowNautStore extends UserState {
   deleteHabit: (habitId: string) => void;
   updateHabitRoutine: (habitId: string, routineDays?: number[], routineFrequency?: RoutineFrequency, routineMonthWeek?: number | number[]) => void;
   updateHabitTime: (habitId: string, time?: string) => void;
-  toggleHabitNotification: (habitId: string) => void;
   
   // Daily tracking
   setHabitState: (date: string, habitId: string, state: HabitState) => void;
@@ -175,13 +174,7 @@ export const useFlowNautStore = create<FlowNautStore>()(
 
       updateHabitTime: (habitId, time) => set((state) => ({
         habits: state.habits.map((h) =>
-          h.id === habitId ? { ...h, scheduledTime: time, notificationEnabled: time ? h.notificationEnabled : false } : h
-        ),
-      })),
-
-      toggleHabitNotification: (habitId) => set((state) => ({
-        habits: state.habits.map((h) =>
-          h.id === habitId ? { ...h, notificationEnabled: !h.notificationEnabled } : h
+          h.id === habitId ? { ...h, scheduledTime: time } : h
         ),
       })),
 

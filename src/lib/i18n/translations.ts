@@ -211,8 +211,6 @@ export interface Translations {
     planned: string;
     emptyTitle: string;
     emptySubtitle: string;
-    notificationOn: string;
-    notificationOff: string;
   };
   
   // Add Habit Dialog
@@ -614,8 +612,6 @@ export const translations: Record<SupportedLanguage, Translations> = {
       planned: 'Planned',
       emptyTitle: 'Your observation space is empty',
       emptySubtitle: 'Add something you\'d like to observe – not to perfect, just to notice.',
-      notificationOn: 'Notification active',
-      notificationOff: 'Enable notification',
     },
     addHabitDialog: {
       title: 'What would you like to observe?',
@@ -1034,8 +1030,6 @@ export const translations: Record<SupportedLanguage, Translations> = {
       planned: 'Planificado',
       emptyTitle: 'Tu espacio de observación está vacío',
       emptySubtitle: 'Añade algo que te gustaría observar – no para perfeccionar, solo para notar.',
-      notificationOn: 'Notificación activa',
-      notificationOff: 'Activar notificación',
     },
     addHabitDialog: {
       title: '¿Qué te gustaría observar?',
@@ -1454,8 +1448,6 @@ export const translations: Record<SupportedLanguage, Translations> = {
       planned: 'Geplant',
       emptyTitle: 'Dein Beobachtungsraum ist leer',
       emptySubtitle: 'Füge etwas hinzu, das du beobachten möchtest – nicht um es zu perfektionieren, nur um es wahrzunehmen.',
-      notificationOn: 'Benachrichtigung aktiv',
-      notificationOff: 'Benachrichtigung aktivieren',
     },
     addHabitDialog: {
       title: 'Was möchtest du beobachten?',
