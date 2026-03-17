@@ -648,9 +648,6 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
 
       {/* Add habit dialog triggered from calendar */}
       <AddHabitDialog isOpen={showAddHabit} onClose={() => setShowAddHabit(false)} />
-          )}
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
