@@ -1454,6 +1454,8 @@ export const translations: Record<SupportedLanguage, Translations> = {
       planned: 'Geplant',
       emptyTitle: 'Dein Beobachtungsraum ist leer',
       emptySubtitle: 'Füge etwas hinzu, das du beobachten möchtest – nicht um es zu perfektionieren, nur um es wahrzunehmen.',
+      notificationOn: 'Benachrichtigung aktiv',
+      notificationOff: 'Benachrichtigung aktivieren',
     },
     addHabitDialog: {
       title: 'Was möchtest du beobachten?',
