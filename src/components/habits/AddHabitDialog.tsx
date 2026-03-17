@@ -114,7 +114,6 @@ export function AddHabitDialog({ isOpen, onClose }: AddHabitDialogProps) {
                   onChange={(e) => setName(e.target.value)}
                   placeholder={t.addHabitDialog.placeholder}
                   className="h-14 text-lg rounded-xl bg-secondary border-border/50 focus:border-primary"
-                  autoFocus
                 />
 
                 {/* Routine toggle */}

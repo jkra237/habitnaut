@@ -616,7 +616,7 @@ export const translations: Record<SupportedLanguage, Translations> = {
     addHabitDialog: {
       title: 'What would you like to observe?',
       subtitle: 'Add something you\'d like to pay attention to',
-      placeholder: 'e.g., Morning walk, Journaling, Reading...',
+      placeholder: 'Name your habit',
       descriptionLabel: 'Description (optional)',
       descriptionPlaceholder: 'A short note about this habit...',
       timeOfDay: 'Time of day',
@@ -1034,7 +1034,7 @@ export const translations: Record<SupportedLanguage, Translations> = {
     addHabitDialog: {
       title: '¿Qué te gustaría observar?',
       subtitle: 'Añade algo a lo que quieras prestar atención',
-      placeholder: 'p.ej., Paseo matutino, Escribir, Leer...',
+      placeholder: 'Nombra tu hábito',
       descriptionLabel: 'Descripción (opcional)',
       descriptionPlaceholder: 'Una nota breve sobre este hábito...',
       timeOfDay: 'Momento del día',
@@ -1452,7 +1452,7 @@ export const translations: Record<SupportedLanguage, Translations> = {
     addHabitDialog: {
       title: 'Was möchtest du beobachten?',
       subtitle: 'Füge etwas hinzu, dem du Aufmerksamkeit schenken möchtest',
-      placeholder: 'z.B. Morgenspaziergang, Tagebuch, Lesen...',
+      placeholder: 'Gewohnheit benennen',
       descriptionLabel: 'Beschreibung (optional)',
       descriptionPlaceholder: 'Eine kurze Notiz zu dieser Gewohnheit...',
       timeOfDay: 'Tageszeit',
