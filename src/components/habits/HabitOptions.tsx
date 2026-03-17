@@ -3,10 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { useFlowNautStore } from '@/store/flownaut-store';
 import type { Habit, RoutineFrequency } from '@/types/flownaut';
-import { Moon, Trash2, X, Info, CalendarClock, CalendarX, Clock } from 'lucide-react';
+import { Moon, Trash2, X, Info, CalendarClock, CalendarX, Clock, Sprout } from 'lucide-react';
 import { useTranslations } from '@/hooks/use-translations';
 import { SingleHabitStatsDialog } from './SingleHabitStatsDialog';
 import { RoutineSelector } from './RoutineSelector';
+import { HabitIcon } from '@/lib/habit-icons';
 
 interface HabitOptionsProps {
   habit: Habit;
@@ -69,11 +70,15 @@ export function HabitOptions({ habit, onClose }: HabitOptionsProps) {
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-xl">{habit.emoji || '🌱'}</span>
+            <HabitIcon
+              iconName={habit.emoji}
+              className="w-5 h-5"
+              fallback={<Sprout className="w-5 h-5" />}
+            />
             <span className="font-medium text-foreground">{habit.name}</span>
           </div>
-          <button 
-            onClick={onClose} 
+          <button
+            onClick={onClose}
             className="text-muted-foreground p-1.5 rounded-lg hover:bg-secondary transition-colors"
           >
             <X className="w-4 h-4" />
