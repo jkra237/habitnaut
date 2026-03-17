@@ -175,7 +175,13 @@ export const useFlowNautStore = create<FlowNautStore>()(
 
       updateHabitTime: (habitId, time) => set((state) => ({
         habits: state.habits.map((h) =>
-          h.id === habitId ? { ...h, scheduledTime: time } : h
+          h.id === habitId ? { ...h, scheduledTime: time, notificationEnabled: time ? h.notificationEnabled : false } : h
+        ),
+      })),
+
+      toggleHabitNotification: (habitId) => set((state) => ({
+        habits: state.habits.map((h) =>
+          h.id === habitId ? { ...h, notificationEnabled: !h.notificationEnabled } : h
         ),
       })),
 
