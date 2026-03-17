@@ -3,10 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useFlowNautStore } from '@/store/flownaut-store';
 import type { HabitState, Habit } from '@/types/flownaut';
 import { format, startOfWeek, addDays, addWeeks, isToday, isBefore, startOfDay, getDay } from 'date-fns';
-import { Search, ChevronLeft, ChevronRight, Sprout, Clock } from 'lucide-react';
+import { Search, ChevronLeft, ChevronRight } from 'lucide-react';
 import { HabitOptions } from './HabitOptions';
 import { useTranslations } from '@/hooks/use-translations';
-import { HabitIcon } from '@/lib/habit-icons';
 
 
 
@@ -134,7 +133,7 @@ export function HabitMatrix() {
     return (
       <div className="text-center py-12 px-6">
         <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-secondary flex items-center justify-center">
-          <Sprout className="w-8 h-8 text-muted-foreground" />
+          <span className="text-2xl">🌿</span>
         </div>
         <h3 className="text-lg font-serif font-medium text-foreground mb-2">
           {t.habits.emptyTitle}
@@ -172,7 +171,7 @@ export function HabitMatrix() {
       {/* Day headers - use invisible habit button to align with rows */}
       <div className="flex items-center gap-2 sm:gap-4">
         <div className="flex items-center gap-1 sm:gap-2 min-w-0 flex-1 px-2 py-1.5 invisible">
-          <Sprout className="w-3.5 h-3.5 sm:w-5 sm:h-5 flex-shrink-0" />
+          <span className="text-sm sm:text-lg flex-shrink-0">🌱</span>
           <span className="text-[9px] sm:text-[13px] font-medium flex-1 leading-tight">placeholder</span>
           <Search className="w-3.5 h-3.5 flex-shrink-0" />
         </div>
@@ -211,18 +210,14 @@ export function HabitMatrix() {
               onClick={() => setActiveOptionsId(activeOptionsId === habit.id ? null : habit.id)}
               className="flex items-center gap-1 sm:gap-2 min-w-0 flex-1 rounded-xl bg-transparent border border-amber-400/20 hover:bg-amber-400/10 transition-all px-2 py-1.5 cursor-pointer"
             >
-              <HabitIcon
-                iconName={habit.emoji}
-                className="w-3.5 h-3.5 sm:w-5 sm:h-5 flex-shrink-0"
-                fallback={<Sprout className="w-3.5 h-3.5 sm:w-5 sm:h-5" />}
-              />
+              <span className="text-sm sm:text-lg flex-shrink-0">{habit.emoji || '🌱'}</span>
               <div className="flex flex-col min-w-0 flex-1">
                 <span className="text-[9px] sm:text-[13px] font-medium text-foreground line-clamp-2 leading-tight text-left">
                   {habit.name}
                 </span>
                 {habit.scheduledTime && (
-                  <span className="text-[7px] sm:text-[10px] text-muted-foreground leading-tight text-left flex items-center gap-0.5">
-                    <Clock className="w-2 h-2 sm:w-2.5 sm:h-2.5" /> {habit.scheduledTime}
+                  <span className="text-[7px] sm:text-[10px] text-muted-foreground leading-tight text-left block">
+                    🕐 {habit.scheduledTime}
                   </span>
                 )}
               </div>

@@ -7,7 +7,17 @@ import { Plus, CalendarClock, Clock } from 'lucide-react';
 import { useTranslations } from '@/hooks/use-translations';
 import { RoutineSelector } from './RoutineSelector';
 import type { RoutineFrequency } from '@/types/flownaut';
-import { HABIT_ICON_OPTIONS, type HabitIconName } from '@/lib/habit-icons';
+
+const EMOJI_OPTIONS = [
+  { emoji: '🌱' },
+  { emoji: '💧' },
+  { emoji: '🌙' },
+  { emoji: '❤️' },
+  { emoji: '📖' },
+  { emoji: '💪' },
+  { emoji: '🎵' },
+  { emoji: '☕' },
+];
 
 interface AddHabitDialogProps {
   isOpen: boolean;
@@ -17,7 +27,7 @@ interface AddHabitDialogProps {
 export function AddHabitDialog({ isOpen, onClose }: AddHabitDialogProps) {
   const t = useTranslations();
   const [name, setName] = useState('');
-  const [selectedIcon, setSelectedIcon] = useState<HabitIconName>('sprout');
+  const [selectedEmoji, setSelectedEmoji] = useState('🌱');
   const [showRoutine, setShowRoutine] = useState(false);
   const [showTime, setShowTime] = useState(false);
   const [scheduledTime, setScheduledTime] = useState('');
@@ -29,18 +39,18 @@ export function AddHabitDialog({ isOpen, onClose }: AddHabitDialogProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) return;
-
+    
     addHabit({
       name: name.trim(),
-      emoji: selectedIcon,
+      emoji: selectedEmoji,
       scheduledTime: scheduledTime || undefined,
       routineDays: routineDays.length > 0 ? routineDays : undefined,
       routineFrequency: routineDays.length > 0 ? routineFrequency : undefined,
       routineMonthWeek: routineDays.length > 0 && routineFrequency === 'monthly' ? routineMonthWeeks : undefined,
     });
-
+    
     setName('');
-    setSelectedIcon('sprout');
+    setSelectedEmoji('🌱');
     setShowRoutine(false);
     setShowTime(false);
     setScheduledTime('');
@@ -80,20 +90,20 @@ export function AddHabitDialog({ isOpen, onClose }: AddHabitDialogProps) {
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Icon selector */}
+                {/* Emoji selector */}
                 <div className="flex justify-center gap-2 flex-wrap">
-                  {HABIT_ICON_OPTIONS.map(({ name, icon: IconComponent }) => (
+                  {EMOJI_OPTIONS.map(({ emoji }) => (
                     <button
-                      key={name}
+                      key={emoji}
                       type="button"
-                      onClick={() => setSelectedIcon(name)}
-                      className={`w-12 h-12 rounded-xl transition-all duration-200 flex items-center justify-center ${
-                        selectedIcon === name
+                      onClick={() => setSelectedEmoji(emoji)}
+                      className={`w-12 h-12 rounded-xl text-xl transition-all duration-200 ${
+                        selectedEmoji === emoji
                           ? 'bg-primary/20 border-2 border-primary scale-110'
                           : 'bg-secondary border-2 border-transparent hover:bg-secondary/80'
                       }`}
                     >
-                      <IconComponent className="w-6 h-6" />
+                      {emoji}
                     </button>
                   ))}
                 </div>

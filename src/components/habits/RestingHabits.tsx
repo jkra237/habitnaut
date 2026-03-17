@@ -3,9 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { useFlowNautStore } from '@/store/flownaut-store';
 import type { Habit } from '@/types/flownaut';
-import { Moon, RefreshCw, ChevronDown, Sprout } from 'lucide-react';
+import { Moon, RefreshCw, ChevronDown } from 'lucide-react';
 import { useTranslations } from '@/hooks/use-translations';
-import { HabitIcon } from '@/lib/habit-icons';
 
 interface RestingHabitsProps {
   habits: Habit[];
@@ -65,13 +64,7 @@ export function RestingHabits({ habits }: RestingHabitsProps) {
                   className="flex items-center justify-between p-3 rounded-xl bg-card border border-border/30"
                 >
                   <div className="flex items-center gap-2">
-                    <div className="opacity-50">
-                      <HabitIcon
-                        iconName={habit.emoji}
-                        className="w-5 h-5"
-                        fallback={<Sprout className="w-5 h-5" />}
-                      />
-                    </div>
+                    <span className="text-lg opacity-50">{habit.emoji || '🌱'}</span>
                     <span className="text-sm text-muted-foreground">{habit.name}</span>
                   </div>
                   <Button

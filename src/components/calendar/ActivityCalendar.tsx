@@ -3,14 +3,13 @@
 
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, ChevronDown, ChevronUp, X, Grid3X3, List, Plus, Circle } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, ChevronDown, ChevronUp, X, Grid3X3, List, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { useFlowNautStore } from '@/store/flownaut-store';
 import { useTranslations } from '@/hooks/use-translations';
 import { AddHabitDialog } from '@/components/habits/AddHabitDialog';
 import type { Habit, HabitState } from '@/types/flownaut';
-import { HabitIcon } from '@/lib/habit-icons';
 import { 
   format, 
   startOfMonth, 
@@ -476,11 +475,7 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
                                     : 'bg-muted/40 text-muted-foreground'
                                 }`}
                               >
-                                <HabitIcon
-                                  iconName={habitEntry.habit.emoji}
-                                  className="w-3 h-3 sm:w-3.5 sm:h-3.5"
-                                  fallback={<Circle className="w-3 h-3 sm:w-3.5 sm:h-3.5" />}
-                                />
+                                <span className="text-[10px] sm:text-xs">{habitEntry.habit.emoji || '○'}</span>
                                 <span className="max-w-[60px] sm:max-w-[80px] truncate">{habitEntry.habit.name}</span>
                                 <span className="text-[8px] sm:text-[9px]">{STATE_ICONS[habitEntry.state] || ''}</span>
                               </button>
@@ -548,11 +543,7 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
                             ? 'bg-blue-500/10 text-foreground'
                             : 'bg-muted/30 text-muted-foreground'
                         }`}>
-                          <HabitIcon
-                            iconName={habitEntry.habit.emoji}
-                            className="w-5 h-5"
-                            fallback={<Circle className="w-5 h-5" />}
-                          />
+                          <span className="text-base">{habitEntry.habit.emoji || '○'}</span>
                           <span className={habitEntry.state === 'done' ? 'font-medium' : ''}>
                             {habitEntry.habit.name}
                           </span>

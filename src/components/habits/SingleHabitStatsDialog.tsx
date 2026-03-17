@@ -2,13 +2,12 @@ import { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import {
   Flame, BarChart3, Target, Star, Trophy,
-  ArrowUp, ArrowDown, X, Sprout,
+  ArrowUp, ArrowDown, X,
 } from 'lucide-react';
 import { useFlowNautStore } from '@/store/flownaut-store';
 import { useLanguage } from '@/hooks/use-translations';
 import { calculateSingleHabitStats } from '@/lib/statistics/habit-stats-calculator';
 import type { Habit } from '@/types/flownaut';
-import { HabitIcon } from '@/lib/habit-icons';
 
 interface SingleHabitStatsDialogProps {
   habit: Habit;
@@ -152,11 +151,7 @@ export function SingleHabitStatsDialog({ habit, onClose }: SingleHabitStatsDialo
       >
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <HabitIcon
-              iconName={habit.emoji}
-              className="w-5 h-5"
-              fallback={<Sprout className="w-5 h-5" />}
-            />
+            <span className="text-lg">{habit.emoji || '🌱'}</span>
             <span className="font-medium text-foreground text-sm">{habit.name} — {l.title}</span>
           </div>
           <button onClick={onClose} className="text-muted-foreground p-1.5 rounded-lg hover:bg-secondary transition-colors">

@@ -1,10 +1,10 @@
 import { useMemo, useState } from 'react';
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
+import { 
+  LineChart, 
+  Line, 
+  XAxis, 
+  YAxis, 
+  Tooltip, 
   ResponsiveContainer,
   CartesianGrid,
   Legend
@@ -12,8 +12,6 @@ import {
 import { useFlowNautStore } from '@/store/flownaut-store';
 import { format, parseISO, subDays, subMonths, subYears, eachDayOfInterval, eachWeekOfInterval, eachMonthOfInterval, startOfWeek, startOfMonth, endOfWeek, endOfMonth } from 'date-fns';
 import { useTranslations } from '@/hooks/use-translations';
-import { HabitIcon } from '@/lib/habit-icons';
-import { Sprout } from 'lucide-react';
 
 type TimeRange = 'week' | 'month' | 'year';
 
@@ -249,11 +247,7 @@ export function HabitTimeline({ initialRange = 'month' }: HabitTimelineProps) {
             className="p-3 rounded-xl bg-secondary/50 border border-border/50"
           >
             <div className="flex items-center gap-2 mb-1">
-              <HabitIcon
-                iconName={habit.emoji}
-                className="w-5 h-5"
-                fallback={<Sprout className="w-5 h-5" />}
-              />
+              <span className="text-lg">{habit.emoji || '🌱'}</span>
               <span className="text-sm font-medium text-foreground truncate">
                 {habit.name}
               </span>
