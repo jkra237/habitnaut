@@ -1034,7 +1034,7 @@ export const translations: Record<SupportedLanguage, Translations> = {
     addHabitDialog: {
       title: '¿Qué te gustaría observar?',
       subtitle: 'Añade algo a lo que quieras prestar atención',
-      placeholder: 'p.ej., Paseo matutino, Escribir, Leer...',
+      placeholder: 'Nombra tu hábito',
       descriptionLabel: 'Descripción (opcional)',
       descriptionPlaceholder: 'Una nota breve sobre este hábito...',
       timeOfDay: 'Momento del día',
