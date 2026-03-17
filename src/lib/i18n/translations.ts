@@ -211,6 +211,8 @@ export interface Translations {
     planned: string;
     emptyTitle: string;
     emptySubtitle: string;
+    notificationOn: string;
+    notificationOff: string;
   };
   
   // Add Habit Dialog
