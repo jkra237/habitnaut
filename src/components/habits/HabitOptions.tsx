@@ -3,10 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { useFlowNautStore } from '@/store/flownaut-store';
 import type { Habit, RoutineFrequency } from '@/types/flownaut';
-import { Moon, Trash2, X, Info, CalendarClock, CalendarX, Clock } from 'lucide-react';
+import { Moon, Trash2, X, Info, CalendarClock, CalendarX, Clock, Bell, BellOff } from 'lucide-react';
 import { useTranslations } from '@/hooks/use-translations';
 import { SingleHabitStatsDialog } from './SingleHabitStatsDialog';
 import { RoutineSelector } from './RoutineSelector';
+import { requestNotificationPermission } from '@/hooks/use-habit-notifications';
 
 interface HabitOptionsProps {
   habit: Habit;
