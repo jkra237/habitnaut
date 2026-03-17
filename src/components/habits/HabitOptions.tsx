@@ -195,6 +195,34 @@ export function HabitOptions({ habit, onClose }: HabitOptionsProps) {
             )}
           </AnimatePresence>
 
+          {/* Notification toggle - only when scheduledTime is set */}
+          {habit.scheduledTime && (
+            <Button
+              variant="ghost"
+              className="w-full justify-start"
+              onClick={async () => {
+                if (!habit.notificationEnabled) {
+                  const granted = await requestNotificationPermission();
+                  if (!granted) return;
+                }
+                toggleHabitNotification(habit.id);
+              }}
+            >
+              {habit.notificationEnabled ? (
+                <Bell className="w-4 h-4 mr-2 text-primary" />
+              ) : (
+                <BellOff className="w-4 h-4 mr-2" />
+              )}
+              {habit.notificationEnabled 
+                ? (t.habits?.notificationOn || 'Notification active')
+                : (t.habits?.notificationOff || 'Enable notification')
+              }
+              <span className="text-xs text-muted-foreground ml-auto">
+                {habit.scheduledTime}
+              </span>
+            </Button>
+          )}
+
           {/* Routine editor */}
           <AnimatePresence>
             {showRoutineEdit && (
