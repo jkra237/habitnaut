@@ -32,6 +32,7 @@ export interface Habit {
   routineFrequency?: RoutineFrequency;
   routineMonthWeek?: number | number[]; // 1-4, which week(s) of the month (only for monthly)
   scheduledTime?: string; // HH:mm format, optional specific time
+  notificationEnabled?: boolean; // Enable push notification at scheduledTime
 }
 
 export type HabitState = 'done' | 'not-done' | 'conscious-skip' | 'planned';
