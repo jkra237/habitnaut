@@ -216,7 +216,7 @@ export function HabitMatrix() {
                   {habit.name}
                 </span>
                 {habit.scheduledTime && (
-                  <span className="text-[7px] sm:text-[10px] text-muted-foreground leading-tight">
+                  <span className="text-[7px] sm:text-[10px] text-muted-foreground leading-tight text-left block">
                     🕐 {habit.scheduledTime}
                   </span>
                 )}
