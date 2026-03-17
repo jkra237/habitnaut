@@ -143,6 +143,7 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
   const [currentWeek, setCurrentWeek] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<{ habitId: string; habitName: string; emoji: string } | null>(null);
+  const [showAddHabit, setShowAddHabit] = useState(false);
   const setHabitState = useFlowNautStore(s => s.setHabitState);
   const removeHabitState = useFlowNautStore(s => s.removeHabitState);
   const entries = useFlowNautStore(s => s.entries);
