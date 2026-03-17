@@ -625,14 +625,29 @@ export function ActivityCalendar({ className = '' }: ActivityCalendarProps) {
                       </div>
                     ))}
                 </div>
-              ) : (
+               ) : (
                 <p className="text-sm text-muted-foreground">
                   {language === 'de' ? 'Keine Aktivitäten an diesem Tag' : 
                    language === 'es' ? 'Sin actividades este día' : 
                    'No activities on this day'}
                 </p>
               )}
+
+              {/* Add habit button */}
+              <button
+                onClick={() => setShowAddHabit(true)}
+                className="mt-3 w-full flex items-center justify-center gap-1.5 py-2 rounded-xl border border-dashed border-border/50 text-muted-foreground hover:text-foreground hover:border-primary/30 hover:bg-primary/5 transition-all text-xs"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                {language === 'de' ? 'Gewohnheit hinzufügen' : language === 'es' ? 'Añadir hábito' : 'Add habit'}
+              </button>
             </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Add habit dialog triggered from calendar */}
+      <AddHabitDialog isOpen={showAddHabit} onClose={() => setShowAddHabit(false)} />
           )}
         </DialogContent>
       </Dialog>
