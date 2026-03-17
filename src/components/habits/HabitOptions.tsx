@@ -19,6 +19,7 @@ export function HabitOptions({ habit, onClose }: HabitOptionsProps) {
   const deleteHabit = useFlowNautStore((s) => s.deleteHabit);
   const updateHabitRoutine = useFlowNautStore((s) => s.updateHabitRoutine);
   const updateHabitTime = useFlowNautStore((s) => s.updateHabitTime);
+  const toggleHabitNotification = useFlowNautStore((s) => s.toggleHabitNotification);
   const t = useTranslations();
   const [showStats, setShowStats] = useState(false);
   const [showRoutineEdit, setShowRoutineEdit] = useState(false);
