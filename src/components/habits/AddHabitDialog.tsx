@@ -69,7 +69,7 @@ export function AddHabitDialog({ isOpen, onClose }: AddHabitDialogProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-foreground/20 backdrop-blur-sm z-40"
+            className="fixed inset-0 bg-foreground/20 backdrop-blur-sm z-[60]"
           />
           
           <motion.div
@@ -77,7 +77,7 @@ export function AddHabitDialog({ isOpen, onClose }: AddHabitDialogProps) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: "spring", duration: 0.4 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            className="fixed inset-0 z-[70] flex items-center justify-center p-4"
           >
             <div className="bg-card rounded-3xl shadow-elevated p-6 space-y-6 max-h-[80vh] overflow-y-auto w-full max-w-md">
               <div className="text-center space-y-2">
