@@ -366,6 +366,7 @@ export interface Translations {
       saturday: string;
       sunday: string;
     };
+    dayAbbreviations: [string, string, string, string, string, string, string];
     months: {
       january: string;
       february: string;
@@ -749,6 +750,7 @@ export const translations: Record<SupportedLanguage, Translations> = {
         saturday: 'Saturday',
         sunday: 'Sunday',
       },
+      dayAbbreviations: ['M', 'T', 'W', 'T', 'F', 'S', 'S'] as [string, string, string, string, string, string, string],
       months: {
         january: 'January',
         february: 'February',
@@ -1167,6 +1169,7 @@ export const translations: Record<SupportedLanguage, Translations> = {
         saturday: 'Sábado',
         sunday: 'Domingo',
       },
+      dayAbbreviations: ['L', 'M', 'X', 'J', 'V', 'S', 'D'] as [string, string, string, string, string, string, string],
       months: {
         january: 'Enero',
         february: 'Febrero',
@@ -1585,6 +1588,7 @@ export const translations: Record<SupportedLanguage, Translations> = {
         saturday: 'Samstag',
         sunday: 'Sonntag',
       },
+      dayAbbreviations: ['M', 'D', 'M', 'D', 'F', 'S', 'S'] as [string, string, string, string, string, string, string],
       months: {
         january: 'Januar',
         february: 'Februar',
