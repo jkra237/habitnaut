@@ -1169,6 +1169,7 @@ export const translations: Record<SupportedLanguage, Translations> = {
         saturday: 'Sábado',
         sunday: 'Domingo',
       },
+      dayAbbreviations: ['L', 'M', 'X', 'J', 'V', 'S', 'D'] as [string, string, string, string, string, string, string],
       months: {
         january: 'Enero',
         february: 'Febrero',
