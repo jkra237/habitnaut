@@ -750,6 +750,7 @@ export const translations: Record<SupportedLanguage, Translations> = {
         saturday: 'Saturday',
         sunday: 'Sunday',
       },
+      dayAbbreviations: ['M', 'T', 'W', 'T', 'F', 'S', 'S'] as [string, string, string, string, string, string, string],
       months: {
         january: 'January',
         february: 'February',
