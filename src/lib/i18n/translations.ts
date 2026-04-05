@@ -366,6 +366,7 @@ export interface Translations {
       saturday: string;
       sunday: string;
     };
+    dayAbbreviations: [string, string, string, string, string, string, string];
     months: {
       january: string;
       february: string;

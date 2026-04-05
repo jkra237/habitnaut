@@ -71,6 +71,8 @@ export function Dashboard() {
     const weekday = t.time.weekdays[weekdayKeys[dayIndex]];
     const month = t.time.months[monthKeys[monthIndex]];
     
+    if (language === 'de') return `${weekday}, ${dayOfMonth}. ${month}`;
+    if (language === 'es') return `${weekday}, ${dayOfMonth} de ${month}`;
     return `${weekday}, ${month} ${dayOfMonth}`;
   };
 

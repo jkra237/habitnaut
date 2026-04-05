@@ -9,7 +9,7 @@ import { useTranslations } from '@/hooks/use-translations';
 
 
 
-const DAYS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+
 
 export function HabitMatrix() {
   const t = useTranslations();
