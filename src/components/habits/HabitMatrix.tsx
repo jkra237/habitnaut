@@ -185,7 +185,7 @@ export function HabitMatrix() {
                   isCurrent ? 'text-primary' : 'text-muted-foreground'
                 }`}
               >
-                <div>{DAYS[idx]}</div>
+                <div>{t.time.dayAbbreviations[idx]}</div>
                 <div className={`text-[8px] sm:text-[10px] ${isCurrent ? 'text-primary' : 'text-muted-foreground/60'}`}>
                   {format(date, 'd')}
                 </div>
