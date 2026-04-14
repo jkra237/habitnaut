@@ -30,6 +30,8 @@ export interface Translations {
     allSetSubtitle: string;
     allSetMessage: string;
     localDataNotice: string;
+    statisticsTipTitle: string;
+    statisticsTipMessage: string;
     startObserving: string;
     // Language selection
     chooseLanguage: string;
@@ -454,6 +456,8 @@ export const translations: Record<SupportedLanguage, Translations> = {
       allSetSubtitle: 'Your space is ready. No streaks. No pressure. Just gentle self-observation.',
       allSetMessage: 'You\'ve taken a beautiful first step. This is your space to observe yourself with kindness – no expectations, just gentle awareness. Welcome aboard, fellow explorer. 🚀',
       localDataNotice: '💾 This app saves your data locally on this device. Use the Export & Import functions in Settings to back up your habit data before resetting your device or to transfer it to another device.',
+      statisticsTipTitle: 'Tip: Discover your personal statistics',
+      statisticsTipMessage: 'This app creates statistics about your habits. Complete your first habit to get an insight.',
       startObserving: 'Start observing',
       chooseLanguage: 'Choose your language',
       languageSubtitle: 'You can change this anytime in settings',
@@ -873,6 +877,8 @@ export const translations: Record<SupportedLanguage, Translations> = {
       allSetSubtitle: 'Tu espacio está preparado. Sin rachas. Sin presión. Solo autoobservación amable.',
       allSetMessage: 'Has dado un primer paso maravilloso. Este es tu espacio para observarte con amabilidad – sin expectativas, solo conciencia suave. Bienvenido a bordo, compañero explorador. 🚀',
       localDataNotice: '💾 Esta app guarda tus datos localmente en este dispositivo. Usa las funciones de Exportar e Importar en Ajustes para hacer una copia de seguridad antes de restablecer tu dispositivo o transferir tus datos a otro.',
+      statisticsTipTitle: 'Consejo: Descubre tus estadísticas personales',
+      statisticsTipMessage: 'Esta app crea estadísticas sobre tus hábitos. Completa tu primer hábito para obtener una visión.',
       startObserving: 'Empezar a observar',
       chooseLanguage: 'Elige tu idioma',
       languageSubtitle: 'Puedes cambiarlo en cualquier momento en los ajustes',
@@ -1292,6 +1298,8 @@ export const translations: Record<SupportedLanguage, Translations> = {
       allSetSubtitle: 'Dein Raum ist fertig. Keine Streaks. Kein Druck. Nur achtsame Selbstbeobachtung.',
       allSetMessage: 'Du hast einen wunderbaren ersten Schritt gemacht. Das hier ist dein Raum, dich mit Freundlichkeit zu beobachten – keine Erwartungen, nur sanfte Achtsamkeit. Willkommen an Bord, Mitentdecker. 🚀',
       localDataNotice: '💾 Diese App speichert deine Daten lokal auf diesem Gerät. Nutze die Export- & Import-Funktionen in den Einstellungen, um deine Daten zu sichern, bevor du dein Gerät zurücksetzt oder sie auf ein anderes Gerät überträgst.',
+      statisticsTipTitle: 'Tipp: Entdecke deine persönlichen Statistiken',
+      statisticsTipMessage: 'Diese App erstellt Statistiken zu deinen Gewohnheiten. Erledige deine erste Gewohnheit, um einen Einblick zu erhalten.',
       startObserving: 'Jetzt starten',
       chooseLanguage: 'Wähle deine Sprache',
       languageSubtitle: 'Du kannst das jederzeit in den Einstellungen ändern',

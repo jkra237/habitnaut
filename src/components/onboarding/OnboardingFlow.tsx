@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { useFlowNautStore } from '@/store/flownaut-store';
 import type { PersonalityProfile, TimeAnchor } from '@/types/flownaut';
-import { Check, Globe, Activity, Calendar, Target, Brain, Battery, Compass, Sparkles } from 'lucide-react';
+import { Check, Globe, Activity, Calendar, Target, Brain, Battery, Compass, Sparkles, TrendingUp } from 'lucide-react';
 import { useTranslations, useSetLanguage } from '@/hooks/use-translations';
 import { LANGUAGE_OPTIONS, type SupportedLanguage } from '@/lib/i18n/translations';
 import { FlagComponents } from '@/components/ui/language-flags';
@@ -554,10 +554,24 @@ export function OnboardingFlow() {
                 >
                   {t.onboarding.allSetMessage}
                 </motion.p>
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.7 }}
+                  className="max-w-md mx-auto bg-accent/30 rounded-xl p-4 border border-accent/50"
+                >
+                  <p className="text-sm font-medium text-foreground mb-1 flex items-center gap-1.5">
+                    <TrendingUp className="w-4 h-4 text-primary" />
+                    {t.onboarding.statisticsTipTitle}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {t.onboarding.statisticsTipMessage}
+                  </p>
+                </motion.div>
                 <motion.p
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.8 }}
+                  transition={{ delay: 0.9 }}
                   className="text-xs text-muted-foreground max-w-md mx-auto bg-secondary/50 rounded-xl p-4 border border-border"
                 >
                   {t.onboarding.localDataNotice}
