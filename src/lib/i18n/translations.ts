@@ -30,6 +30,8 @@ export interface Translations {
     allSetSubtitle: string;
     allSetMessage: string;
     localDataNotice: string;
+    statisticsTipTitle: string;
+    statisticsTipMessage: string;
     startObserving: string;
     // Language selection
     chooseLanguage: string;
