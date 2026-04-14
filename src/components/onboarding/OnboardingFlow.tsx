@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { useFlowNautStore } from '@/store/flownaut-store';
 import type { PersonalityProfile, TimeAnchor } from '@/types/flownaut';
-import { Check, Globe, Activity, Calendar, Target, Brain, Battery, Compass, Sparkles } from 'lucide-react';
+import { Check, Globe, Activity, Calendar, Target, Brain, Battery, Compass, Sparkles, TrendingUp } from 'lucide-react';
 import { useTranslations, useSetLanguage } from '@/hooks/use-translations';
 import { LANGUAGE_OPTIONS, type SupportedLanguage } from '@/lib/i18n/translations';
 import { FlagComponents } from '@/components/ui/language-flags';
