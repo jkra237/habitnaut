@@ -503,18 +503,18 @@ export function OnboardingFlow() {
                 })}
               </div>
 
-              <div className="flex gap-3">
+              <div className="flex flex-col-reverse sm:flex-row gap-3">
                 <Button
                   variant="outline"
                   onClick={() => setStep(step + 1)}
-                  className="flex-1"
+                  className="w-full sm:flex-1"
                 >
                   {t.onboarding.skipForNow}
                 </Button>
                 <Button
                   onClick={() => setStep(step + 1)}
                   disabled={selectedHabits.size === 0}
-                  className="flex-1"
+                  className="w-full sm:flex-1 text-sm"
                 >
                   {t.onboarding.continueWithSelected} ({selectedHabits.size}/{MAX_HABITS})
                 </Button>
