@@ -8,6 +8,7 @@ const MAX_HABITS = 1000;
 const MAX_ENTRIES = 5000;
 const MAX_REFLECTIONS = 500;
 const MAX_GRATITUDE_ENTRIES = 5000;
+const MAX_EXPERIMENTS = 500;
 const MAX_STRING_LENGTH = 500;
 const MAX_NAME_LENGTH = 100;
 const MAX_EMOJI_LENGTH = 10;
@@ -89,6 +90,25 @@ const GratitudeEntrySchema = z.object({
   createdAt: z.string().optional(),
 }).passthrough();
 
+const ExperimentSchema = z.object({
+  id: z.string().max(100),
+  ideaId: z.string().max(100),
+  title: sanitizedString(MAX_NAME_LENGTH),
+  description: sanitizedString(MAX_STRING_LENGTH),
+  reflectionQuestion: sanitizedString(MAX_STRING_LENGTH),
+  emoji: z.string().max(MAX_EMOJI_LENGTH),
+  durationDays: z.number().min(7).max(28),
+  startDate: dateStringSchema,
+  endDate: dateStringSchema,
+  beforeMood: z.number().min(1).max(5),
+  afterMood: z.number().min(1).max(5).optional(),
+  intention: sanitizedString(MAX_STRING_LENGTH).optional(),
+  closingNote: sanitizedString(MAX_STRING_LENGTH).optional(),
+  status: z.enum(['active', 'completed', 'resting']),
+  createdAt: z.string().optional(),
+  completedAt: z.string().optional(),
+}).passthrough();
+
 // App preferences schema
 const AppPreferencesSchema = z.object({
   language: z.string().max(10).optional(),
@@ -103,6 +123,7 @@ const ImportDataSchema = z.object({
   entries: z.array(DayEntrySchema).max(MAX_ENTRIES).optional(),
   reflections: z.array(WeekReflectionSchema).max(MAX_REFLECTIONS).optional(),
   gratitudeEntries: z.array(GratitudeEntrySchema).max(MAX_GRATITUDE_ENTRIES).optional(),
+  experiments: z.array(ExperimentSchema).max(MAX_EXPERIMENTS).optional(),
   preferences: AppPreferencesSchema.optional(),
   exportedAt: z.string().optional(),
 }).passthrough();

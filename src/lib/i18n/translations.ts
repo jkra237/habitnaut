@@ -181,6 +181,42 @@ export interface Translations {
     eveningHint: string;
     flexibleHint: string;
   };
+
+  experiments: {
+    menuLabel: string;
+    title: string;
+    subtitle: string;
+    activeExperiment: string;
+    ideaLibrary: string;
+    completedExperiments: string;
+    noActive: string;
+    noCompleted: string;
+    dayOf: string;
+    daysLeft: string;
+    startsToday: string;
+    durationLabel: string;
+    chooseDuration: string;
+    beforeMood: string;
+    afterMood: string;
+    intention: string;
+    intentionPlaceholder: string;
+    closingNote: string;
+    closingPlaceholder: string;
+    startExperiment: string;
+    completeExperiment: string;
+    letRest: string;
+    reflectionQuestion: string;
+    compareTitle: string;
+    moodBefore: string;
+    moodAfter: string;
+    moodSame: string;
+    moodLifted: string;
+    moodLower: string;
+    observationOnly: string;
+    activeLimit: string;
+    week: string;
+    weeks: string;
+  };
   
   // Timeline
   timeline: {
@@ -600,6 +636,41 @@ export const translations: Record<SupportedLanguage, Translations> = {
       morningHint: 'Your mornings tend to be clearer – a good time for what matters.',
       eveningHint: 'You come alive as the day winds down – honor that rhythm.',
       flexibleHint: 'Your rhythm flows with the day – stay curious about it.',
+    },
+    experiments: {
+      menuLabel: 'Self-experiments',
+      title: 'Self-experiments',
+      subtitle: 'A self-experiment is observation, not a goal test.',
+      activeExperiment: 'Current experiment',
+      ideaLibrary: 'Ideas to explore',
+      completedExperiments: 'Past observations',
+      noActive: 'No experiment is active right now.',
+      noCompleted: 'Completed experiments will appear here.',
+      dayOf: 'Day {current} of {total}',
+      daysLeft: '{days} days left',
+      startsToday: 'Starts today',
+      durationLabel: 'Duration',
+      chooseDuration: 'Choose a quiet frame',
+      beforeMood: 'Mood before',
+      afterMood: 'Mood after',
+      intention: 'What would you like to observe?',
+      intentionPlaceholder: 'A short note for yourself...',
+      closingNote: 'What did you notice?',
+      closingPlaceholder: 'A few words are enough...',
+      startExperiment: 'Start experiment',
+      completeExperiment: 'Complete gently',
+      letRest: 'Let rest',
+      reflectionQuestion: 'Reflection question',
+      compareTitle: 'Before / after',
+      moodBefore: 'Before',
+      moodAfter: 'After',
+      moodSame: 'Your mood stayed similar.',
+      moodLifted: 'Your mood felt a little lighter afterwards.',
+      moodLower: 'Your mood felt a little heavier afterwards.',
+      observationOnly: 'This is only an observation, not a judgment.',
+      activeLimit: 'One active experiment at a time keeps the space calm.',
+      week: 'week',
+      weeks: 'weeks',
     },
     habits: {
       letRest: 'Let rest',
@@ -1022,6 +1093,41 @@ export const translations: Record<SupportedLanguage, Translations> = {
       eveningHint: 'Cobras vida cuando el día termina – honra ese ritmo.',
       flexibleHint: 'Tu ritmo fluye con el día – mantén la curiosidad.',
     },
+    experiments: {
+      menuLabel: 'Autoexperimentos',
+      title: 'Autoexperimentos',
+      subtitle: 'Un autoexperimento es observación, no una prueba de metas.',
+      activeExperiment: 'Experimento actual',
+      ideaLibrary: 'Ideas para explorar',
+      completedExperiments: 'Observaciones pasadas',
+      noActive: 'No hay ningún experimento activo ahora mismo.',
+      noCompleted: 'Los experimentos completados aparecerán aquí.',
+      dayOf: 'Día {current} de {total}',
+      daysLeft: 'Quedan {days} días',
+      startsToday: 'Empieza hoy',
+      durationLabel: 'Duración',
+      chooseDuration: 'Elige un marco tranquilo',
+      beforeMood: 'Estado de ánimo antes',
+      afterMood: 'Estado de ánimo después',
+      intention: '¿Qué te gustaría observar?',
+      intentionPlaceholder: 'Una nota breve para ti...',
+      closingNote: '¿Qué notaste?',
+      closingPlaceholder: 'Unas pocas palabras bastan...',
+      startExperiment: 'Iniciar experimento',
+      completeExperiment: 'Completar suavemente',
+      letRest: 'Pausar',
+      reflectionQuestion: 'Pregunta de reflexión',
+      compareTitle: 'Antes / después',
+      moodBefore: 'Antes',
+      moodAfter: 'Después',
+      moodSame: 'Tu estado de ánimo se mantuvo parecido.',
+      moodLifted: 'Tu estado de ánimo se sintió algo más ligero después.',
+      moodLower: 'Tu estado de ánimo se sintió algo más pesado después.',
+      observationOnly: 'Esto es solo una observación, no un juicio.',
+      activeLimit: 'Un experimento activo a la vez mantiene el espacio tranquilo.',
+      week: 'semana',
+      weeks: 'semanas',
+    },
     habits: {
       letRest: 'Pausar',
       letRestSubtitle: 'Hacer una pausa suave',
@@ -1442,6 +1548,41 @@ export const translations: Record<SupportedLanguage, Translations> = {
       morningHint: 'Deine Vormittage sind oft klarer – eine gute Zeit für das Wesentliche.',
       eveningHint: 'Du blühst auf, wenn der Tag sich neigt – ehre diesen Rhythmus.',
       flexibleHint: 'Dein Rhythmus fließt mit dem Tag – bleib neugierig darauf.',
+    },
+    experiments: {
+      menuLabel: 'Selbst-Experimente',
+      title: 'Selbst-Experimente',
+      subtitle: 'Ein Selbstexperiment ist Beobachtung, kein Zieltest.',
+      activeExperiment: 'Aktuelles Experiment',
+      ideaLibrary: 'Ideen zum Entdecken',
+      completedExperiments: 'Frühere Beobachtungen',
+      noActive: 'Gerade ist kein Experiment aktiv.',
+      noCompleted: 'Abgeschlossene Experimente erscheinen hier.',
+      dayOf: 'Tag {current} von {total}',
+      daysLeft: 'Noch {days} Tage',
+      startsToday: 'Startet heute',
+      durationLabel: 'Dauer',
+      chooseDuration: 'Wähle einen ruhigen Rahmen',
+      beforeMood: 'Stimmung vorher',
+      afterMood: 'Stimmung nachher',
+      intention: 'Was möchtest du beobachten?',
+      intentionPlaceholder: 'Eine kurze Notiz an dich selbst...',
+      closingNote: 'Was hast du bemerkt?',
+      closingPlaceholder: 'Ein paar Worte reichen...',
+      startExperiment: 'Experiment starten',
+      completeExperiment: 'Sanft abschließen',
+      letRest: 'Ruhen lassen',
+      reflectionQuestion: 'Reflexionsfrage',
+      compareTitle: 'Vorher / Nachher',
+      moodBefore: 'Vorher',
+      moodAfter: 'Nachher',
+      moodSame: 'Deine Stimmung blieb ähnlich.',
+      moodLifted: 'Deine Stimmung fühlte sich danach etwas leichter an.',
+      moodLower: 'Deine Stimmung fühlte sich danach etwas schwerer an.',
+      observationOnly: 'Das ist nur eine Beobachtung, kein Urteil.',
+      activeLimit: 'Ein aktives Experiment gleichzeitig hält den Raum ruhig.',
+      week: 'Woche',
+      weeks: 'Wochen',
     },
     habits: {
       letRest: 'Pausieren',

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Settings as SettingsIcon, TrendingUp } from 'lucide-react';
+import { Beaker, Plus, Settings as SettingsIcon, TrendingUp } from 'lucide-react';
 import { LoginStreakPopup } from '@/components/streak/LoginStreakPopup';
 import { Button } from '@/components/ui/button';
 import { HabitMatrix } from '@/components/habits/HabitMatrix';
@@ -14,6 +14,7 @@ import { GratitudeJournal } from '@/components/gratitude/GratitudeJournal';
 import { ActivityCalendar } from '@/components/calendar/ActivityCalendar';
 import { HabitStatistics } from '@/components/statistics/HabitStatistics';
 import { DailyQuoteCard } from '@/components/dashboard/DailyQuoteCard';
+import { SelfExperimentsDialog } from '@/components/experiments/SelfExperimentsDialog';
 
 import { useFlowNautStore } from '@/store/flownaut-store';
 import { useTranslations } from '@/hooks/use-translations';
@@ -21,6 +22,7 @@ import { useTranslations } from '@/hooks/use-translations';
 export function Dashboard() {
   const [isAddHabitOpen, setIsAddHabitOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isExperimentsOpen, setIsExperimentsOpen] = useState(false);
   const [showTimeline, setShowTimeline] = useState(false);
   const [streakPopup, setStreakPopup] = useState<{ show: boolean; streak: number }>({ show: false, streak: 0 });
   const loginRecorded = useRef(false);
@@ -94,6 +96,15 @@ export function Dashboard() {
             </p>
           </div>
           <div className="flex items-center gap-2">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="rounded-xl"
+              onClick={() => setIsExperimentsOpen(true)}
+              aria-label={t.experiments.menuLabel}
+            >
+              <Beaker className="w-5 h-5" />
+            </Button>
             <Button 
               variant="ghost" 
               size="icon" 
@@ -272,6 +283,13 @@ export function Dashboard() {
       <AnimatePresence>
         {isSettingsOpen && (
           <Settings onClose={() => setIsSettingsOpen(false)} />
+        )}
+      </AnimatePresence>
+
+      {/* Self Experiments */}
+      <AnimatePresence>
+        {isExperimentsOpen && (
+          <SelfExperimentsDialog onClose={() => setIsExperimentsOpen(false)} />
         )}
       </AnimatePresence>
 
