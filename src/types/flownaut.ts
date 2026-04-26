@@ -75,6 +75,27 @@ export interface GratitudeEntry {
   createdAt: string; // ISO timestamp
 }
 
+export type ExperimentStatus = 'active' | 'completed' | 'resting';
+
+export interface SelfExperiment {
+  id: string;
+  ideaId: string;
+  title: string;
+  description: string;
+  reflectionQuestion: string;
+  emoji: string;
+  durationDays: number;
+  startDate: string; // YYYY-MM-DD
+  endDate: string; // YYYY-MM-DD
+  beforeMood: number; // 1-5
+  afterMood?: number; // 1-5
+  intention?: string;
+  closingNote?: string;
+  status: ExperimentStatus;
+  createdAt: string; // ISO timestamp
+  completedAt?: string; // ISO timestamp
+}
+
 export interface UserState {
   hasCompletedOnboarding: boolean;
   personality?: PersonalityProfile;
@@ -83,6 +104,7 @@ export interface UserState {
   insights: Insight[];
   reflections: WeekReflection[];
   gratitudeEntries: GratitudeEntry[];
+  experiments: SelfExperiment[];
   unlockedAchievements: Record<string, string>; // key -> ISO date when unlocked
   preferredTone: 'gentle' | 'clear';
   preferences: AppPreferences;
