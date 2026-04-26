@@ -1,32 +1,103 @@
+## Plan: Selbst-Experimente Feature
 
+Ich implementiere einen neuen separaten Menüpunkt direkt neben dem Zahnrad im Dashboard. Darüber können Nutzer ruhige 1-4 Wochen-Selbstexperimente starten, begleiten und am Ende einen Vorher/Nachher-Stimmungsvergleich sehen.
 
-## Problem
+### 1. Neuer Dashboard-Menüpunkt
 
-With only one active habit, the "Your Overview" section shows multiple stats that all say essentially the same thing:
+- Neben dem Zahnrad kommt ein eigener Icon-Button für „Experimente“.
+- Der Button öffnet eine mobile-freundliche Vollbild-/Dialogansicht im bestehenden App-Stil.
+- Die Position bleibt bewusst prominent, aber ruhig: kein Badge, kein Druck, keine Gamification.
 
-1. **"Most practiced"** → shows the single habit
-2. **"Steadiest rhythm"** → shows the same single habit
-3. **"Trend: more present lately"** → generic statement about the same habit
+### 2. Experiment-Übersicht
 
-These are three ways of saying "you've been doing this habit regularly." The user rightly sees this as redundant.
+Die neue Ansicht enthält:
 
-## Root Cause
+- kurze Erklärung: „Ein Experiment ist eine Selbstbeobachtung, kein Zieltest.“
+- aktives Experiment, falls vorhanden
+- Liste bisheriger abgeschlossener Experimente
+- Einstieg in eine Ideensammlung mit 30 passenden Experimenten
 
-The statistics are designed for multiple habits but don't deduplicate when there's only one. Additionally, "steadiest rhythm" and "most practiced" overlap conceptually even with multiple habits — the most-done habit is often the steadiest.
+### 3. Liste mit 30 Selbstexperimenten
 
-## Fix
+Ich erstelle eine kuratierte Liste im HabitNaut-Ton, z. B. in Bereichen wie:
 
-In `src/components/statistics/HabitStatistics.tsx`:
+- Morgen & Start in den Tag
+- Ruhe & Reizreduktion
+- Bewegung & Körpergefühl
+- Fokus & digitale Gewohnheiten
+- Abend & Reflexion
+- Beziehungen & Umwelt
 
-1. **Skip "steadiest rhythm" if it's the same habit as "most practiced"** — the information is already conveyed.
-2. **Skip "least practiced" if there's only one active habit** — it's the same as "most practiced."
-3. **Skip "trend" if there are fewer than 2 active habits and the trend just restates what "most practiced" already shows** — collapse redundant signals.
-4. **General dedup rule**: before pushing any stat that references a specific habit, check if that habit is already shown by a previous stat. If so, only add it if the new stat provides genuinely different information (e.g., habit pair shows a *relationship*, not just a single habit again).
+Alle Vorschläge werden sanft formuliert, z. B. „Beobachte, wie es dir geht, wenn …“ statt „Optimiere …“. Jeder Vorschlag enthält:
 
-### Concretely
+- Titel
+- kurze Beschreibung
+- optionales Icon/Emoji
+- Reflexionsfrage für den Abschluss
 
-- Line ~261: Add condition `stats.steadiestHabit.id !== stats.mostPracticed?.habit.id`
-- Line ~221: Add condition `habits.length >= 2` (already partially there but `leastPracticed` can still equal `mostPracticed` when count differs by 0)
-- Line ~289: Add condition `habits.length >= 2` for trend — with one habit it just restates what's above
-- Add a final cap: show **max 5 stat items** to prevent visual clutter
+### 4. Experiment starten
 
+Beim Start eines Experiments speichert die App:
+
+- ausgewähltes Experiment
+- Startdatum
+- automatisches Enddatum nach 7-28 Tagen
+- Vorher-Stimmung als 1–5 Skala
+- optionale Notiz: „Was möchtest du beobachten?“
+
+Es wird vorerst ein aktives Experiment gleichzeitig unterstützt, damit die UX einfach bleibt.
+
+### 5. Während des Experiments
+
+Für das aktive Experiment zeige ich:
+
+- Tag X von X
+- verbleibende Tage
+- Start-Stimmung
+- kurze, nicht-wertende Erinnerung an die Beobachtungsfrage
+- Möglichkeit, das Experiment sanft zu beenden oder ruhen zu lassen
+
+### 6. Abschluss mit Vorher/Nachher-Vergleich
+
+Nach X Tagen oder manuell am Ende kann der Nutzer erfassen:
+
+- Nachher-Stimmung als 1–5 Skala
+- kurze Abschlussnotiz
+
+Danach zeigt die App eine kleine Auswertung:
+
+- Vorher-Stimmung
+- Nachher-Stimmung
+- Differenz, bewusst neutral formuliert
+- Abschlussfrage des Experiments
+- Hinweis, dass es eine Beobachtung ist, kein Urteil
+
+### 7. Speicherung und Export
+
+- Die Experimente werden lokal im bestehenden Zustand gespeichert.
+- Der JSON-Export/Import wird erweitert, damit Experimente nicht verloren gehen.
+- Keine neue Backend-Tabelle nötig, da das Feature zunächst lokal und privat bleibt – passend zur bestehenden App-Philosophie.
+
+### 8. Mehrsprachigkeit
+
+- Ich ergänze die UI-Texte mindestens in Deutsch, Englisch und Spanisch, passend zur bestehenden i18n-Struktur.
+- Die 30 Experimentideen werden ebenfalls lokalisiert oder so eingebunden, dass sie sauber je Sprache angezeigt werden können.
+
+### 9. Mobile UX und Layout
+
+- Die Ansicht wird für gängige Mobilgrößen optimiert.
+- Buttons stapeln sich auf kleinen Screens.
+- Listen bekommen ausreichend Touch-Flächen.
+- Lange Experimenttitel dürfen umbrechen, ohne Layout-Overflow.
+
+## Technische Umsetzung
+
+Betroffene Bereiche:
+
+- `src/types/flownaut.ts`: neue Typen für Selbstexperimente
+- `src/store/flownaut-store.ts`: State + Aktionen für Start, Abschluss, Abbruch und Import/Export
+- neuer Komponentenbereich, z. B. `src/components/experiments/`
+- `src/components/dashboard/Dashboard.tsx`: neuer Button neben dem Zahnrad und Dialog-State
+- `src/lib/i18n/translations.ts`: Texte und 30 Experimentideen in der bestehenden Übersetzungsstruktur
+
+Keine Datenbankmigration ist geplant, weil das Feature lokal funktioniert und keine Cloud-Strukturänderung benötigt.
