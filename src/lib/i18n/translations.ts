@@ -181,6 +181,42 @@ export interface Translations {
     eveningHint: string;
     flexibleHint: string;
   };
+
+  experiments: {
+    menuLabel: string;
+    title: string;
+    subtitle: string;
+    activeExperiment: string;
+    ideaLibrary: string;
+    completedExperiments: string;
+    noActive: string;
+    noCompleted: string;
+    dayOf: string;
+    daysLeft: string;
+    startsToday: string;
+    durationLabel: string;
+    chooseDuration: string;
+    beforeMood: string;
+    afterMood: string;
+    intention: string;
+    intentionPlaceholder: string;
+    closingNote: string;
+    closingPlaceholder: string;
+    startExperiment: string;
+    completeExperiment: string;
+    letRest: string;
+    reflectionQuestion: string;
+    compareTitle: string;
+    moodBefore: string;
+    moodAfter: string;
+    moodSame: string;
+    moodLifted: string;
+    moodLower: string;
+    observationOnly: string;
+    activeLimit: string;
+    week: string;
+    weeks: string;
+  };
   
   // Timeline
   timeline: {
