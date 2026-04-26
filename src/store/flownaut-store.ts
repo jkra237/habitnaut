@@ -12,6 +12,7 @@ import type {
   RoutineFrequency,
   AppPreferences,
   GratitudeEntry,
+  SelfExperiment,
 } from '@/types/flownaut';
 import { validateImportData } from '@/lib/import-validation';
 import { checkAchievements } from '@/lib/achievements/achievement-checker';
@@ -62,6 +63,11 @@ interface FlowNautStore extends UserState {
   // Gratitude
   addGratitude: (date: string, text: string) => void;
   deleteGratitude: (id: string) => void;
+
+  // Self experiments
+  startExperiment: (experiment: Omit<SelfExperiment, 'id' | 'createdAt' | 'status'>) => void;
+  completeExperiment: (experimentId: string, afterMood: number, closingNote?: string) => void;
+  restExperiment: (experimentId: string) => void;
   
   // Week reflection
   setWeekWord: (weekStart: string, word: string) => void;
@@ -102,6 +108,7 @@ const initialState: UserState = {
   insights: [],
   reflections: [],
   gratitudeEntries: [],
+  experiments: [],
   unlockedAchievements: {},
   preferredTone: 'gentle',
   preferences: defaultPreferences,
@@ -282,6 +289,40 @@ export const useFlowNautStore = create<FlowNautStore>()(
         gratitudeEntries: state.gratitudeEntries.filter((e) => e.id !== id),
       })),
 
+      startExperiment: (experiment) => set((state) => ({
+        experiments: [
+          {
+            ...experiment,
+            id: crypto.randomUUID(),
+            createdAt: new Date().toISOString(),
+            status: 'active',
+          },
+          ...state.experiments.filter((e) => e.status !== 'active'),
+        ],
+      })),
+
+      completeExperiment: (experimentId, afterMood, closingNote) => set((state) => ({
+        experiments: state.experiments.map((experiment) =>
+          experiment.id === experimentId
+            ? {
+                ...experiment,
+                afterMood,
+                closingNote,
+                status: 'completed',
+                completedAt: new Date().toISOString(),
+              }
+            : experiment
+        ),
+      })),
+
+      restExperiment: (experimentId) => set((state) => ({
+        experiments: state.experiments.map((experiment) =>
+          experiment.id === experimentId
+            ? { ...experiment, status: 'resting' }
+            : experiment
+        ),
+      })),
+
       setWeekWord: (weekStart, word) => set((state) => {
         const existing = state.reflections.find((r) => r.weekStart === weekStart);
         if (existing) {
@@ -327,6 +368,8 @@ export const useFlowNautStore = create<FlowNautStore>()(
           habits: state.habits,
           entries: state.entries,
           reflections: state.reflections,
+          gratitudeEntries: state.gratitudeEntries,
+          experiments: state.experiments,
           preferences: state.preferences,
           exportedAt: new Date().toISOString(),
         }, null, 2);
@@ -349,6 +392,7 @@ export const useFlowNautStore = create<FlowNautStore>()(
           entries: (data.entries as DayEntry[]) || state.entries,
           reflections: (data.reflections as typeof state.reflections) || state.reflections,
           gratitudeEntries: (data.gratitudeEntries as GratitudeEntry[]) || state.gratitudeEntries,
+          experiments: (data.experiments as SelfExperiment[]) || state.experiments,
           preferences: data.preferences ? { ...state.preferences, ...data.preferences } : state.preferences,
           hasCompletedOnboarding: data.personality ? true : state.hasCompletedOnboarding,
         }));
