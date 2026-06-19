@@ -567,6 +567,9 @@ export function OnboardingFlow() {
                   <p className="text-xs text-muted-foreground">
                     {t.onboarding.statisticsTipMessage}
                   </p>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    {t.onboarding.experimentHint}
+                  </p>
                 </motion.div>
                 <motion.p
                   initial={{ opacity: 0, y: 10 }}
