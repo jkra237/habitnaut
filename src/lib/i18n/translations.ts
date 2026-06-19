@@ -216,6 +216,21 @@ export interface Translations {
     activeLimit: string;
     week: string;
     weeks: string;
+    progress: string;
+    restingExperiments: string;
+    wake: string;
+    activeIndicator: string;
+    categories: {
+      morning: string;
+      body: string;
+      calm: string;
+      focus: string;
+      evening: string;
+      reflection: string;
+      connection: string;
+      environment: string;
+      boundaries: string;
+    };
   };
   
   // Timeline
