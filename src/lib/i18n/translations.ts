@@ -32,6 +32,7 @@ export interface Translations {
     localDataNotice: string;
     statisticsTipTitle: string;
     statisticsTipMessage: string;
+    experimentHint: string;
     startObserving: string;
     // Language selection
     chooseLanguage: string;
