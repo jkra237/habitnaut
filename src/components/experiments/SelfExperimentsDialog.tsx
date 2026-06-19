@@ -84,6 +84,7 @@ function ActiveExperiment({ experiment, onComplete, onRest }: { experiment: Self
   const elapsed = Math.max(0, experiment.durationDays - Math.max(0, daysBetween(today, experiment.endDate)));
   const currentDay = Math.min(experiment.durationDays, elapsed + 1);
   const daysLeft = Math.max(0, daysBetween(today, experiment.endDate));
+  const progressPct = Math.min(100, Math.max(0, Math.round((elapsed / experiment.durationDays) * 100)));
 
   return (
     <section className="rounded-2xl border border-primary/20 bg-primary/5 p-4 shadow-soft">
@@ -93,6 +94,15 @@ function ActiveExperiment({ experiment, onComplete, onRest }: { experiment: Self
           <p className="text-xs font-medium uppercase tracking-wide text-primary">{t.experiments.activeExperiment}</p>
           <h2 className="mt-1 text-lg font-serif font-medium leading-tight text-foreground">{experiment.title}</h2>
           <p className="mt-2 text-sm text-muted-foreground">{experiment.description}</p>
+        </div>
+      </div>
+      <div className="mt-4 space-y-2">
+        <div className="flex items-center justify-between text-xs text-muted-foreground">
+          <span>{t.experiments.progress}</span>
+          <span>{progressPct}%</span>
+        </div>
+        <div className="h-2 w-full overflow-hidden rounded-full bg-background/70">
+          <div className="h-full rounded-full bg-primary/60 transition-all duration-500" style={{ width: `${progressPct}%` }} />
         </div>
       </div>
       <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
