@@ -37,6 +37,7 @@ export function Dashboard() {
   const language = useFlowNautStore((s) => s.preferences.language);
   const dailyQuoteEnabled = useFlowNautStore((s) => s.preferences.dailyQuoteEnabled);
   const recordLogin = useFlowNautStore((s) => s.recordLogin);
+  const hasActiveExperiment = useFlowNautStore((s) => s.experiments.some((e) => e.status === 'active'));
   const t = useTranslations();
 
   // Check achievements whenever habits or entries change
@@ -99,17 +100,26 @@ export function Dashboard() {
             <Button 
               variant="ghost" 
               size="icon" 
-              className="rounded-xl"
+              className="rounded-xl relative"
               onClick={() => setIsExperimentsOpen(true)}
-              aria-label={t.experiments.menuLabel}
+              aria-label={hasActiveExperiment ? t.experiments.activeIndicator : t.experiments.menuLabel}
+              title={hasActiveExperiment ? t.experiments.activeIndicator : t.experiments.menuLabel}
             >
               <Beaker className="w-5 h-5" />
+              {hasActiveExperiment && (
+                <span
+                  aria-hidden="true"
+                  className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-primary ring-2 ring-background animate-pulse"
+                />
+              )}
             </Button>
             <Button 
               variant="ghost" 
               size="icon" 
               className="rounded-xl"
               onClick={() => setIsSettingsOpen(true)}
+              aria-label={t.settings?.title || 'Settings'}
+              title={t.settings?.title || 'Settings'}
             >
               <SettingsIcon className="w-5 h-5" />
             </Button>

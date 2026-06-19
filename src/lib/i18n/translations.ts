@@ -32,6 +32,7 @@ export interface Translations {
     localDataNotice: string;
     statisticsTipTitle: string;
     statisticsTipMessage: string;
+    experimentHint: string;
     startObserving: string;
     // Language selection
     chooseLanguage: string;
@@ -216,6 +217,21 @@ export interface Translations {
     activeLimit: string;
     week: string;
     weeks: string;
+    progress: string;
+    restingExperiments: string;
+    wake: string;
+    activeIndicator: string;
+    categories: {
+      morning: string;
+      body: string;
+      calm: string;
+      focus: string;
+      evening: string;
+      reflection: string;
+      connection: string;
+      environment: string;
+      boundaries: string;
+    };
   };
   
   // Timeline
@@ -494,6 +510,7 @@ export const translations: Record<SupportedLanguage, Translations> = {
       localDataNotice: '💾 This app saves your data locally on this device. Use the Export & Import functions in Settings to back up your habit data before resetting your device or to transfer it to another device.',
       statisticsTipTitle: 'Tip: Discover your personal statistics',
       statisticsTipMessage: 'This app creates statistics about your habits. Complete your first habit to get an insight.',
+      experimentHint: 'Or start a small self-experiment from the beaker icon at the top.',
       startObserving: 'Start observing',
       chooseLanguage: 'Choose your language',
       languageSubtitle: 'You can change this anytime in settings',
@@ -671,6 +688,21 @@ export const translations: Record<SupportedLanguage, Translations> = {
       activeLimit: 'One active experiment at a time keeps the space calm.',
       week: 'week',
       weeks: 'weeks',
+      progress: 'Progress',
+      restingExperiments: 'Currently resting',
+      wake: 'Resume',
+      activeIndicator: 'An experiment is currently running',
+      categories: {
+        morning: 'Morning',
+        body: 'Body',
+        calm: 'Calm',
+        focus: 'Focus',
+        evening: 'Evening',
+        reflection: 'Reflection',
+        connection: 'Connection',
+        environment: 'Environment',
+        boundaries: 'Boundaries',
+      },
     },
     habits: {
       letRest: 'Let rest',
@@ -950,6 +982,7 @@ export const translations: Record<SupportedLanguage, Translations> = {
       localDataNotice: '💾 Esta app guarda tus datos localmente en este dispositivo. Usa las funciones de Exportar e Importar en Ajustes para hacer una copia de seguridad antes de restablecer tu dispositivo o transferir tus datos a otro.',
       statisticsTipTitle: 'Consejo: Descubre tus estadísticas personales',
       statisticsTipMessage: 'Esta app crea estadísticas sobre tus hábitos. Completa tu primer hábito para obtener una visión.',
+      experimentHint: 'O inicia un pequeño autoexperimento desde el icono de matraz arriba.',
       startObserving: 'Empezar a observar',
       chooseLanguage: 'Elige tu idioma',
       languageSubtitle: 'Puedes cambiarlo en cualquier momento en los ajustes',
@@ -1127,6 +1160,21 @@ export const translations: Record<SupportedLanguage, Translations> = {
       activeLimit: 'Un experimento activo a la vez mantiene el espacio tranquilo.',
       week: 'semana',
       weeks: 'semanas',
+      progress: 'Progreso',
+      restingExperiments: 'En pausa actualmente',
+      wake: 'Reanudar',
+      activeIndicator: 'Un experimento está en curso',
+      categories: {
+        morning: 'Mañana',
+        body: 'Cuerpo',
+        calm: 'Calma',
+        focus: 'Foco',
+        evening: 'Noche',
+        reflection: 'Reflexión',
+        connection: 'Conexión',
+        environment: 'Entorno',
+        boundaries: 'Límites',
+      },
     },
     habits: {
       letRest: 'Pausar',
@@ -1406,6 +1454,7 @@ export const translations: Record<SupportedLanguage, Translations> = {
       localDataNotice: '💾 Diese App speichert deine Daten lokal auf diesem Gerät. Nutze die Export- & Import-Funktionen in den Einstellungen, um deine Daten zu sichern, bevor du dein Gerät zurücksetzt oder sie auf ein anderes Gerät überträgst.',
       statisticsTipTitle: 'Tipp: Entdecke deine persönlichen Statistiken',
       statisticsTipMessage: 'Diese App erstellt Statistiken zu deinen Gewohnheiten. Erledige deine erste Gewohnheit, um einen Einblick zu erhalten.',
+      experimentHint: 'Oder starte ein kleines Selbst-Experiment über das Becher-Symbol oben.',
       startObserving: 'Jetzt starten',
       chooseLanguage: 'Wähle deine Sprache',
       languageSubtitle: 'Du kannst das jederzeit in den Einstellungen ändern',
@@ -1583,6 +1632,21 @@ export const translations: Record<SupportedLanguage, Translations> = {
       activeLimit: 'Ein aktives Experiment gleichzeitig hält den Raum ruhig.',
       week: 'Woche',
       weeks: 'Wochen',
+      progress: 'Fortschritt',
+      restingExperiments: 'Zurzeit ruhend',
+      wake: 'Fortsetzen',
+      activeIndicator: 'Ein Experiment läuft gerade',
+      categories: {
+        morning: 'Morgen',
+        body: 'Körper',
+        calm: 'Ruhe',
+        focus: 'Fokus',
+        evening: 'Abend',
+        reflection: 'Reflexion',
+        connection: 'Verbindung',
+        environment: 'Umgebung',
+        boundaries: 'Grenzen',
+      },
     },
     habits: {
       letRest: 'Pausieren',

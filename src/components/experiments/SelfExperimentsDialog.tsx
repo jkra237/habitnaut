@@ -84,6 +84,7 @@ function ActiveExperiment({ experiment, onComplete, onRest }: { experiment: Self
   const elapsed = Math.max(0, experiment.durationDays - Math.max(0, daysBetween(today, experiment.endDate)));
   const currentDay = Math.min(experiment.durationDays, elapsed + 1);
   const daysLeft = Math.max(0, daysBetween(today, experiment.endDate));
+  const progressPct = Math.min(100, Math.max(0, Math.round((elapsed / experiment.durationDays) * 100)));
 
   return (
     <section className="rounded-2xl border border-primary/20 bg-primary/5 p-4 shadow-soft">
@@ -93,6 +94,15 @@ function ActiveExperiment({ experiment, onComplete, onRest }: { experiment: Self
           <p className="text-xs font-medium uppercase tracking-wide text-primary">{t.experiments.activeExperiment}</p>
           <h2 className="mt-1 text-lg font-serif font-medium leading-tight text-foreground">{experiment.title}</h2>
           <p className="mt-2 text-sm text-muted-foreground">{experiment.description}</p>
+        </div>
+      </div>
+      <div className="mt-4 space-y-2">
+        <div className="flex items-center justify-between text-xs text-muted-foreground">
+          <span>{t.experiments.progress}</span>
+          <span>{progressPct}%</span>
+        </div>
+        <div className="h-2 w-full overflow-hidden rounded-full bg-background/70">
+          <div className="h-full rounded-full bg-primary/60 transition-all duration-500" style={{ width: `${progressPct}%` }} />
         </div>
       </div>
       <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
@@ -124,6 +134,7 @@ export function SelfExperimentsDialog({ onClose }: SelfExperimentsDialogProps) {
   const startExperiment = useFlowNautStore((s) => s.startExperiment);
   const completeExperiment = useFlowNautStore((s) => s.completeExperiment);
   const restExperiment = useFlowNautStore((s) => s.restExperiment);
+  const wakeExperiment = useFlowNautStore((s) => s.wakeExperiment);
 
   const [viewMode, setViewMode] = useState<ViewMode>('overview');
   const [selectedIdea, setSelectedIdea] = useState<ExperimentIdea | null>(null);
@@ -135,6 +146,7 @@ export function SelfExperimentsDialog({ onClose }: SelfExperimentsDialogProps) {
 
   const activeExperiment = experiments.find((experiment) => experiment.status === 'active');
   const completedExperiments = experiments.filter((experiment) => experiment.status === 'completed');
+  const restingExperiments = experiments.filter((experiment) => experiment.status === 'resting');
 
   const moodCopy = (before: number, after?: number) => {
     if (!after || after === before) return t.experiments.moodSame;
@@ -175,7 +187,13 @@ export function SelfExperimentsDialog({ onClose }: SelfExperimentsDialogProps) {
     setViewMode('overview');
   };
 
-  const groupedIdeas = useMemo(() => SELF_EXPERIMENT_IDEAS, []);
+  const groupedIdeas = useMemo(() => {
+    const groups: Record<string, ExperimentIdea[]> = {};
+    for (const idea of SELF_EXPERIMENT_IDEAS) {
+      (groups[idea.category] ||= []).push(idea);
+    }
+    return Object.entries(groups);
+  }, []);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/95 p-3 backdrop-blur-sm sm:p-5">
@@ -210,14 +228,46 @@ export function SelfExperimentsDialog({ onClose }: SelfExperimentsDialogProps) {
 
               {activeExperiment && <p className="text-xs text-muted-foreground">{t.experiments.activeLimit}</p>}
 
-              <section className="space-y-3">
+              <section className="space-y-4">
                 <h2 className="font-serif text-lg font-medium text-foreground">{t.experiments.ideaLibrary}</h2>
-                <div className="grid gap-3 sm:grid-cols-2">
-                  {groupedIdeas.map((idea) => (
-                    <ExperimentCard key={idea.id} idea={idea} disabled={Boolean(activeExperiment)} onSelect={() => handleSelectIdea(idea)} />
-                  ))}
-                </div>
+                {groupedIdeas.map(([category, ideas]) => {
+                  const categoryLabel = (t.experiments.categories as Record<string, string>)[category] ?? category;
+                  return (
+                    <div key={category} className="space-y-2">
+                      <h3 className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{categoryLabel}</h3>
+                      <div className="grid gap-3 sm:grid-cols-2">
+                        {ideas.map((idea) => (
+                          <ExperimentCard key={idea.id} idea={idea} disabled={Boolean(activeExperiment)} onSelect={() => handleSelectIdea(idea)} />
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
               </section>
+
+              {restingExperiments.length > 0 && (
+                <section className="space-y-3">
+                  <h2 className="font-serif text-lg font-medium text-foreground">{t.experiments.restingExperiments}</h2>
+                  <div className="space-y-3">
+                    {restingExperiments.map((experiment) => (
+                      <article key={experiment.id} className="rounded-2xl border border-border/60 bg-card p-4 shadow-soft">
+                        <div className="flex items-start gap-3">
+                          <span className="text-2xl">{experiment.emoji}</span>
+                          <div className="min-w-0 flex-1">
+                            <h3 className="font-medium leading-snug text-foreground">{experiment.title}</h3>
+                            <p className="mt-1 text-xs text-muted-foreground">{experiment.description}</p>
+                          </div>
+                        </div>
+                        <div className="mt-3 flex justify-end">
+                          <Button variant="gentle" size="sm" onClick={() => wakeExperiment(experiment.id)} disabled={Boolean(activeExperiment)}>
+                            {t.experiments.wake}
+                          </Button>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                </section>
+              )}
 
               <section className="space-y-3">
                 <h2 className="font-serif text-lg font-medium text-foreground">{t.experiments.completedExperiments}</h2>

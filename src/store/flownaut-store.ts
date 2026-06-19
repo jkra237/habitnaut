@@ -68,6 +68,7 @@ interface FlowNautStore extends UserState {
   startExperiment: (experiment: Omit<SelfExperiment, 'id' | 'createdAt' | 'status'>) => void;
   completeExperiment: (experimentId: string, afterMood: number, closingNote?: string) => void;
   restExperiment: (experimentId: string) => void;
+  wakeExperiment: (experimentId: string) => void;
   
   // Week reflection
   setWeekWord: (weekStart: string, word: string) => void;
@@ -321,6 +322,18 @@ export const useFlowNautStore = create<FlowNautStore>()(
             ? { ...experiment, status: 'resting' }
             : experiment
         ),
+      })),
+
+      wakeExperiment: (experimentId) => set((state) => ({
+        experiments: state.experiments.map((experiment) => {
+          if (experiment.id !== experimentId) {
+            // Demote any currently active experiment to resting to keep one-active rule
+            return experiment.status === 'active'
+              ? { ...experiment, status: 'resting' as const }
+              : experiment;
+          }
+          return { ...experiment, status: 'active' as const };
+        }),
       })),
 
       setWeekWord: (weekStart, word) => set((state) => {
