@@ -228,14 +228,46 @@ export function SelfExperimentsDialog({ onClose }: SelfExperimentsDialogProps) {
 
               {activeExperiment && <p className="text-xs text-muted-foreground">{t.experiments.activeLimit}</p>}
 
-              <section className="space-y-3">
+              <section className="space-y-4">
                 <h2 className="font-serif text-lg font-medium text-foreground">{t.experiments.ideaLibrary}</h2>
-                <div className="grid gap-3 sm:grid-cols-2">
-                  {groupedIdeas.map((idea) => (
-                    <ExperimentCard key={idea.id} idea={idea} disabled={Boolean(activeExperiment)} onSelect={() => handleSelectIdea(idea)} />
-                  ))}
-                </div>
+                {groupedIdeas.map(([category, ideas]) => {
+                  const categoryLabel = (t.experiments.categories as Record<string, string>)[category] ?? category;
+                  return (
+                    <div key={category} className="space-y-2">
+                      <h3 className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{categoryLabel}</h3>
+                      <div className="grid gap-3 sm:grid-cols-2">
+                        {ideas.map((idea) => (
+                          <ExperimentCard key={idea.id} idea={idea} disabled={Boolean(activeExperiment)} onSelect={() => handleSelectIdea(idea)} />
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
               </section>
+
+              {restingExperiments.length > 0 && (
+                <section className="space-y-3">
+                  <h2 className="font-serif text-lg font-medium text-foreground">{t.experiments.restingExperiments}</h2>
+                  <div className="space-y-3">
+                    {restingExperiments.map((experiment) => (
+                      <article key={experiment.id} className="rounded-2xl border border-border/60 bg-card p-4 shadow-soft">
+                        <div className="flex items-start gap-3">
+                          <span className="text-2xl">{experiment.emoji}</span>
+                          <div className="min-w-0 flex-1">
+                            <h3 className="font-medium leading-snug text-foreground">{experiment.title}</h3>
+                            <p className="mt-1 text-xs text-muted-foreground">{experiment.description}</p>
+                          </div>
+                        </div>
+                        <div className="mt-3 flex justify-end">
+                          <Button variant="gentle" size="sm" onClick={() => wakeExperiment(experiment.id)} disabled={Boolean(activeExperiment)}>
+                            {t.experiments.wake}
+                          </Button>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                </section>
+              )}
 
               <section className="space-y-3">
                 <h2 className="font-serif text-lg font-medium text-foreground">{t.experiments.completedExperiments}</h2>
