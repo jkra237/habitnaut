@@ -134,6 +134,7 @@ export function SelfExperimentsDialog({ onClose }: SelfExperimentsDialogProps) {
   const startExperiment = useFlowNautStore((s) => s.startExperiment);
   const completeExperiment = useFlowNautStore((s) => s.completeExperiment);
   const restExperiment = useFlowNautStore((s) => s.restExperiment);
+  const wakeExperiment = useFlowNautStore((s) => s.wakeExperiment);
 
   const [viewMode, setViewMode] = useState<ViewMode>('overview');
   const [selectedIdea, setSelectedIdea] = useState<ExperimentIdea | null>(null);
@@ -145,6 +146,7 @@ export function SelfExperimentsDialog({ onClose }: SelfExperimentsDialogProps) {
 
   const activeExperiment = experiments.find((experiment) => experiment.status === 'active');
   const completedExperiments = experiments.filter((experiment) => experiment.status === 'completed');
+  const restingExperiments = experiments.filter((experiment) => experiment.status === 'resting');
 
   const moodCopy = (before: number, after?: number) => {
     if (!after || after === before) return t.experiments.moodSame;
@@ -185,7 +187,13 @@ export function SelfExperimentsDialog({ onClose }: SelfExperimentsDialogProps) {
     setViewMode('overview');
   };
 
-  const groupedIdeas = useMemo(() => SELF_EXPERIMENT_IDEAS, []);
+  const groupedIdeas = useMemo(() => {
+    const groups: Record<string, ExperimentIdea[]> = {};
+    for (const idea of SELF_EXPERIMENT_IDEAS) {
+      (groups[idea.category] ||= []).push(idea);
+    }
+    return Object.entries(groups);
+  }, []);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/95 p-3 backdrop-blur-sm sm:p-5">
