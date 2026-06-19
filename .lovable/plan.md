@@ -1,103 +1,35 @@
-## Plan: Selbst-Experimente Feature
+## Verbesserungsvorschläge für HabitNaut
 
-Ich implementiere einen neuen separaten Menüpunkt direkt neben dem Zahnrad im Dashboard. Darüber können Nutzer ruhige 1-4 Wochen-Selbstexperimente starten, begleiten und am Ende einen Vorher/Nachher-Stimmungsvergleich sehen.
+### 1. Visueller Hinweis auf aktives Experiment im Dashboard
+Der Beaker-Button im Header zeigt aktuell nicht an, wenn ein Experiment läuft. Ein dezenter Punkt oder eine sanfte Animation würde den Nutzer subtil daran erinnern, ohne aufdringlich zu sein.
 
-### 1. Neuer Dashboard-Menüpunkt
+### 2. Kategorisierte Experiment-Bibliothek
+Die 30 Experiment-Ideen sind aktuell als flaches Grid angezeigt. Eine Gruppierung nach Bereichen (Morgen, Ruhe, Bewegung, Fokus, Abend, Beziehungen) würde die Auswahl übersichtlicher machen und dem Nutzer helfen, passende Experimente schneller zu finden.
 
-- Neben dem Zahnrad kommt ein eigener Icon-Button für „Experimente“.
-- Der Button öffnet eine mobile-freundliche Vollbild-/Dialogansicht im bestehenden App-Stil.
-- Die Position bleibt bewusst prominent, aber ruhig: kein Badge, kein Druck, keine Gamification.
+### 3. „Experiment wieder aufwecken“ Funktion
+Analog zu „ruhende Gewohnheiten“ (wakeHabit) fehlt ein `wakeExperiment`, das ein ruhendes Experiment fortsetzen lässt. Aktuell werden ruhende Experimente in der UI gar nicht angezeigt.
 
-### 2. Experiment-Übersicht
+### 4. Kleiner Fortschrittsbalken im aktiven Experiment
+Statt nur „Tag 5 von 14“ könnte ein sanfter visueller Fortschrittsbalken das Zeitgefühl unterstützen – bewusst ohne Druck, sondern als sanfte Orientierung.
 
-Die neue Ansicht enthält:
+### 5. Experiment-Hinweis im Onboarding-Abschluss
+Die neue Tipp-Box zum Ende des Onboardings könnte auch einen kurzen Hinweis auf die Selbst-Experimente enthalten („Oder starte ein kleines Experiment, um etwas Neues zu beobachten“), damit neue Nutzer das Feature entdecken.
 
-- kurze Erklärung: „Ein Experiment ist eine Selbstbeobachtung, kein Zieltest.“
-- aktives Experiment, falls vorhanden
-- Liste bisheriger abgeschlossener Experimente
-- Einstieg in eine Ideensammlung mit 30 passenden Experimenten
+### 6. Button-Labels auf Mobile für bessere Auffindbarkeit
+Beaker und Zahnrad im Header haben nur Icons. Auf kleinen Screens könnten kurze Labels („Experimente“, „Einstellungen“) oder zumindest Tooltips die Auffindbarkeit verbessern – besonders für Screenreader-Nutzer.
 
-### 3. Liste mit 30 Selbstexperimenten
+### 7. Ruhende Experimente in der Übersicht anzeigen
+Aktuell filtert die UI auf `active` und `completed`. Ruhende Experimente verschwinden komplett aus dem Dialog. Ein eigener kleiner Abschnitt „Zurzeit ruhend“ würde Konsistenz mit dem Gewohnheiten-System schaffen.
 
-Ich erstelle eine kuratierte Liste im HabitNaut-Ton, z. B. in Bereichen wie:
+---
 
-- Morgen & Start in den Tag
-- Ruhe & Reizreduktion
-- Bewegung & Körpergefühl
-- Fokus & digitale Gewohnheiten
-- Abend & Reflexion
-- Beziehungen & Umwelt
+### Technische Details (falls gewünscht)
+- **Punkt 1**: Zustandsabfrage aus `flownaut-store` im Dashboard-Header, CSS-Punkt oder Ring um Icon.
+- **Punkt 2**: `self-experiment-ideas.ts` hat bereits Kategorien, die Gruppierung wäre rein UI-seitig.
+- **Punkt 3**: Store-Erweiterung `wakeExperiment` + UI-Integration in `SelfExperimentsDialog`.
+- **Punkt 4**: Tailwind-basierter Balken, reines Frontend, keine Datenänderung.
+- **Punkt 5**: Erweiterung der Onboarding-Abschluss-Karte um einen zusätzlichen Satz.
+- **Punkt 6**: Entweder sichtbare Labels unter den Icons (nur auf Mobile) oder Tooltip-Komponente.
+- **Punkt 7**: Filter auf `resting` analog zu `completed` im Dialog.
 
-Alle Vorschläge werden sanft formuliert, z. B. „Beobachte, wie es dir geht, wenn …“ statt „Optimiere …“. Jeder Vorschlag enthält:
-
-- Titel
-- kurze Beschreibung
-- optionales Icon/Emoji
-- Reflexionsfrage für den Abschluss
-
-### 4. Experiment starten
-
-Beim Start eines Experiments speichert die App:
-
-- ausgewähltes Experiment
-- Startdatum
-- automatisches Enddatum nach 7-28 Tagen
-- Vorher-Stimmung als 1–5 Skala
-- optionale Notiz: „Was möchtest du beobachten?“
-
-Es wird vorerst ein aktives Experiment gleichzeitig unterstützt, damit die UX einfach bleibt.
-
-### 5. Während des Experiments
-
-Für das aktive Experiment zeige ich:
-
-- Tag X von X
-- verbleibende Tage
-- Start-Stimmung
-- kurze, nicht-wertende Erinnerung an die Beobachtungsfrage
-- Möglichkeit, das Experiment sanft zu beenden oder ruhen zu lassen
-
-### 6. Abschluss mit Vorher/Nachher-Vergleich
-
-Nach X Tagen oder manuell am Ende kann der Nutzer erfassen:
-
-- Nachher-Stimmung als 1–5 Skala
-- kurze Abschlussnotiz
-
-Danach zeigt die App eine kleine Auswertung:
-
-- Vorher-Stimmung
-- Nachher-Stimmung
-- Differenz, bewusst neutral formuliert
-- Abschlussfrage des Experiments
-- Hinweis, dass es eine Beobachtung ist, kein Urteil
-
-### 7. Speicherung und Export
-
-- Die Experimente werden lokal im bestehenden Zustand gespeichert.
-- Der JSON-Export/Import wird erweitert, damit Experimente nicht verloren gehen.
-- Keine neue Backend-Tabelle nötig, da das Feature zunächst lokal und privat bleibt – passend zur bestehenden App-Philosophie.
-
-### 8. Mehrsprachigkeit
-
-- Ich ergänze die UI-Texte mindestens in Deutsch, Englisch und Spanisch, passend zur bestehenden i18n-Struktur.
-- Die 30 Experimentideen werden ebenfalls lokalisiert oder so eingebunden, dass sie sauber je Sprache angezeigt werden können.
-
-### 9. Mobile UX und Layout
-
-- Die Ansicht wird für gängige Mobilgrößen optimiert.
-- Buttons stapeln sich auf kleinen Screens.
-- Listen bekommen ausreichend Touch-Flächen.
-- Lange Experimenttitel dürfen umbrechen, ohne Layout-Overflow.
-
-## Technische Umsetzung
-
-Betroffene Bereiche:
-
-- `src/types/flownaut.ts`: neue Typen für Selbstexperimente
-- `src/store/flownaut-store.ts`: State + Aktionen für Start, Abschluss, Abbruch und Import/Export
-- neuer Komponentenbereich, z. B. `src/components/experiments/`
-- `src/components/dashboard/Dashboard.tsx`: neuer Button neben dem Zahnrad und Dialog-State
-- `src/lib/i18n/translations.ts`: Texte und 30 Experimentideen in der bestehenden Übersetzungsstruktur
-
-Keine Datenbankmigration ist geplant, weil das Feature lokal funktioniert und keine Cloud-Strukturänderung benötigt.
+**Frage an dich**: Welche dieser Punkte sollen priorisiert umgesetzt werden? Alle, oder eine Auswahl?
