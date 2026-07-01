@@ -38,7 +38,8 @@ const defaultPreferences: AppPreferences = {
 
 interface FlowNautStore extends UserState {
   // Onboarding
-  completeOnboarding: (personality: PersonalityProfile, tone: 'gentle' | 'clear') => void;
+  completeOnboarding: (personality: PersonalityProfile, tone: 'gentle' | 'clear', userName?: string) => void;
+  setUserName: (userName: string) => void;
   updatePersonality: (personality: PersonalityProfile) => void;
   reopenOnboarding: () => void;
   
