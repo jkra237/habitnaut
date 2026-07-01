@@ -127,11 +127,15 @@ export const useFlowNautStore = create<FlowNautStore>()(
     (set, get) => ({
       ...initialState,
 
-      completeOnboarding: (personality, tone) => set({
+      completeOnboarding: (personality, tone, userName) => set({
         hasCompletedOnboarding: true,
         personality,
         preferredTone: tone,
+        userName: userName?.trim() || undefined,
       }),
+
+      setUserName: (userName) => set({ userName: userName.trim() || undefined }),
+
 
       addHabit: (nameOrOptions, emoji) => set((state) => {
         const isOptions = typeof nameOrOptions === 'object';
