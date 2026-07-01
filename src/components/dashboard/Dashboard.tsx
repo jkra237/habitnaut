@@ -58,10 +58,10 @@ export function Dashboard() {
 
   const getGreeting = () => {
     const hour = new Date().getHours();
-    if (hour < 12) return t.dashboard.greetingMorning;
-    if (hour < 17) return t.dashboard.greetingAfternoon;
-    return t.dashboard.greetingEvening;
+    const base = hour < 12 ? t.dashboard.greetingMorning : hour < 17 ? t.dashboard.greetingAfternoon : t.dashboard.greetingEvening;
+    return userName ? `${base}, ${userName}` : base;
   };
+
 
   const getFormattedDate = () => {
     const now = new Date();
