@@ -18,6 +18,21 @@ export interface Translations {
     welcome: string;
     welcomeSubtitle: string;
     welcomeSubtitle2: string;
+    welcomeTagline: string;
+    questionsTagline: string;
+    habitsTagline: string;
+    namePrompt: string;
+    nameSubtitle: string;
+    namePlaceholder: string;
+    nameGreetingPreview: string;
+    swipeHint: string;
+    categoryAll: string;
+    categoryMovement: string;
+    categoryCalm: string;
+    categoryReflection: string;
+    categoryFocus: string;
+    notSureLabel: string;
+    notSureSubtitle: string;
     begin: string;
     questionsAhead: string;
     noRightAnswer: string;
@@ -62,6 +77,7 @@ export interface Translations {
       growthB: string;
     };
   };
+
   
   // Settings
   settings: {
