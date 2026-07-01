@@ -98,6 +98,7 @@ export interface SelfExperiment {
 
 export interface UserState {
   hasCompletedOnboarding: boolean;
+  userName?: string;
   personality?: PersonalityProfile;
   habits: Habit[];
   entries: DayEntry[];
