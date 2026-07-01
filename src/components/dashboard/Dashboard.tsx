@@ -38,6 +38,7 @@ export function Dashboard() {
   const dailyQuoteEnabled = useFlowNautStore((s) => s.preferences.dailyQuoteEnabled);
   const recordLogin = useFlowNautStore((s) => s.recordLogin);
   const hasActiveExperiment = useFlowNautStore((s) => s.experiments.some((e) => e.status === 'active'));
+  const userName = useFlowNautStore((s) => s.userName);
   const t = useTranslations();
 
   // Check achievements whenever habits or entries change
@@ -57,10 +58,10 @@ export function Dashboard() {
 
   const getGreeting = () => {
     const hour = new Date().getHours();
-    if (hour < 12) return t.dashboard.greetingMorning;
-    if (hour < 17) return t.dashboard.greetingAfternoon;
-    return t.dashboard.greetingEvening;
+    const base = hour < 12 ? t.dashboard.greetingMorning : hour < 17 ? t.dashboard.greetingAfternoon : t.dashboard.greetingEvening;
+    return userName ? `${base}, ${userName}` : base;
   };
+
 
   const getFormattedDate = () => {
     const now = new Date();

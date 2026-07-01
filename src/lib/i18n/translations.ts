@@ -18,6 +18,21 @@ export interface Translations {
     welcome: string;
     welcomeSubtitle: string;
     welcomeSubtitle2: string;
+    welcomeTagline: string;
+    questionsTagline: string;
+    habitsTagline: string;
+    namePrompt: string;
+    nameSubtitle: string;
+    namePlaceholder: string;
+    nameGreetingPreview: string;
+    swipeHint: string;
+    categoryAll: string;
+    categoryMovement: string;
+    categoryCalm: string;
+    categoryReflection: string;
+    categoryFocus: string;
+    notSureLabel: string;
+    notSureSubtitle: string;
     begin: string;
     questionsAhead: string;
     noRightAnswer: string;
@@ -62,6 +77,7 @@ export interface Translations {
       growthB: string;
     };
   };
+
   
   // Settings
   settings: {
@@ -511,6 +527,21 @@ export const translations: Record<SupportedLanguage, Translations> = {
       statisticsTipTitle: 'Tip: Discover your personal statistics',
       statisticsTipMessage: 'This app creates statistics about your habits. Complete your first habit to get an insight.',
       experimentHint: 'Or start a small self-experiment from the beaker icon at the top.',
+      welcomeTagline: 'No pressure. No streaks.',
+      questionsTagline: 'Just what feels true today.',
+      habitsTagline: 'Choose gently — you can adjust later.',
+      namePrompt: 'How should we call you on board?',
+      nameSubtitle: 'Optional — only used for a friendly greeting.',
+      namePlaceholder: 'Your name (optional)',
+      nameGreetingPreview: 'Hi, {name} 👋',
+      swipeHint: 'Swipe or use the buttons',
+      categoryAll: 'All',
+      categoryMovement: 'Movement',
+      categoryCalm: 'Calm',
+      categoryReflection: 'Reflection',
+      categoryFocus: 'Focus',
+      notSureLabel: "I'm not sure yet",
+      notSureSubtitle: 'Start with something tiny — a glass of water.',
       startObserving: 'Start observing',
       chooseLanguage: 'Choose your language',
       languageSubtitle: 'You can change this anytime in settings',
@@ -983,6 +1014,21 @@ export const translations: Record<SupportedLanguage, Translations> = {
       statisticsTipTitle: 'Consejo: Descubre tus estadísticas personales',
       statisticsTipMessage: 'Esta app crea estadísticas sobre tus hábitos. Completa tu primer hábito para obtener una visión.',
       experimentHint: 'O inicia un pequeño autoexperimento desde el icono de matraz arriba.',
+      welcomeTagline: 'Sin presión. Sin rachas.',
+      questionsTagline: 'Solo lo que sientes hoy.',
+      habitsTagline: 'Elige con calma – puedes ajustar luego.',
+      namePrompt: '¿Cómo quieres que te llamemos a bordo?',
+      nameSubtitle: 'Opcional – solo para un saludo amable.',
+      namePlaceholder: 'Tu nombre (opcional)',
+      nameGreetingPreview: 'Hola, {name} 👋',
+      swipeHint: 'Desliza o usa los botones',
+      categoryAll: 'Todos',
+      categoryMovement: 'Movimiento',
+      categoryCalm: 'Calma',
+      categoryReflection: 'Reflexión',
+      categoryFocus: 'Enfoque',
+      notSureLabel: 'Aún no lo sé',
+      notSureSubtitle: 'Empieza con algo pequeño – un vaso de agua.',
       startObserving: 'Empezar a observar',
       chooseLanguage: 'Elige tu idioma',
       languageSubtitle: 'Puedes cambiarlo en cualquier momento en los ajustes',
@@ -1455,6 +1501,21 @@ export const translations: Record<SupportedLanguage, Translations> = {
       statisticsTipTitle: 'Tipp: Entdecke deine persönlichen Statistiken',
       statisticsTipMessage: 'Diese App erstellt Statistiken zu deinen Gewohnheiten. Erledige deine erste Gewohnheit, um einen Einblick zu erhalten.',
       experimentHint: 'Oder starte ein kleines Selbst-Experiment über das Becher-Symbol oben.',
+      welcomeTagline: 'Kein Druck. Keine Streaks.',
+      questionsTagline: 'Nur, was sich heute stimmig anfühlt.',
+      habitsTagline: 'Wähle sanft – du kannst später anpassen.',
+      namePrompt: 'Wie sollen wir dich an Bord nennen?',
+      nameSubtitle: 'Optional – nur für einen freundlichen Gruß.',
+      namePlaceholder: 'Dein Name (optional)',
+      nameGreetingPreview: 'Hi, {name} 👋',
+      swipeHint: 'Wische oder nutze die Buttons',
+      categoryAll: 'Alle',
+      categoryMovement: 'Bewegung',
+      categoryCalm: 'Ruhe',
+      categoryReflection: 'Reflexion',
+      categoryFocus: 'Fokus',
+      notSureLabel: 'Ich weiß noch nicht',
+      notSureSubtitle: 'Fang mit etwas Winzigem an – ein Glas Wasser.',
       startObserving: 'Jetzt starten',
       chooseLanguage: 'Wähle deine Sprache',
       languageSubtitle: 'Du kannst das jederzeit in den Einstellungen ändern',
