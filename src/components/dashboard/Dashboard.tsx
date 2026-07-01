@@ -38,6 +38,7 @@ export function Dashboard() {
   const dailyQuoteEnabled = useFlowNautStore((s) => s.preferences.dailyQuoteEnabled);
   const recordLogin = useFlowNautStore((s) => s.recordLogin);
   const hasActiveExperiment = useFlowNautStore((s) => s.experiments.some((e) => e.status === 'active'));
+  const userName = useFlowNautStore((s) => s.userName);
   const t = useTranslations();
 
   // Check achievements whenever habits or entries change
