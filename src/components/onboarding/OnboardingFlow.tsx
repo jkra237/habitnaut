@@ -245,6 +245,17 @@ export function OnboardingFlow() {
   return (
     <div className="min-h-screen flex items-center justify-center p-6">
       <div className="w-full max-w-lg">
+        {/* Skip onboarding link (for returning users / after export-import) */}
+        {step <= STEP_WELCOME && (
+          <div className="flex justify-end mb-2">
+            <button
+              onClick={handleSkipOnboarding}
+              className="text-xs text-muted-foreground/70 hover:text-foreground transition-colors underline underline-offset-2"
+            >
+              {t.onboarding.skipOnboarding}
+            </button>
+          </div>
+        )}
         {/* Top bar: back + progress dots */}
         {showProgress && (
           <div className="flex items-center justify-between mb-6 min-h-[36px]">
