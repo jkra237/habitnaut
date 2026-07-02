@@ -1018,6 +1018,8 @@ export const translations: Record<SupportedLanguage, Translations> = {
       statisticsTipTitle: 'Consejo: Descubre tus estadísticas personales',
       statisticsTipMessage: 'Esta app crea estadísticas sobre tus hábitos. Completa tu primer hábito para obtener una visión.',
       experimentHint: 'O inicia un pequeño autoexperimento desde el icono de matraz arriba.',
+      adjustLaterHint: 'Puedes cambiar hábitos, idioma e inicio de semana en cualquier momento en Ajustes ⚙️.',
+      skipOnboarding: 'Saltar introducción',
       welcomeTagline: 'Sin presión. Sin rachas.',
       questionsTagline: 'Solo lo que sientes hoy.',
       habitsTagline: 'Elige con calma – puedes ajustar luego.',
