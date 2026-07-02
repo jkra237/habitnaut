@@ -7,7 +7,9 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {hasCompletedOnboarding ? <Dashboard /> : <OnboardingFlow />}
+      <div className="mx-auto w-full max-w-2xl min-h-screen bg-background sm:shadow-card sm:border-x sm:border-border/40">
+        {hasCompletedOnboarding ? <Dashboard /> : <OnboardingFlow />}
+      </div>
     </div>
   );
 };

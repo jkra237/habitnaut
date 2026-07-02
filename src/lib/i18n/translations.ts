@@ -48,6 +48,8 @@ export interface Translations {
     statisticsTipTitle: string;
     statisticsTipMessage: string;
     experimentHint: string;
+    adjustLaterHint: string;
+    skipOnboarding: string;
     startObserving: string;
     // Language selection
     chooseLanguage: string;
@@ -527,6 +529,8 @@ export const translations: Record<SupportedLanguage, Translations> = {
       statisticsTipTitle: 'Tip: Discover your personal statistics',
       statisticsTipMessage: 'This app creates statistics about your habits. Complete your first habit to get an insight.',
       experimentHint: 'Or start a small self-experiment from the beaker icon at the top.',
+      adjustLaterHint: 'You can change habits, language and week start anytime in Settings ⚙️.',
+      skipOnboarding: 'Skip onboarding',
       welcomeTagline: 'No pressure. No streaks.',
       questionsTagline: 'Just what feels true today.',
       habitsTagline: 'Choose gently — you can adjust later.',
@@ -1014,6 +1018,8 @@ export const translations: Record<SupportedLanguage, Translations> = {
       statisticsTipTitle: 'Consejo: Descubre tus estadísticas personales',
       statisticsTipMessage: 'Esta app crea estadísticas sobre tus hábitos. Completa tu primer hábito para obtener una visión.',
       experimentHint: 'O inicia un pequeño autoexperimento desde el icono de matraz arriba.',
+      adjustLaterHint: 'Puedes cambiar hábitos, idioma e inicio de semana en cualquier momento en Ajustes ⚙️.',
+      skipOnboarding: 'Saltar introducción',
       welcomeTagline: 'Sin presión. Sin rachas.',
       questionsTagline: 'Solo lo que sientes hoy.',
       habitsTagline: 'Elige con calma – puedes ajustar luego.',
@@ -1501,6 +1507,8 @@ export const translations: Record<SupportedLanguage, Translations> = {
       statisticsTipTitle: 'Tipp: Entdecke deine persönlichen Statistiken',
       statisticsTipMessage: 'Diese App erstellt Statistiken zu deinen Gewohnheiten. Erledige deine erste Gewohnheit, um einen Einblick zu erhalten.',
       experimentHint: 'Oder starte ein kleines Selbst-Experiment über das Becher-Symbol oben.',
+      adjustLaterHint: 'Gewohnheiten, Sprache und Wochenstart kannst du jederzeit in den Einstellungen ⚙️ anpassen.',
+      skipOnboarding: 'Einführung überspringen',
       welcomeTagline: 'Kein Druck. Keine Streaks.',
       questionsTagline: 'Nur, was sich heute stimmig anfühlt.',
       habitsTagline: 'Wähle sanft – du kannst später anpassen.',

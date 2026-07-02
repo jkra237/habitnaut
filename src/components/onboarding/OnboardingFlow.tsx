@@ -201,6 +201,15 @@ export function OnboardingFlow() {
     completeOnboarding(personality, 'gentle', nameInput);
   };
 
+  const handleSkipOnboarding = () => {
+    const defaultPersonality: PersonalityProfile = {
+      energyStyle: 'calming',
+      structureStyle: 'flexible',
+      motivationStyle: 'feeling',
+    };
+    completeOnboarding(defaultPersonality, 'gentle', '');
+  };
+
   const onbQ = t.onboarding.questions;
 
   // Swipe handler for mobile — enable on welcome, name, questions, habits
@@ -236,6 +245,17 @@ export function OnboardingFlow() {
   return (
     <div className="min-h-screen flex items-center justify-center p-6">
       <div className="w-full max-w-lg">
+        {/* Skip onboarding link (for returning users / after export-import) */}
+        {step <= STEP_WELCOME && (
+          <div className="flex justify-end mb-2">
+            <button
+              onClick={handleSkipOnboarding}
+              className="text-xs text-muted-foreground/70 hover:text-foreground transition-colors underline underline-offset-2"
+            >
+              {t.onboarding.skipOnboarding}
+            </button>
+          </div>
+        )}
         {/* Top bar: back + progress dots */}
         {showProgress && (
           <div className="flex items-center justify-between mb-6 min-h-[36px]">
@@ -513,7 +533,7 @@ export function OnboardingFlow() {
                           whileHover={!isDisabled ? { scale: 1.01 } : {}}
                           whileTap={!isDisabled ? { scale: 0.99 } : {}}
                           onClick={() => !isDisabled && toggleHabit(habit.id)}
-                          className={`w-full p-4 min-h-[68px] rounded-xl border-2 transition-all duration-300 text-left flex items-center gap-4 ${
+                          className={`w-full p-5 min-h-[80px] rounded-xl border-2 transition-all duration-300 text-left flex items-center gap-4 ${
                             isSelected
                               ? 'border-primary bg-primary/10'
                               : isDisabled
@@ -556,14 +576,38 @@ export function OnboardingFlow() {
               {/* Complete */}
               {step === STEP_COMPLETE && (
                 <div className="text-center space-y-8">
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: 0.2, type: 'spring' }}
-                    className="w-24 h-24 mx-auto rounded-full bg-primary/20 flex items-center justify-center"
-                  >
-                    <Check className="w-12 h-12 text-primary" />
-                  </motion.div>
+                  <div className="relative w-32 h-32 mx-auto">
+                    {/* Floating sparkles around the mascot */}
+                    {[0, 1, 2, 3, 4, 5].map((i) => {
+                      const angle = (i / 6) * Math.PI * 2;
+                      const x = Math.cos(angle) * 56;
+                      const y = Math.sin(angle) * 56;
+                      return (
+                        <motion.div
+                          key={i}
+                          initial={{ opacity: 0, x: 0, y: 0, scale: 0 }}
+                          animate={{ opacity: [0, 1, 0], x, y, scale: [0, 1, 0.5] }}
+                          transition={{ duration: 2.2, delay: 0.4 + i * 0.08, repeat: Infinity, repeatDelay: 1.4 }}
+                          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                        >
+                          <Sparkles className="w-3.5 h-3.5 text-primary/70" />
+                        </motion.div>
+                      );
+                    })}
+                    <motion.div
+                      initial={{ scale: 0, rotate: -20 }}
+                      animate={{ scale: 1, rotate: 0 }}
+                      transition={{ delay: 0.2, type: 'spring', stiffness: 180, damping: 12 }}
+                      className="w-24 h-24 mx-auto rounded-full bg-primary/20 flex items-center justify-center relative z-10"
+                    >
+                      <motion.div
+                        animate={{ y: [0, -4, 0] }}
+                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                      >
+                        <Check className="w-12 h-12 text-primary" />
+                      </motion.div>
+                    </motion.div>
+                  </div>
                   <div className="space-y-4">
                     <h2 className="text-3xl font-serif font-medium text-foreground">
                       {t.onboarding.allSet}
@@ -591,6 +635,7 @@ export function OnboardingFlow() {
                       </p>
                       <p className="text-xs text-muted-foreground">{t.onboarding.statisticsTipMessage}</p>
                       <p className="text-xs text-muted-foreground mt-2">{t.onboarding.experimentHint}</p>
+                      <p className="text-xs text-muted-foreground/80 mt-2 pt-2 border-t border-accent/40">{t.onboarding.adjustLaterHint}</p>
                     </motion.div>
                     <motion.p
                       initial={{ opacity: 0, y: 10 }}
