@@ -201,6 +201,15 @@ export function OnboardingFlow() {
     completeOnboarding(personality, 'gentle', nameInput);
   };
 
+  const handleSkipOnboarding = () => {
+    const defaultPersonality: PersonalityProfile = {
+      energyStyle: 'calming',
+      structureStyle: 'flexible',
+      motivationStyle: 'feeling',
+    };
+    completeOnboarding(defaultPersonality, 'gentle', '');
+  };
+
   const onbQ = t.onboarding.questions;
 
   // Swipe handler for mobile — enable on welcome, name, questions, habits
