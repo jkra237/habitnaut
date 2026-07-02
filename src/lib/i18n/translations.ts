@@ -529,6 +529,8 @@ export const translations: Record<SupportedLanguage, Translations> = {
       statisticsTipTitle: 'Tip: Discover your personal statistics',
       statisticsTipMessage: 'This app creates statistics about your habits. Complete your first habit to get an insight.',
       experimentHint: 'Or start a small self-experiment from the beaker icon at the top.',
+      adjustLaterHint: 'You can change habits, language and week start anytime in Settings ⚙️.',
+      skipOnboarding: 'Skip onboarding',
       welcomeTagline: 'No pressure. No streaks.',
       questionsTagline: 'Just what feels true today.',
       habitsTagline: 'Choose gently — you can adjust later.',
