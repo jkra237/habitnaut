@@ -533,7 +533,7 @@ export function OnboardingFlow() {
                           whileHover={!isDisabled ? { scale: 1.01 } : {}}
                           whileTap={!isDisabled ? { scale: 0.99 } : {}}
                           onClick={() => !isDisabled && toggleHabit(habit.id)}
-                          className={`w-full p-4 min-h-[68px] rounded-xl border-2 transition-all duration-300 text-left flex items-center gap-4 ${
+                          className={`w-full p-5 min-h-[80px] rounded-xl border-2 transition-all duration-300 text-left flex items-center gap-4 ${
                             isSelected
                               ? 'border-primary bg-primary/10'
                               : isDisabled
