@@ -576,14 +576,38 @@ export function OnboardingFlow() {
               {/* Complete */}
               {step === STEP_COMPLETE && (
                 <div className="text-center space-y-8">
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: 0.2, type: 'spring' }}
-                    className="w-24 h-24 mx-auto rounded-full bg-primary/20 flex items-center justify-center"
-                  >
-                    <Check className="w-12 h-12 text-primary" />
-                  </motion.div>
+                  <div className="relative w-32 h-32 mx-auto">
+                    {/* Floating sparkles around the mascot */}
+                    {[0, 1, 2, 3, 4, 5].map((i) => {
+                      const angle = (i / 6) * Math.PI * 2;
+                      const x = Math.cos(angle) * 56;
+                      const y = Math.sin(angle) * 56;
+                      return (
+                        <motion.div
+                          key={i}
+                          initial={{ opacity: 0, x: 0, y: 0, scale: 0 }}
+                          animate={{ opacity: [0, 1, 0], x, y, scale: [0, 1, 0.5] }}
+                          transition={{ duration: 2.2, delay: 0.4 + i * 0.08, repeat: Infinity, repeatDelay: 1.4 }}
+                          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                        >
+                          <Sparkles className="w-3.5 h-3.5 text-primary/70" />
+                        </motion.div>
+                      );
+                    })}
+                    <motion.div
+                      initial={{ scale: 0, rotate: -20 }}
+                      animate={{ scale: 1, rotate: 0 }}
+                      transition={{ delay: 0.2, type: 'spring', stiffness: 180, damping: 12 }}
+                      className="w-24 h-24 mx-auto rounded-full bg-primary/20 flex items-center justify-center relative z-10"
+                    >
+                      <motion.div
+                        animate={{ y: [0, -4, 0] }}
+                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                      >
+                        <Check className="w-12 h-12 text-primary" />
+                      </motion.div>
+                    </motion.div>
+                  </div>
                   <div className="space-y-4">
                     <h2 className="text-3xl font-serif font-medium text-foreground">
                       {t.onboarding.allSet}
