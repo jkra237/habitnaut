@@ -1507,6 +1507,8 @@ export const translations: Record<SupportedLanguage, Translations> = {
       statisticsTipTitle: 'Tipp: Entdecke deine persönlichen Statistiken',
       statisticsTipMessage: 'Diese App erstellt Statistiken zu deinen Gewohnheiten. Erledige deine erste Gewohnheit, um einen Einblick zu erhalten.',
       experimentHint: 'Oder starte ein kleines Selbst-Experiment über das Becher-Symbol oben.',
+      adjustLaterHint: 'Gewohnheiten, Sprache und Wochenstart kannst du jederzeit in den Einstellungen ⚙️ anpassen.',
+      skipOnboarding: 'Einführung überspringen',
       welcomeTagline: 'Kein Druck. Keine Streaks.',
       questionsTagline: 'Nur, was sich heute stimmig anfühlt.',
       habitsTagline: 'Wähle sanft – du kannst später anpassen.',
