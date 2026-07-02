@@ -48,6 +48,8 @@ export interface Translations {
     statisticsTipTitle: string;
     statisticsTipMessage: string;
     experimentHint: string;
+    adjustLaterHint: string;
+    skipOnboarding: string;
     startObserving: string;
     // Language selection
     chooseLanguage: string;
