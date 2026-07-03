@@ -239,6 +239,9 @@ export interface Translations {
     restingExperiments: string;
     wake: string;
     activeIndicator: string;
+    overviewObservationPrompt: string;
+    overviewEmptyPrompt: string;
+    overviewDiscover: string;
     categories: {
       morning: string;
       body: string;
@@ -727,6 +730,9 @@ export const translations: Record<SupportedLanguage, Translations> = {
       restingExperiments: 'Currently resting',
       wake: 'Resume',
       activeIndicator: 'An experiment is currently running',
+      overviewObservationPrompt: 'Observation for today',
+      overviewEmptyPrompt: 'Curious about a gentle experiment?',
+      overviewDiscover: 'Discover',
       categories: {
         morning: 'Morning',
         body: 'Body',
@@ -1216,6 +1222,9 @@ export const translations: Record<SupportedLanguage, Translations> = {
       restingExperiments: 'En pausa actualmente',
       wake: 'Reanudar',
       activeIndicator: 'Un experimento está en curso',
+      overviewObservationPrompt: 'Observación de hoy',
+      overviewEmptyPrompt: '¿Te apetece un pequeño experimento?',
+      overviewDiscover: 'Descubrir',
       categories: {
         morning: 'Mañana',
         body: 'Cuerpo',
@@ -1705,6 +1714,9 @@ export const translations: Record<SupportedLanguage, Translations> = {
       restingExperiments: 'Zurzeit ruhend',
       wake: 'Fortsetzen',
       activeIndicator: 'Ein Experiment läuft gerade',
+      overviewObservationPrompt: 'Beobachtung des Tages',
+      overviewEmptyPrompt: 'Magst du ein kleines Experiment probieren?',
+      overviewDiscover: 'Entdecken',
       categories: {
         morning: 'Morgen',
         body: 'Körper',
