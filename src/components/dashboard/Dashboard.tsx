@@ -15,6 +15,8 @@ import { ActivityCalendar } from '@/components/calendar/ActivityCalendar';
 import { HabitStatistics } from '@/components/statistics/HabitStatistics';
 import { DailyQuoteCard } from '@/components/dashboard/DailyQuoteCard';
 import { SelfExperimentsDialog } from '@/components/experiments/SelfExperimentsDialog';
+import { ActiveExperimentCard } from '@/components/dashboard/ActiveExperimentCard';
+import { CompletedExperimentsRow } from '@/components/dashboard/CompletedExperimentsRow';
 
 import { useFlowNautStore } from '@/store/flownaut-store';
 import { useTranslations } from '@/hooks/use-translations';
@@ -148,6 +150,16 @@ export function Dashboard() {
         >
           <DailyCheckin />
         </motion.section>
+
+        {/* Active Experiment overview */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+        >
+          <ActiveExperimentCard onOpen={() => setIsExperimentsOpen(true)} />
+        </motion.section>
+
 
         {/* Habit Matrix */}
         <motion.section
