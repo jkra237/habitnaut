@@ -5,6 +5,7 @@ import type { HabitState, Habit } from '@/types/flownaut';
 import { format, startOfWeek, addDays, addWeeks, isToday, isBefore, startOfDay, getDay } from 'date-fns';
 import { Search, ChevronLeft, ChevronRight } from 'lucide-react';
 import { HabitOptions } from './HabitOptions';
+import { CellCelebration } from './CellCelebration';
 import { useTranslations } from '@/hooks/use-translations';
 
 
@@ -16,6 +17,7 @@ export function HabitMatrix() {
   const [activeReminderId, setActiveReminderId] = useState<string | null>(null);
   const [activeOptionsId, setActiveOptionsId] = useState<string | null>(null);
   const [weekOffset, setWeekOffset] = useState(0);
+  const [celebration, setCelebration] = useState<{ key: string; type: 'done' | 'skip' } | null>(null);
   const habits = useFlowNautStore((s) => s.getActiveHabits());
   const entries = useFlowNautStore((s) => s.entries);
   const setHabitState = useFlowNautStore((s) => s.setHabitState);
@@ -96,6 +98,15 @@ export function HabitMatrix() {
       'done';
     
     setHabitState(dateStr, habitId, nextState);
+
+    // Gentle micro-animation on positive transitions
+    if (nextState === 'done' || nextState === 'conscious-skip') {
+      const key = `${habitId}-${dateStr}-${Date.now()}`;
+      setCelebration({ key, type: nextState === 'done' ? 'done' : 'skip' });
+      window.setTimeout(() => {
+        setCelebration((c) => (c && c.key === key ? null : c));
+      }, 900);
+    }
   };
 
   const getCellStyle = (state: HabitState | undefined, isCurrentDay: boolean) => {
@@ -229,16 +240,25 @@ export function HabitMatrix() {
               {weekDates.map((date, dateIdx) => {
                 const state = getStateForCell(habit, date);
                 const isCurrent = isToday(date);
-                
+                const dateStr = format(date, 'yyyy-MM-dd');
+                const cellId = `${habit.id}-${dateStr}`;
+                const isCelebrating =
+                  celebration !== null && celebration.key.startsWith(`${cellId}-`);
+
                 return (
                   <motion.button
                     key={dateIdx}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => cycleState(habit, date)}
-                    className={getCellStyle(state, isCurrent)}
+                    className={`${getCellStyle(state, isCurrent)} relative overflow-visible`}
                   >
                     {getCellContent(state)}
+                    <AnimatePresence>
+                      {isCelebrating && celebration && (
+                        <CellCelebration key={celebration.key} type={celebration.type} />
+                      )}
+                    </AnimatePresence>
                   </motion.button>
                 );
               })}
