@@ -264,6 +264,16 @@ export function Dashboard() {
           <GratitudeJournal />
         </motion.section>
 
+        {/* Completed experiments row */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.41 }}
+        >
+          <CompletedExperimentsRow onOpen={() => setIsExperimentsOpen(true)} />
+        </motion.section>
+
+
         {/* Gentle Observation - Rule-based pattern detection */}
         {habits.length >= 1 && (
           <motion.section
