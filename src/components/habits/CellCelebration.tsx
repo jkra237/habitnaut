@@ -7,7 +7,7 @@ interface CellCelebrationProps {
 /**
  * Micro-animation played when a habit cell transitions into
  * a positive state. Kept gentle to match the "observation over
- * optimization" philosophy — sparkles + a tiny rocket, no loud burst.
+ * optimization" philosophy — soft sparkles, no loud burst.
  */
 export function CellCelebration({ type }: CellCelebrationProps) {
   const particles = type === 'done'
@@ -45,17 +45,6 @@ export function CellCelebration({ type }: CellCelebrationProps) {
         );
       })}
 
-      {/* Tiny rocket flying by (only for done) */}
-      {type === 'done' && (
-        <motion.span
-          initial={{ x: -40, y: 18, opacity: 0, rotate: -20 }}
-          animate={{ x: 40, y: -18, opacity: [0, 1, 1, 0], rotate: -20 }}
-          transition={{ duration: 0.9, ease: 'easeOut' }}
-          className="absolute text-[11px] sm:text-sm"
-        >
-          🚀
-        </motion.span>
-      )}
     </span>
   );
 }
