@@ -199,7 +199,12 @@ export interface Translations {
     morningHint: string;
     eveningHint: string;
     flexibleHint: string;
+    todayMissionTitle: string;
+    todayMissionSubtitle: string;
+    todayAllDone: string;
+    todayEmpty: string;
   };
+
 
   experiments: {
     menuLabel: string;
@@ -691,7 +696,12 @@ export const translations: Record<SupportedLanguage, Translations> = {
       morningHint: 'Your mornings tend to be clearer – a good time for what matters.',
       eveningHint: 'You come alive as the day winds down – honor that rhythm.',
       flexibleHint: 'Your rhythm flows with the day – stay curious about it.',
+      todayMissionTitle: "Today's Mission",
+      todayMissionSubtitle: 'One tap to mark what you noticed today.',
+      todayAllDone: 'All noticed for today. Nothing left – just be.',
+      todayEmpty: 'Nothing scheduled for today. Space to simply be.',
     },
+
     experiments: {
       menuLabel: 'Self-experiments',
       title: 'Self-experiments',
@@ -1183,7 +1193,12 @@ export const translations: Record<SupportedLanguage, Translations> = {
       morningHint: 'Tus mañanas suelen ser más claras – un buen momento para lo importante.',
       eveningHint: 'Cobras vida cuando el día termina – honra ese ritmo.',
       flexibleHint: 'Tu ritmo fluye con el día – mantén la curiosidad.',
+      todayMissionTitle: 'Misión de hoy',
+      todayMissionSubtitle: 'Un toque para marcar lo que notaste hoy.',
+      todayAllDone: 'Todo observado por hoy. Nada pendiente – solo respira.',
+      todayEmpty: 'Nada programado para hoy. Espacio para simplemente estar.',
     },
+
     experiments: {
       menuLabel: 'Autoexperimentos',
       title: 'Autoexperimentos',
@@ -1675,7 +1690,12 @@ export const translations: Record<SupportedLanguage, Translations> = {
       morningHint: 'Deine Vormittage sind oft klarer – eine gute Zeit für das Wesentliche.',
       eveningHint: 'Du blühst auf, wenn der Tag sich neigt – ehre diesen Rhythmus.',
       flexibleHint: 'Dein Rhythmus fließt mit dem Tag – bleib neugierig darauf.',
+      todayMissionTitle: 'Heutige Mission',
+      todayMissionSubtitle: 'Ein Tipp genügt, um zu markieren, was du heute wahrgenommen hast.',
+      todayAllDone: 'Alles für heute wahrgenommen. Nichts mehr offen – einfach sein.',
+      todayEmpty: 'Heute steht nichts an. Raum, um einfach zu sein.',
     },
+
     experiments: {
       menuLabel: 'Selbst-Experimente',
       title: 'Selbst-Experimente',

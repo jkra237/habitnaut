@@ -17,6 +17,8 @@ import { DailyQuoteCard } from '@/components/dashboard/DailyQuoteCard';
 import { SelfExperimentsDialog } from '@/components/experiments/SelfExperimentsDialog';
 import { ActiveExperimentCard } from '@/components/dashboard/ActiveExperimentCard';
 import { CompletedExperimentsRow } from '@/components/dashboard/CompletedExperimentsRow';
+import { TodayMission } from '@/components/dashboard/TodayMission';
+
 
 import { useFlowNautStore } from '@/store/flownaut-store';
 import { useTranslations } from '@/hooks/use-translations';
@@ -142,6 +144,9 @@ export function Dashboard() {
 
       {/* Main content */}
       <main className="px-5 space-y-6">
+        {/* Today's Mission - one-tap completion */}
+        <TodayMission />
+
         {/* Daily check-in */}
         <motion.section
           initial={{ opacity: 0, y: 20 }}
@@ -150,6 +155,7 @@ export function Dashboard() {
         >
           <DailyCheckin />
         </motion.section>
+
 
         {/* Active Experiment overview */}
         <motion.section
