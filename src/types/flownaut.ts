@@ -94,6 +94,7 @@ export interface SelfExperiment {
   status: ExperimentStatus;
   createdAt: string; // ISO timestamp
   completedAt?: string; // ISO timestamp
+  checkInDates?: string[]; // YYYY-MM-DD, days the user confirmed the experiment was done
 }
 
 export interface UserState {

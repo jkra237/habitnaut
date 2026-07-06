@@ -70,6 +70,7 @@ interface FlowNautStore extends UserState {
   completeExperiment: (experimentId: string, afterMood: number, closingNote?: string) => void;
   restExperiment: (experimentId: string) => void;
   wakeExperiment: (experimentId: string) => void;
+  toggleExperimentCheckIn: (experimentId: string, date: string) => void;
   
   // Week reflection
   setWeekWord: (weekStart: string, word: string) => void;
@@ -302,9 +303,21 @@ export const useFlowNautStore = create<FlowNautStore>()(
             id: crypto.randomUUID(),
             createdAt: new Date().toISOString(),
             status: 'active',
+            checkInDates: [],
           },
           ...state.experiments.filter((e) => e.status !== 'active'),
         ],
+      })),
+
+      toggleExperimentCheckIn: (experimentId, date) => set((state) => ({
+        experiments: state.experiments.map((experiment) => {
+          if (experiment.id !== experimentId) return experiment;
+          const current = experiment.checkInDates ?? [];
+          const next = current.includes(date)
+            ? current.filter((d) => d !== date)
+            : [...current, date].sort();
+          return { ...experiment, checkInDates: next };
+        }),
       })),
 
       completeExperiment: (experimentId, afterMood, closingNote) => set((state) => ({
