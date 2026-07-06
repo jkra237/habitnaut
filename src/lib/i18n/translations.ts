@@ -247,6 +247,10 @@ export interface Translations {
     overviewObservationPrompt: string;
     overviewEmptyPrompt: string;
     overviewDiscover: string;
+    confirmToday: string;
+    confirmedToday: string;
+    daysConfirmed: string;
+    todayMissionExperimentLabel: string;
     categories: {
       morning: string;
       body: string;
@@ -743,6 +747,10 @@ export const translations: Record<SupportedLanguage, Translations> = {
       overviewObservationPrompt: 'Observation for today',
       overviewEmptyPrompt: 'Curious about a gentle experiment?',
       overviewDiscover: 'Discover',
+      confirmToday: 'Confirm today',
+      confirmedToday: 'Confirmed today',
+      daysConfirmed: '{done} of {total} days confirmed',
+      todayMissionExperimentLabel: 'Today\'s experiment',
       categories: {
         morning: 'Morning',
         body: 'Body',
@@ -1240,6 +1248,10 @@ export const translations: Record<SupportedLanguage, Translations> = {
       overviewObservationPrompt: 'Observación de hoy',
       overviewEmptyPrompt: '¿Te apetece un pequeño experimento?',
       overviewDiscover: 'Descubrir',
+      confirmToday: 'Confirmar hoy',
+      confirmedToday: 'Confirmado hoy',
+      daysConfirmed: '{done} de {total} días confirmados',
+      todayMissionExperimentLabel: 'Experimento de hoy',
       categories: {
         morning: 'Mañana',
         body: 'Cuerpo',
@@ -1737,6 +1749,10 @@ export const translations: Record<SupportedLanguage, Translations> = {
       overviewObservationPrompt: 'Beobachtung des Tages',
       overviewEmptyPrompt: 'Magst du ein kleines Experiment probieren?',
       overviewDiscover: 'Entdecken',
+      confirmToday: 'Heute bestätigen',
+      confirmedToday: 'Heute bestätigt',
+      daysConfirmed: '{done} von {total} Tagen bestätigt',
+      todayMissionExperimentLabel: 'Heutiges Experiment',
       categories: {
         morning: 'Morgen',
         body: 'Körper',

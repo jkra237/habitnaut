@@ -80,11 +80,13 @@ function ExperimentCard({ idea, onSelect, disabled }: { idea: ExperimentIdea; on
 
 function ActiveExperiment({ experiment, onComplete, onRest }: { experiment: SelfExperiment; onComplete: () => void; onRest: () => void }) {
   const t = useTranslations();
+  const toggleExperimentCheckIn = useFlowNautStore((s) => s.toggleExperimentCheckIn);
   const today = toDateString(new Date());
-  const elapsed = Math.max(0, experiment.durationDays - Math.max(0, daysBetween(today, experiment.endDate)));
-  const currentDay = Math.min(experiment.durationDays, elapsed + 1);
+  const doneCount = experiment.checkInDates?.length ?? 0;
+  const progressPct = Math.min(100, Math.max(0, Math.round((doneCount / experiment.durationDays) * 100)));
   const daysLeft = Math.max(0, daysBetween(today, experiment.endDate));
-  const progressPct = Math.min(100, Math.max(0, Math.round((elapsed / experiment.durationDays) * 100)));
+  const confirmedToday = Boolean(experiment.checkInDates?.includes(today));
+  const inFrame = today >= experiment.startDate && today <= experiment.endDate;
 
   return (
     <section className="rounded-2xl border border-primary/20 bg-primary/5 p-4 shadow-soft">
@@ -98,17 +100,39 @@ function ActiveExperiment({ experiment, onComplete, onRest }: { experiment: Self
       </div>
       <div className="mt-4 space-y-2">
         <div className="flex items-center justify-between text-xs text-muted-foreground">
-          <span>{t.experiments.progress}</span>
+          <span>{interpolate(t.experiments.daysConfirmed, { done: doneCount, total: experiment.durationDays })}</span>
           <span>{progressPct}%</span>
         </div>
         <div className="h-2 w-full overflow-hidden rounded-full bg-background/70">
           <div className="h-full rounded-full bg-primary/60 transition-all duration-500" style={{ width: `${progressPct}%` }} />
         </div>
       </div>
+      {inFrame && (
+        <button
+          type="button"
+          onClick={() => toggleExperimentCheckIn(experiment.id, today)}
+          aria-pressed={confirmedToday}
+          className={`mt-4 flex w-full items-center justify-center gap-2 rounded-xl border px-3 py-2.5 text-sm font-medium transition-all ${
+            confirmedToday
+              ? 'border-primary/60 bg-primary/15 text-foreground shadow-[0_0_0_1px_hsl(var(--primary)/0.2),0_4px_16px_-4px_hsl(var(--primary)/0.35)]'
+              : 'border-border/60 bg-card hover:border-primary/40 hover:bg-primary/5'
+          }`}
+        >
+          <span
+            className={`flex h-5 w-5 items-center justify-center rounded-full border-2 ${
+              confirmedToday ? 'border-primary bg-primary text-primary-foreground' : 'border-border/60'
+            }`}
+            aria-hidden="true"
+          >
+            {confirmedToday && <Check className="h-3 w-3" strokeWidth={3} />}
+          </span>
+          {confirmedToday ? t.experiments.confirmedToday : t.experiments.confirmToday}
+        </button>
+      )}
       <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
         <div className="rounded-xl bg-background/70 p-3">
           <CalendarDays className="mb-2 h-4 w-4 text-primary" />
-          <p className="font-medium text-foreground">{interpolate(t.experiments.dayOf, { current: currentDay, total: experiment.durationDays })}</p>
+          <p className="font-medium text-foreground">{interpolate(t.experiments.dayOf, { current: Math.min(experiment.durationDays, doneCount), total: experiment.durationDays })}</p>
           <p className="text-xs text-muted-foreground">{daysLeft > 0 ? interpolate(t.experiments.daysLeft, { days: daysLeft }) : t.experiments.startsToday}</p>
         </div>
         <div className="rounded-xl bg-background/70 p-3">
